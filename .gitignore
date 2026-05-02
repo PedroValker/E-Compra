@@ -1,26 +1,35 @@
-# Visual Studio
-.vs/
-
-# Build
-bin/
-obj/
-
-# User-specific files
-*.user
-*.suo
-
-# Logs
-*.log
-
-# Arquivos temporários
-*.tmp
-
-# Banco/local (se tiver)
-*.db
-
 # Publicação
 publish/
 
 .vs/
 bin/
 obj/
+
+
+# Build
+bin/
+obj/
+
+# Visual Studio
+.vs/
+*.user
+*.suo
+*.userosscache
+*.sln.docstates
+
+# Logs e temporários
+*.log
+*.tmp
+*.cache
+
+# Binários
+*.dll
+*.exe
+*.pdb
+
+# Testes
+TestResults/
+*.coverage
+
+# NuGet
+packages/
