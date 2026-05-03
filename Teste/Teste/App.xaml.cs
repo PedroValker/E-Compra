@@ -24,6 +24,9 @@ namespace Teste
             // 3. 🔥 Carrega Cestas
             CestaRepository repoCestas = new CestaRepository();
             repoCestas.CarregarDoArquivo();
+            //4. 🔥 Carrega Carrinhos
+            CarrinhoRepository repoCarrinho = new CarrinhoRepository();
+            repoCarrinho.CarregarDoArquivo();
         }
 
         protected override void OnExit(ExitEventArgs e)
@@ -36,6 +39,9 @@ namespace Teste
 
                 CestaRepository repoCestas = new CestaRepository();
                 repoCestas.AtualizarArquivoTxt();
+
+                CarrinhoRepository repoCarrinho = new CarrinhoRepository();
+                repoCarrinho.AtualizarArquivoTxt();
 
                 // Mantenho a sua lógica de salvar usuários do jeito que você fez
                 string pastaProjeto = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));

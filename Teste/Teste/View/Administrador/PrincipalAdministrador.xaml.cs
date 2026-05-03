@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CestaApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -43,15 +44,29 @@ namespace Teste.View
         // ... (O resto dos seus cliques de botão continua igual) ...
         private void Pedidos_Click(object sender, RoutedEventArgs e)
         {
-            // O código "new ();" dava erro. Deixei comentado até você criar a tela de Pedidos.
-            // ConteudoPrincipal.Content = new SuaTelaDePedidosAqui();
+            // Lembra de colocar o using CestaApp.Views; lá em cima se precisar
+            ConteudoPrincipal.Content = new PedidosAdminView();
         }
 
         private void Cadastrar_Click(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new CadastroProduto();
         }
+        private void Logoff_Click(object sender, RoutedEventArgs e)
+        {
+            // Opcional: Adicionar uma caixa de confirmação
+            var result = MessageBox.Show("Deseja realmente sair do sistema?", "Confirmação", MessageBoxButton.YesNo, MessageBoxImage.Question);
 
+            if (result == MessageBoxResult.Yes)
+            {
+                // Substitua 'LoginWindow' pelo nome da sua tela de login
+                MainWindow login = new MainWindow();
+                login.Show();
+
+                // Fecha a tela atual do administrador
+                this.Close();
+            }
+        }
         private void Pendencias_Click(object sender, RoutedEventArgs e)
         {
             // Por enquanto está abrindo CadastroProduto, mude quando criar a tela de Pendências

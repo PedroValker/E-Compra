@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using Teste.Model;
 using System.Windows.Input;
 
 public class CestaViewModel : BaseViewModel

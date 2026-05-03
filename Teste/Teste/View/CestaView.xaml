@@ -1,0 +1,158 @@
+﻿<UserControl x:Class="CestaApp.Views.CestaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:av="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+             mc:Ignorable="av"
+             Background="#F2F2F2" av:DesignHeight="432.435" av:DesignWidth="850.773">
+
+    <UserControl.Resources>
+
+        <SolidColorBrush x:Key="PrimaryColor" Color="#FFD700"/>
+        <SolidColorBrush x:Key="CardBackground" Color="White"/>
+        <SolidColorBrush x:Key="BorderColor" Color="#E0E0E0"/>
+        <SolidColorBrush x:Key="TextPrimary" Color="#222"/>
+        <SolidColorBrush x:Key="TextSecondary" Color="#666"/>
+
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="{StaticResource CardBackground}"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="Padding" Value="15"/>
+            <Setter Property="Margin" Value="5"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BorderColor}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10" Opacity="0.05" ShadowDepth="2"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="QtyButtonStyle" TargetType="Button">
+            <Setter Property="Width" Value="28"/>
+            <Setter Property="Height" Value="28"/>
+            <Setter Property="Margin" Value="2"/>
+            <Setter Property="Background" Value="#F0F0F0"/>
+            <Setter Property="BorderBrush" Value="#CCC"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="45"/>
+            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Background" Value="{StaticResource PrimaryColor}"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+
+        <Style TargetType="DataGrid">
+            <Setter Property="GridLinesVisibility" Value="None"/>
+            <Setter Property="RowBackground" Value="White"/>
+            <Setter Property="AlternatingRowBackground" Value="#FAFAFA"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="HeadersVisibility" Value="Column"/>
+            <Setter Property="CanUserAddRows" Value="False"/>
+            <Setter Property="AutoGenerateColumns" Value="False"/>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="20">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="2*" />
+            <ColumnDefinition Width="3*" />
+            <ColumnDefinition Width="2*" />
+        </Grid.ColumnDefinitions>
+
+        <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="5,5,15,5">
+            <StackPanel VerticalAlignment="Center">
+
+                <TextBlock Text="{Binding CestaAtual.Nome}"
+                           FontSize="22"
+                           FontWeight="Bold"
+                           TextWrapping="Wrap"
+                           HorizontalAlignment="Center"
+                           Margin="0,0,0,20"/>
+
+                <Image Source="/Assets/cesta.png"
+                       Height="200"
+                       Stretch="Uniform"/>
+            </StackPanel>
+        </Border>
+
+        <Border Grid.Column="1" Style="{StaticResource CardStyle}" Margin="5,5,15,5">
+            <StackPanel>
+                <TextBlock Text="Itens da Cesta" FontSize="18" FontWeight="SemiBold" Margin="0,0,0,10"/>
+
+                <DataGrid x:Name="GridProdutos" ItemsSource="{Binding ProdutosDaCesta}">
+                    <DataGrid.Columns>
+
+                        <DataGridTextColumn Header="Qtd" Binding="{Binding QuantidadeFixa, FallbackValue=1}" Width="50" IsReadOnly="True"/>
+
+                        <DataGridTextColumn Header="Produto" Binding="{Binding Nome}" Width="*" IsReadOnly="True"/>
+
+                        <DataGridTemplateColumn Header="Ajuste" Width="100">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                                        <Button Content="-"
+                                                Style="{StaticResource QtyButtonStyle}"
+                                                Click="DiminuirQtd_Click"/>
+
+                                        <TextBlock Text="{Binding QuantidadeSelecionada, FallbackValue=1}"
+                                                   Margin="10,0"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
+
+                                        <Button Content="+"
+                                                Style="{StaticResource QtyButtonStyle}"
+                                                Click="AumentarQtd_Click"/>
+
+                                    </StackPanel>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                    </DataGrid.Columns>
+                </DataGrid>
+            </StackPanel>
+        </Border>
+
+        <StackPanel Grid.Column="2" Margin="5">
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Total do Pedido" Foreground="{StaticResource TextSecondary}"/>
+
+                    <TextBlock Text="{Binding CestaAtual.Preco, StringFormat='R$ {0:N2}'}"
+                               FontSize="26"
+                               FontWeight="Bold"
+                               Margin="0,5,0,0"/>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
+                    <TextBlock Text="Observações" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding Observacoes, UpdateSourceTrigger=PropertyChanged}"
+                             Height="100"
+                             TextWrapping="Wrap"
+                             AcceptsReturn="True"
+                             BorderBrush="#DDD"
+                             Padding="5"/>
+                </StackPanel>
+            </Border>
+
+            <Button Content="Adicionar ao Carrinho"
+                    Style="{StaticResource PrimaryButtonStyle}"
+                    Margin="5,10,5,0"
+                    Click="AdicionarCarrinho_Click"/>
+
+        </StackPanel>
+
+    </Grid>
+</UserControl>

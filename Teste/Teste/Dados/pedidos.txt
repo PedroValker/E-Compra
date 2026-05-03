@@ -1,0 +1,1 @@
+NomePedido:PED-20260503141725 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:500,00 |Obs:Cesta Teste: pao com apo |Itens:Cesta Teste=1

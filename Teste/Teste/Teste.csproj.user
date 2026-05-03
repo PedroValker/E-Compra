@@ -8,7 +8,16 @@
     <Compile Update="View\Administrador\DetalhesCesta.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\Administrador\DetalhesPedido.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Administrador\HomeAdministrador.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\Administrador\PedidosAdminView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\CarrinhoView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\Login.xaml.cs">

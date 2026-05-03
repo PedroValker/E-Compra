@@ -15,6 +15,7 @@
         <SolidColorBrush x:Key="AccentBrush" Color="#3B82F6"/>
         <SolidColorBrush x:Key="MenuButtonHoverBrush" Color="#334155"/>
 
+        <Geometry x:Key="IconLogoff">M10.09 15.59L11.5 17l5-5-5-5-1.41 1.41L12.67 11H3v2h9.67l-2.58 2.59zM19 3H5c-1.11 0-2 .9-2 2v4h2V5h14v14H5v-4H3v4c0 1.1.89 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2z</Geometry>
         <Geometry x:Key="IconLogo">M13.5 2a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM11 5.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM17.5 11.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM21 13.5a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM11.5 17.5a1.5 1.5 0 1 0 0 3 1.5 1.5 0 0 0 0-3zM5.5 21a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM2 13.5a1.5 1.5 0 1 0 3 0 1.5 1.5 0 0 0-3 0zM5.5 11a1.5 1.5 0 1 1 3 0 1.5 1.5 0 0 1-3 0zM12 22C6.477 22 2 17.523 2 12S6.477 2 12 2s10 4.477 10 10-4.477 10-10 10zm0-2a8 8 0 1 0 0-16 8 8 0 0 0 0 16z</Geometry>
         <Geometry x:Key="IconHome">M10 20v-6h4v6h5v-8h3L12 3 2 12h3v8z</Geometry>
         <Geometry x:Key="IconPedidos">M19 3h-4.18C14.4 1.84 13.3 1 12 1c-1.3 0-2.4.84-2.82 2H5c-1.1 0-2 .9-2 2v14c0 1.1.9 2 2 2h14c1.1 0 2-.9 2-2V5c0-1.1-.9-2-2-2zm-7 0c.55 0 1 .45 1 1s-.45 1-1 1-1-.45-1-1 .45-1 1-1zm2 14H7v-2h7v2zm3-4H7v-2h10v2zm0-4H7V7h10v2z</Geometry>
@@ -151,8 +152,17 @@
                     </StackPanel>
                 </ScrollViewer>
 
-                <Border Grid.Row="3" Padding="15" BorderBrush="#2D3748" BorderThickness="0,1,0,0">
-                    <TextBlock Text="Versão 1.0.0" FontSize="10" Foreground="{StaticResource SidebarTextMutedBrush}" HorizontalAlignment="Center"/>
+                <Border Grid.Row="3" Padding="10" BorderBrush="#2D3748" BorderThickness="0,1,0,0">
+                    <StackPanel>
+                        <Button Style="{StaticResource MenuButton}" Click="Logoff_Click">
+                            <StackPanel Orientation="Horizontal">
+                                <Path Data="{StaticResource IconLogoff}" Fill="#EF4444" Width="18" Height="18" Stretch="Uniform" Margin="0,0,12,0" VerticalAlignment="Center"/>
+                                <TextBlock Text="Sair da Conta" FontSize="14" FontWeight="Medium" Foreground="#EF4444" VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Button>
+
+                        <TextBlock Text="Versão 1.0.0" FontSize="10" Foreground="{StaticResource SidebarTextMutedBrush}" HorizontalAlignment="Center" Margin="0,10,0,5"/>
+                    </StackPanel>
                 </Border>
             </Grid>
         </Border>

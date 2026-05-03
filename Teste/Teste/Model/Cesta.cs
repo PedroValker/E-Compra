@@ -14,7 +14,9 @@ namespace Teste.Model
 
         public List<Produto> Itens { get; set; } = new List<Produto>();
 
-        public string ResumoItens => string.Join(", ", Itens.Select(p => p.Nome));
+        public string ResumoItens => string.Join(", ", Itens
+      .Where(p => p.QuantidadeSelecionada > 0) // Pega só os itens que o cliente não zerou
+      .Select(p => $"{p.QuantidadeSelecionada}x {p.Nome}")); // Junta a quantidade com o nome
 
         // 🔥 CONSTRUTOR PADRÃO (Para quando você clica em Salvar na tela)
         public Cesta()
