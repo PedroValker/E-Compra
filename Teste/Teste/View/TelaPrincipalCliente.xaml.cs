@@ -4,7 +4,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
 using Teste.Repository;
-
+using System.Linq;
 namespace Teste.View
 {
     public partial class TelaPrincipalCliente : Window
@@ -63,25 +63,26 @@ namespace Teste.View
                 ConteudoPrincipal.Content = new CestaView(cestaSelecionada);
             }
         }
+        
+
         private void CarregarCestasDoBanco()
-        {
-            CestaRepository repo = new CestaRepository();
-            repo.CarregarDoArquivo();
-            ListaCestas.Clear();
-
-            foreach (Cesta cesta in MemoriaCestas.Lista)
             {
-                ListaCestas.Add(cesta);
+                CestaRepository repo = new CestaRepository();
+                repo.CarregarDoArquivo();
+                ListaCestas.Clear();
+
+                foreach (Cesta cesta in MemoriaCestas.Lista.Take(3))
+                {
+                    ListaCestas.Add(cesta);
+                }
             }
-        }
-
-        // Navega para a tela de Pedido
-        private void FaçaPedido(object sender, RoutedEventArgs e)
+    // Navega para a tela de Pedido
+    private void FaçaPedido(object sender, RoutedEventArgs e)
         {
-            ConteudoPrincipal.Content = new CestaView();
+            ConteudoPrincipal.Content = new FacaSeuPedidoView();
         }
 
-        // 🔥 NOVO MÉTODO: Volta para a tela inicial
+        // Volta para a tela inicial
         private void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
             // Pega o conteúdo original que salvamos e joga de volta na tela

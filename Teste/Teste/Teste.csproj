@@ -12,4 +12,14 @@
     <Compile Remove="View\CarrinhoEFinalizarPedido.cs" />
   </ItemGroup>
 
+  <ItemGroup>
+    <None Remove="imagem\fundo.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="imagem\fundo.png">
+      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
+    </Resource>
+  </ItemGroup>
+
 </Project>

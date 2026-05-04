@@ -7,7 +7,7 @@ namespace Teste.Model
     {
         // Variável estática que controla o próximo ID a ser gerado
         private static int contador = 1;
-
+        public string ImagemPath { get; set; }
         public int Id { get; set; }
         public string Nome { get; set; } = "";
         public decimal Preco { get; set; }

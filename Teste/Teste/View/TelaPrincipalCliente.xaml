@@ -3,28 +3,42 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         Title="Dashboard - Cliente Basic"
         WindowState="Maximized"
-        Background="#F2F2F2">
+        Background="#F4F6F8"
+        FontFamily="Segoe UI, Tahoma, sans-serif"
+        Name="JanelaPrincipal">
 
     <Window.Resources>
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#FFD700"/>
-            <Setter Property="Foreground" Value="Black"/>
-            <Setter Property="Padding" Value="12,6"/>
+            <Setter Property="Foreground" Value="#111111"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="16"/>
             <Setter Property="Cursor" Value="Hand"/>
-        </Style>
-
-        <Style x:Key="MenuButton" TargetType="Button">
-            <Setter Property="Background" Value="Transparent"/>
-            <Setter Property="BorderThickness" Value="0"/>
-            <Setter Property="Padding" Value="12,6"/>
-            <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="Foreground" Value="Black"/>
-
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
-                    <Setter Property="Foreground" Value="#1A2BE2"/>
+                    <Setter Property="Background" Value="#F2CC00"/>
+                </Trigger>
+            </Style.Triggers>
+        </Style>
+
+        <Style x:Key="MenuItemText" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Margin" Value="25,0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Style.Triggers>
+                <Trigger Property="IsMouseOver" Value="True">
+                    <Setter Property="Foreground" Value="#002DB3"/>
                 </Trigger>
             </Style.Triggers>
         </Style>
@@ -34,110 +48,144 @@
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="120"/>
+            <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Background="White">
+        <Border Grid.Row="0" Background="White">
+            <Border.Effect>
+                <DropShadowEffect BlurRadius="10" Opacity="0.05" ShadowDepth="2" Direction="270"/>
+            </Border.Effect>
 
-            <Grid Height="70" Margin="20,0">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
+            <StackPanel HorizontalAlignment="Center" MaxWidth="1300" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}">
 
-                <Button Grid.Column="0" Click="VoltarInicio_Click" Background="Transparent" BorderThickness="0" Cursor="Hand" HorizontalAlignment="Left">
-                    <StackPanel Orientation="Horizontal" VerticalAlignment="Center">
-                        <TextBlock Text="🛒" FontSize="22" Margin="0,0,5,0" Foreground="#1E22D8"/>
-                        <TextBlock Text="Basic" FontSize="22" FontWeight="Bold" Foreground="#1E22D8"/>
+                <Grid Margin="20,25,20,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"/>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
+                        <TextBlock Text="🛒 Basic" FontSize="32" FontWeight="Black" Foreground="#002DB3"/>
                     </StackPanel>
-                </Button>
 
-                <TextBlock x:Name="NomeUsuarioText" Grid.Column="1"
-                           Text="Olá, Usuário" FontSize="18" FontWeight="SemiBold" 
-                           VerticalAlignment="Center" HorizontalAlignment="Center"/>
+                    <TextBlock Grid.Column="1" Text="R. Prefeita Adelle de Moraes - Cachoeira Paulista, SP ˅" 
+                               HorizontalAlignment="Center" VerticalAlignment="Center" FontSize="16" FontWeight="Medium" Foreground="#555"/>
 
-                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
-                    <Button Width="35" Height="35" Margin="5" Background="Transparent" BorderThickness="0" Cursor="Hand">
-                        <TextBlock Text="👤" FontSize="16" HorizontalAlignment="Center"/>
-                    </Button>
+                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                        <TextBlock x:Name="NomeUsuarioText" 
+                                   Text="{Binding NomeUsuarioLogado}" 
+                                   FontSize="18" 
+                                   FontWeight="Bold" 
+                                   Foreground="#333"
+                                   VerticalAlignment="Center" 
+                                   Margin="0,0,15,0"/>
 
-                    <Button Width="35" Height="35" Margin="5" Background="Transparent" BorderThickness="0" Cursor="Hand" Click="VerCarrinho_Click">
-                        <TextBlock Text="🛒" FontSize="16" HorizontalAlignment="Center"/>
-                    </Button>
+                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,15,0" ToolTip="Meu Perfil">
+                            <TextBlock Text="👤" FontSize="24"/>
+                        </Button>
+
+                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click">
+                            <TextBlock Text="🛒" FontSize="24"/>
+                        </Button>
+                    </StackPanel>
+                </Grid>
+
+                <Separator Background="#EEEEEE" Margin="0" Height="1"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,20">
+                    <TextBlock Text="Início" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#002DB3" MouseLeftButtonDown="VoltarInicio_Click"/>
+                    <TextBlock Text="Faça seu Pedido" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="FaçaPedido"/>
+                    <TextBlock Text="Assinatura" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
+                    <TextBlock Text="Pedidos" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
+                    <TextBlock Text="Sobre" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
+                    <TextBlock Text="Entre em Contato" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
                 </StackPanel>
-            </Grid>
-
-            <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,0,0,15">
-                <Button Content="Início" Style="{StaticResource MenuButton}" Margin="5" Width="100" Click="VoltarInicio_Click"/>
-                <Button Content="Faça seu Pedido" Style="{StaticResource PrimaryButton}" Margin="5" Width="223" Click="FaçaPedido"/>
-                <Button Content="Assinatura" Style="{StaticResource MenuButton}" Margin="5" Width="158"/>
-                <Button Content="Pedidos" Style="{StaticResource MenuButton}" Margin="5" Width="133"/>
-                <Button Content="Sobre" Style="{StaticResource MenuButton}" Margin="5" Width="110"/>
-                <Button Content="Contato" Style="{StaticResource MenuButton}" Margin="5" Width="134"/>
             </StackPanel>
-        </StackPanel>
+        </Border>
 
         <ContentControl x:Name="ConteudoPrincipal" Grid.Row="1">
-
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel>
-
-                    <Border Margin="20" CornerRadius="10" ClipToBounds="True" Background="#E2E8F0" Height="250">
-                        <Image Source="banner.jpg" Stretch="UniformToFill"/>
+                <StackPanel HorizontalAlignment="Center" MaxWidth="1300" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}" Margin="20,30,20,50">
+                    <Border CornerRadius="16" ClipToBounds="True" Background="#1E22D8" Height="280" Margin="0,0,0,40">
+                        <Grid>
+                            <Image Source="pack://application:,,,/imagem/fundo.png" Stretch="UniformToFill" Opacity="0.9"/>
+                        </Grid>
                     </Border>
 
-                    <StackPanel Margin="30,10,30,30">
-                        <TextBlock Text="Verifique nossos produtos" FontSize="20" FontWeight="Bold" Margin="10,0,10,20" HorizontalAlignment="Center"/>
+                    <StackPanel>
+                        <TextBlock Text="Verifique nossos produtos" FontSize="30" FontWeight="Black" Foreground="#222" Margin="0,0,0,30" HorizontalAlignment="Center"/>
 
                         <ItemsControl ItemsSource="{Binding ListaCestas}" HorizontalAlignment="Center">
-
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <UniformGrid Columns="3" HorizontalAlignment="Center"/>
+                                    <WrapPanel HorizontalAlignment="Center" ItemWidth="340"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
 
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="White" CornerRadius="10" Margin="15" Padding="15" Width="280">
+                                    <Border Background="White" CornerRadius="16" Margin="15" Padding="25">
                                         <Border.Effect>
-                                            <DropShadowEffect BlurRadius="10" Opacity="0.1" ShadowDepth="2"/>
+                                            <DropShadowEffect BlurRadius="20" Opacity="0.08" ShadowDepth="5" Direction="270" Color="Black"/>
                                         </Border.Effect>
-                                        <StackPanel>
 
-                                            <Border Background="#F3F4F6" Height="140" CornerRadius="8" Margin="0,0,0,10">
-                                                <TextBlock Text="📦" FontSize="50" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#D1D5DB"/>
+                                        <StackPanel>
+                                            <Border Background="#F4F6F8" Height="180" CornerRadius="12" Margin="0,0,0,20">
+                                                <TextBlock Text="📦" FontSize="70" HorizontalAlignment="Center" VerticalAlignment="Center" Foreground="#D1D5DB"/>
                                             </Border>
 
-                                            <TextBlock Text="{Binding Nome}" FontWeight="Bold" FontSize="16" TextWrapping="Wrap"/>
-                                            <TextBlock Text="{Binding Preco, StringFormat='R$ {0:N2}'}" Foreground="#555" Margin="0,5,0,0"/>
+                                            <TextBlock Text="{Binding Nome}" FontWeight="Bold" FontSize="22" Foreground="#212529" TextWrapping="Wrap" Margin="0,0,0,8"/>
+                                            <TextBlock Text="{Binding Preco, StringFormat='R$ {0:N2}'}" FontSize="18" FontWeight="SemiBold" Foreground="#6C757D" Margin="0,0,0,25"/>
 
                                             <Button Content="Comprar" 
-                                                Background="#FFD700" 
-                                                Margin="0,15,0,0" 
-                                                Height="35" 
-                                                Cursor="Hand" 
-                                                BorderThickness="0" 
-                                                FontWeight="SemiBold"
-                                                Click="ComprarCesta_Click"/>                
+                                                    Style="{StaticResource PrimaryButton}" 
+                                                    Click="ComprarCesta_Click"
+                                                    HorizontalAlignment="Stretch"/>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
                     </StackPanel>
-
                 </StackPanel>
             </ScrollViewer>
         </ContentControl>
 
-        <Grid Grid.Row="2" Background="#1A2BE2">
-            <StackPanel VerticalAlignment="Center" HorizontalAlignment="Center">
-                <TextBlock Text="🛒 Basic" Foreground="White" FontSize="22" FontWeight="Bold" HorizontalAlignment="Center" Margin="0,0,0,5"/>
-                <TextBlock Text="Contato: +55 11 8302-0238" Foreground="White" HorizontalAlignment="Center"/>
-            </StackPanel>
-        </Grid>
+        <Border Grid.Row="2" Background="#1E22D8" Padding="0,20,0,5">
+            <Grid MaxWidth="1200" Margin="40,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Grid Grid.Row="0" Margin="0,0,0,20">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <TextBlock Grid.Column="0" Text="🛒 Basic" Foreground="White" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+
+                    <StackPanel Grid.Column="1" Orientation="Horizontal" VerticalAlignment="Center">
+                        <StackPanel Orientation="Horizontal" Margin="0,0,25,0">
+                            <TextBlock Text="📞" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center" Opacity="0.8"/>
+                            <TextBlock Text="+55 11 8302-0238" Foreground="White" Opacity="0.85" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+
+                        <StackPanel Orientation="Horizontal">
+                            <TextBlock Text="✉️" FontSize="14" Margin="0,0,8,0" VerticalAlignment="Center" Opacity="0.8"/>
+                            <TextBlock Text="contato@basic.com" Foreground="White" Opacity="0.85" FontSize="14" FontWeight="SemiBold" VerticalAlignment="Center"/>
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+
+                <Separator Grid.Row="1" Background="White" Opacity="0.15" Margin="0,0,0,15"/>
+
+                <TextBlock Grid.Row="2" Text="© 2024 Basic Cestas. Todos os direitos reservados." Foreground="White" Opacity="0.5" FontSize="12" HorizontalAlignment="Center"/>
+            </Grid>
+        </Border>
 
     </Grid>
 </Window>

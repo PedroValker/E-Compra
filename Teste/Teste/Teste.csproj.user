@@ -20,6 +20,9 @@
     <Compile Update="View\CarrinhoView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\FacaSeuPedidoView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\Login.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
