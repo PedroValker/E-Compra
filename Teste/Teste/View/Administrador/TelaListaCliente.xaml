@@ -6,10 +6,6 @@
         WindowStartupLocation="CenterScreen"
         Background="#F5F6FA">
 
-    <Window.DataContext>
-        <vm:MainViewModel/>
-    </Window.DataContext>
-
     <Grid>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="220"/>

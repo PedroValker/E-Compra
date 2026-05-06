@@ -40,7 +40,44 @@
                         <Border Style="{StaticResource InputCard}">
                             <TextBox x:Name="NomeCestaBox" BorderThickness="0" Background="Transparent" FontSize="14"/>
                         </Border>
+                        <TextBlock Text="Imagem da Cesta" Foreground="#4B5563" FontWeight="SemiBold" FontSize="13"/>
 
+                        <Grid Margin="0,5,0,15">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <Border Style="{StaticResource InputCard}" Margin="0,0,10,0">
+                                <TextBox x:Name="ImagemPathBox" 
+                 BorderThickness="0" 
+                 Background="Transparent" 
+                 FontSize="14"
+                 IsReadOnly="True"/>
+                            </Border>
+
+                            <Button Grid.Column="1"
+            Content="📷 Selecionar"
+            Background="#6366F1"
+            Foreground="White"
+            FontWeight="Bold"
+            BorderThickness="0"
+            Padding="12,0"
+            Cursor="Hand"
+            Click="SelecionarImagem_Click">
+                                <Button.Resources>
+                                    <Style TargetType="Border">
+                                        <Setter Property="CornerRadius" Value="8"/>
+                                    </Style>
+                                </Button.Resources>
+                            </Button>
+                        </Grid>
+
+
+                        <Image x:Name="PreviewImagem"
+       Height="116"
+       Stretch="UniformToFill"
+       Margin="0,0,0,15" Width="152"/>
                         <TextBlock Text="Preço da Cesta (R$)" Foreground="#4B5563" FontWeight="SemiBold" FontSize="13"/>
                         <Border Style="{StaticResource InputCard}">
                             <TextBox x:Name="PrecoCestaBox" BorderThickness="0" Background="Transparent" FontSize="14"/>

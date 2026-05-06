@@ -4,6 +4,10 @@ using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
 using Teste.Repository;
+using Microsoft.Win32;
+using System.Windows.Media.Imaging;
+using System.IO;
+using System;
 
 namespace Teste.View
 {
@@ -11,21 +15,20 @@ namespace Teste.View
     {
         private Cesta _cestaEmEdicao = null;
 
-        // Lista temporária que armazena os produtos enquanto a cesta está sendo criada/editada
         private List<Produto> _itensDaCestaAtual = new List<Produto>();
+
+        private string caminhoImagemSelecionada = "";
 
         public CadastroCesta()
         {
             InitializeComponent();
 
-            // Preenche o ComboBox com todos os produtos do sistema
             ProdutosComboBox.ItemsSource = MemoriaProdutos.Lista;
 
             AtualizarListaItensAtuais();
             AtualizarListaCestas();
         }
 
-        // 🔥 1. ADICIONA PRODUTO NA CESTA ATUAL
         private void AdicionarItem_Click(object sender, RoutedEventArgs e)
         {
             Produto produtoSelecionado = ProdutosComboBox.SelectedItem as Produto;
@@ -41,7 +44,6 @@ namespace Teste.View
             }
         }
 
-        // 🔥 2. REMOVE PRODUTO DA CESTA ATUAL
         private void RemoverItemDaCesta_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -54,7 +56,27 @@ namespace Teste.View
             }
         }
 
-        // 🔥 3. SALVAR (NOVA OU EDIÇÃO)
+        private void SelecionarImagem_Click(object sender, RoutedEventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog();
+            dialog.Filter = "Imagens (*.png;*.jpg;*.jpeg)|*.png;*.jpg;*.jpeg";
+
+            if (dialog.ShowDialog() == true)
+            {
+                caminhoImagemSelecionada = dialog.FileName;
+                ImagemPathBox.Text = caminhoImagemSelecionada;
+
+                try
+                {
+                    PreviewImagem.Source = new BitmapImage(new Uri(caminhoImagemSelecionada));
+                }
+                catch
+                {
+                    PreviewImagem.Source = null;
+                }
+            }
+        }
+
         private void SalvarCesta_Click(object sender, RoutedEventArgs e)
         {
             if (string.IsNullOrWhiteSpace(NomeCestaBox.Text) || string.IsNullOrWhiteSpace(PrecoCestaBox.Text))
@@ -69,28 +91,37 @@ namespace Teste.View
                 return;
             }
 
+            decimal.TryParse(PrecoCestaBox.Text, out decimal preco);
+
             CestaRepository repo = new CestaRepository();
 
             if (_cestaEmEdicao != null)
             {
-                // MODO EDIÇÃO
+                // 🔥 EDIÇÃO
                 _cestaEmEdicao.Nome = NomeCestaBox.Text;
-                _cestaEmEdicao.Preco = decimal.Parse(PrecoCestaBox.Text);
+                _cestaEmEdicao.Preco = preco;
 
-                // Copia a lista temporária para a cesta sendo editada
+                if (!string.IsNullOrEmpty(caminhoImagemSelecionada))
+                {
+                    _cestaEmEdicao.ImagemPath = caminhoImagemSelecionada;
+                }
+
                 _cestaEmEdicao.Itens = new List<Produto>(_itensDaCestaAtual);
 
                 repo.AtualizarArquivoTxt();
+
                 MessageBox.Show("Cesta atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+
                 _cestaEmEdicao = null;
             }
             else
             {
-                // MODO NOVA CESTA
+                // 🔥 NOVA CESTA
                 Cesta novaCesta = new Cesta
                 {
                     Nome = NomeCestaBox.Text,
-                    Preco = decimal.Parse(PrecoCestaBox.Text),
+                    Preco = preco,
+                    ImagemPath = caminhoImagemSelecionada,
                     Itens = new List<Produto>(_itensDaCestaAtual)
                 };
 
@@ -100,6 +131,9 @@ namespace Teste.View
                     return;
                 }
 
+                // 🔥 Atualiza caminho após cópia da imagem
+                caminhoImagemSelecionada = novaCesta.ImagemPath;
+
                 MessageBox.Show("Cesta criada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
@@ -107,7 +141,6 @@ namespace Teste.View
             AtualizarListaCestas();
         }
 
-        // 🔥 4. BOTÃO EDITAR CESTA DA TABELA
         private void EditarCesta_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -120,14 +153,32 @@ namespace Teste.View
                 NomeCestaBox.Text = cestaClicada.Nome;
                 PrecoCestaBox.Text = cestaClicada.Preco.ToString();
 
-                // Copia os itens da cesta cadastrada para a lista temporária da tela
                 _itensDaCestaAtual = new List<Produto>(cestaClicada.Itens);
+
+                // 🔥 IMAGEM
+                caminhoImagemSelecionada = cestaClicada.ImagemPath;
+                ImagemPathBox.Text = cestaClicada.ImagemPath;
+
+                try
+                {
+                    if (!string.IsNullOrEmpty(cestaClicada.ImagemPath) && File.Exists(cestaClicada.ImagemPath))
+                    {
+                        PreviewImagem.Source = new BitmapImage(new Uri(Path.GetFullPath(cestaClicada.ImagemPath)));
+                    }
+                    else
+                    {
+                        PreviewImagem.Source = null;
+                    }
+                }
+                catch
+                {
+                    PreviewImagem.Source = null;
+                }
 
                 AtualizarListaItensAtuais();
             }
         }
 
-        // 🔥 5. BOTÃO EXCLUIR CESTA
         private void ExcluirCesta_Click(object sender, RoutedEventArgs e)
         {
             Button btn = sender as Button;
@@ -135,7 +186,11 @@ namespace Teste.View
 
             if (cestaClicada != null)
             {
-                MessageBoxResult resposta = MessageBox.Show($"Deseja excluir a '{cestaClicada.Nome}'?", "Confirmar", MessageBoxButton.YesNo, MessageBoxImage.Question);
+                MessageBoxResult resposta = MessageBox.Show(
+                    $"Deseja excluir a '{cestaClicada.Nome}'?",
+                    "Confirmar",
+                    MessageBoxButton.YesNo,
+                    MessageBoxImage.Question);
 
                 if (resposta == MessageBoxResult.Yes)
                 {
@@ -155,7 +210,18 @@ namespace Teste.View
             }
         }
 
-        // Métodos auxiliares de atualização de tela
+        private void VerItens_Click(object sender, RoutedEventArgs e)
+        {
+            Button btn = sender as Button;
+            Cesta cestaClicada = btn.DataContext as Cesta;
+
+            if (cestaClicada != null)
+            {
+                DetalhesCestaWindow popup = new DetalhesCestaWindow(cestaClicada);
+                popup.ShowDialog();
+            }
+        }
+
         private void AtualizarListaItensAtuais()
         {
             ListaItensAtuais.ItemsSource = null;
@@ -167,29 +233,20 @@ namespace Teste.View
             ListaCestas.ItemsSource = null;
             ListaCestas.ItemsSource = MemoriaCestas.Lista;
         }
-        // 🔥 EVENTO NOVO: CLIQUE NO BOTÃO VER ITENS
-        private void VerItens_Click(object sender, RoutedEventArgs e)
-        {
-            Button btn = sender as Button;
-            Cesta cestaClicada = btn.DataContext as Cesta;
 
-            if (cestaClicada != null)
-            {
-                // Instancia a nova janela passando a cesta selecionada
-                DetalhesCestaWindow popup = new DetalhesCestaWindow(cestaClicada);
-
-                // ShowDialog() faz com que a janela abra como um "Popup" 
-                // bloqueando a tela de trás até o usuário fechá-la
-                popup.ShowDialog();
-            }
-        }
         private void LimparCampos()
         {
             NomeCestaBox.Clear();
             PrecoCestaBox.Clear();
             ProdutosComboBox.SelectedIndex = -1;
+
             _itensDaCestaAtual.Clear();
             AtualizarListaItensAtuais();
+
+            // 🔥 LIMPA IMAGEM
+            caminhoImagemSelecionada = "";
+            ImagemPathBox.Clear();
+            PreviewImagem.Source = null;
         }
     }
 }

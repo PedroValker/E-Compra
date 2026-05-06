@@ -9,15 +9,22 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Compile Remove="imagem\**" />
+    <EmbeddedResource Remove="imagem\**" />
+    <None Remove="imagem\**" />
+    <Page Remove="imagem\**" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Compile Remove="View\CarrinhoEFinalizarPedido.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <None Remove="imagem\fundo.png" />
+    <None Remove="Dados\imagem\fundo.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="imagem\fundo.png">
+    <Resource Include="Dados\imagem\fundo.png">
       <CopyToOutputDirectory>Never</CopyToOutputDirectory>
     </Resource>
   </ItemGroup>

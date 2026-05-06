@@ -109,7 +109,7 @@
                 <StackPanel HorizontalAlignment="Center" MaxWidth="1300" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}" Margin="20,30,20,50">
                     <Border CornerRadius="16" ClipToBounds="True" Background="#1E22D8" Height="280" Margin="0,0,0,40">
                         <Grid>
-                            <Image Source="pack://application:,,,/imagem/fundo.png" Stretch="UniformToFill" Opacity="0.9"/>
+                            <Image Source="pack://application:,,,/Dados/imagem/fundo.png"/>
                         </Grid>
                     </Border>
 
