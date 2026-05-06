@@ -35,18 +35,33 @@ namespace Teste.Repository
                 if (!string.IsNullOrEmpty(pasta))
                     Directory.CreateDirectory(pasta);
 
-                // 🔥 Copiar imagem para dentro do projeto
                 string imagemFinal = "null";
 
+                // 🔥 TRATAMENTO DA IMAGEM
                 if (!string.IsNullOrEmpty(cesta.ImagemPath) && File.Exists(cesta.ImagemPath))
                 {
                     string pastaImagens = ObterPastaImagens();
                     Directory.CreateDirectory(pastaImagens);
 
-                    string nomeArquivo = Path.GetFileName(cesta.ImagemPath);
+                    string extensao = Path.GetExtension(cesta.ImagemPath);
+
+                    // 🔥 Nome único evita conflito e sobrescrita
+                    string nomeArquivo = $"{Guid.NewGuid()}{extensao}";
                     string destino = Path.Combine(pastaImagens, nomeArquivo);
 
-                    File.Copy(cesta.ImagemPath, destino, true);
+                    string origemCompleta = Path.GetFullPath(cesta.ImagemPath);
+                    string destinoCompleto = Path.GetFullPath(destino);
+
+                    // 🔥 Evita copiar o arquivo para ele mesmo
+                    if (!origemCompleta.Equals(destinoCompleto, StringComparison.OrdinalIgnoreCase))
+                    {
+                        // 🔥 Copia de forma segura (evita arquivo travado)
+                        using (var streamOrigem = new FileStream(origemCompleta, FileMode.Open, FileAccess.Read, FileShare.Read))
+                        using (var streamDestino = new FileStream(destinoCompleto, FileMode.Create, FileAccess.Write, FileShare.None))
+                        {
+                            streamOrigem.CopyTo(streamDestino);
+                        }
+                    }
 
                     imagemFinal = Path.Combine("Dados", "imagem", nomeArquivo);
                 }

@@ -1,29 +1,39 @@
-﻿using System.Collections.ObjectModel;
+﻿using CestaApp.Views;
+using System;
+using System.Collections.ObjectModel;
 using System.Windows;
-using System.Windows.Controls; // Importante: Necessário para UserControl
+using System.Windows.Controls;
 using Teste.Model;
 using Teste.Repository;
 
 namespace Teste.View
 {
-    // 1. Mudamos de ": Window" para ": UserControl"
     public partial class FacaSeuPedidoView : UserControl
     {
+        // 🔥 EVENTO CORRETO (TEM QUE FICAR DENTRO DA CLASSE)
+        public event Action<Cesta> CestaSelecionada;
+
         public ObservableCollection<Cesta> ListaCestas { get; set; }
 
-        // 2. Removi o parâmetro "string nome" do construtor para bater com a chamada 
-        // que você fez na TelaPrincipalCliente: ConteudoPrincipal.Content = new FacaSeuPedidoView();
         public FacaSeuPedidoView()
         {
             InitializeComponent();
-            // Inicializa a lista
-            ListaCestas = new ObservableCollection<Cesta>();
 
-            // Define o DataContext para o Binding das Cestas funcionar
+            ListaCestas = new ObservableCollection<Cesta>();
             this.DataContext = this;
 
-            // Carrega os dados
             CarregarCestasDoBanco();
+
+        }
+
+        // 🔥 BOTÃO COMPRAR
+        private void ComprarCesta_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button botao && botao.DataContext is Cesta cesta)
+            {
+                // dispara evento para a tela principal
+                CestaSelecionada?.Invoke(cesta);
+            }
         }
 
         private void CarregarCestasDoBanco()

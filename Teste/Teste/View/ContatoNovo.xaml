@@ -1,0 +1,85 @@
+﻿<UserControl x:Class="Teste.View.ContatoNovo.ContatoNovo"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             Background="#F2F2F2"
+             HorizontalContentAlignment="Stretch"
+             VerticalContentAlignment="Stretch">
+    <Grid Margin="30">
+
+        <TextBlock Text="Entre em Contato"
+                   FontSize="26"
+                   FontWeight="Bold"
+                   HorizontalAlignment="Center"
+                   Margin="0,0,0,20"/>
+
+        <Grid Margin="20">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- INFO -->
+            <StackPanel Grid.Column="0" Margin="20">
+
+                <TextBlock Text="Informações de Contato"
+                           FontSize="18"
+                           FontWeight="Bold"
+                           Margin="0,0,0,10"/>
+
+                <TextBlock Text="E-mail"/>
+                <Border Background="White" CornerRadius="8" Padding="10" Margin="0,5">
+                    <TextBlock Text="emaildaloja@exemplo.com"/>
+                </Border>
+
+                <TextBlock Text="Telefone" Margin="10,10,0,0"/>
+                <Border Background="White" CornerRadius="8" Padding="10" Margin="0,5">
+                    <TextBlock Text="(12) 4002-8922"/>
+                </Border>
+
+                <TextBlock Text="Localização" Margin="10,10,0,0"/>
+                <Border Background="White" CornerRadius="8" Padding="10" Margin="0,5">
+                    <TextBlock Text="Lorena, São Paulo"/>
+                </Border>
+
+            </StackPanel>
+
+            <!-- FORM -->
+            <Border Grid.Column="1"
+                    Background="White"
+                    CornerRadius="10"
+                    Padding="20"
+                    Margin="20">
+
+                <StackPanel>
+
+                    <Grid Margin="0,0,0,10">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition/>
+                            <ColumnDefinition/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBox Margin="5" Height="35"/>
+                        <TextBox Margin="5" Height="35" Grid.Column="1"/>
+                    </Grid>
+
+                    <TextBox Height="35" Margin="5"/>
+                    <TextBox Height="150"
+                             Margin="5"
+                             AcceptsReturn="True"
+                             TextWrapping="Wrap"/>
+
+                    <Button Content="Enviar Mensagem"
+                            Background="#1E22D8"
+                            Foreground="White"
+                            Height="40"
+                            Margin="5,15,5,0"
+                            Cursor="Hand"/>
+
+                </StackPanel>
+
+            </Border>
+
+        </Grid>
+
+    </Grid>
+</UserControl>

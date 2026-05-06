@@ -52,11 +52,6 @@ C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.pdb
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.genruntimeconfig.cache
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\ref\Teste.dll
-C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.exe
-C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.deps.json
-C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.runtimeconfig.json
-C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.dll
-C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.pdb
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\AcompanharPedido.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\CadastroCesta.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\CadastroProduto.baml
@@ -67,7 +62,6 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Admin
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\PrincipalAdministrador.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CarrinhoView.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CestaView.baml
-C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Contato.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FacaSeuPedidoView.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FinalizarPedido.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Login.baml
@@ -84,7 +78,6 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Admin
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\TelaListaCliente.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CarrinhoView.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CestaView.g.cs
-C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Contato.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FacaSeuPedidoView.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FinalizarPedido.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Login.g.cs
@@ -93,6 +86,11 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\TelaP
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\App.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste_MarkupCompile.cache
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste_MarkupCompile.lref
+C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.exe
+C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.deps.json
+C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.runtimeconfig.json
+C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.dll
+C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\Teste.pdb
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\TelaListaCliente.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.g.resources
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.GeneratedMSBuildEditorConfig.editorconfig
@@ -105,3 +103,5 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\refint\Tes
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.pdb
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.genruntimeconfig.cache
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\ref\Teste.dll
+C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.baml
+C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.g.cs

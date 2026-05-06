@@ -67,19 +67,19 @@
             <ColumnDefinition Width="2*" />
         </Grid.ColumnDefinitions>
 
-        <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="5,5,15,5">
-            <StackPanel VerticalAlignment="Center">
+        <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="8,10,10,0">
+            <StackPanel VerticalAlignment="Center" Height="333" Margin="11,0,0,0">
 
                 <TextBlock Text="{Binding CestaAtual.Nome}"
                            FontSize="22"
                            FontWeight="Bold"
                            TextWrapping="Wrap"
                            HorizontalAlignment="Center"
-                           Margin="0,0,0,20"/>
-
-                <Image Source="/Assets/cesta.png"
-                       Height="200"
-                       Stretch="Uniform"/>
+                           Margin="0,0,0,20" Height="24"/>
+                <Image Source="{Binding CestaAtual.ImagemCompleta}"
+                   Stretch="Uniform"
+                   HorizontalAlignment="Center"
+                   VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
 
