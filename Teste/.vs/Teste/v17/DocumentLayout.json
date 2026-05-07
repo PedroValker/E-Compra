@@ -3,40 +3,32 @@
   "WorkspaceRootPath": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\pedidosviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\pedidosviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\telaprincipalcliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\pedidosview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\pedidosview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\facaseupedidoview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\cestaview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\cestaview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\finalizarpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\finalizarpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\baseviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\baseviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\fa\u00E7apedidoc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\fa\u00E7apedidoc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\acompanharpedidoviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -47,20 +39,60 @@
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\cadastroviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\fa\u00E7apedidoc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\fa\u00E7apedidoc.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\baseviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\baseviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\cestaview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\cestaview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\relaycommand.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\telaclienteviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\telaclienteviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\viewmodel\\loginviewmodel.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\repository\\pedidorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\repository\\pedidorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\repository\\produtorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\repository\\produtorepository.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\dados\\pedidos.txt||{8B382828-6202-11D1-8870-0000F87579D2}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\dados\\pedidos.txt||{8B382828-6202-11D1-8870-0000F87579D2}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\finalizarpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\finalizarpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\carrinhoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
@@ -89,10 +121,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\administrador\\detalhescesta.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\administrador\\detalhescesta.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\model\\cesta.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -130,10 +158,6 @@
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\administrador\\cadastroproduto.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\acelera\\teste\\teste\\view\\acompanharpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\acompanharpedido.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -165,11 +189,11 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 4,
+          "SelectedChildIndex": 1,
           "Children": [
             {
               "$type": "Document",
-              "DocumentIndex": 38,
+              "DocumentIndex": 44,
               "Title": "FinalizarPedido.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FinalizarPedido.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\FinalizarPedido.xaml",
@@ -178,41 +202,88 @@
               "ViewState": "AgIAAKgAAAAAAAAAAAAswMoAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
               "WhenOpened": "2026-04-24T13:05:05.172Z",
-              "IsPinned": true,
+              "IsPinned": true
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 0,
+              "Title": "PedidosViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\PedidosViewModel.cs",
+              "RelativeDocumentMoniker": "Teste\\ViewModel\\PedidosViewModel.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\PedidosViewModel.cs",
+              "RelativeToolTip": "Teste\\ViewModel\\PedidosViewModel.cs",
+              "ViewState": "AgIAAAQAAAAAAAAAAAAAwBgAAAAQAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T11:04:23.745Z",
               "EditorCaption": ""
             },
             {
-              "$type": "Bookmark",
-              "Name": "ST:0:0:{cce594b6-0c39-4442-ba28-10c64ac7e89f}"
+              "$type": "Document",
+              "DocumentIndex": 6,
+              "Title": "Fa\u00E7aPedidoC.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
+              "RelativeDocumentMoniker": "Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
+              "RelativeToolTip": "Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAUAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T13:28:45.005Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 5,
+              "Title": "FacaSeuPedidoView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml.cs",
+              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml.cs",
+              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml.cs",
+              "ViewState": "AgIAAAsAAAAAAAAAAAAQwBYAAAAkAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T13:32:52.21Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
+              "Title": "PedidosView.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\PedidosView.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml",
+              "RelativeToolTip": "Teste\\View\\PedidosView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-07T10:39:51.2Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 4,
+              "Title": "PedidosView.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml.cs",
+              "RelativeDocumentMoniker": "Teste\\View\\PedidosView.xaml.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml.cs",
+              "RelativeToolTip": "Teste\\View\\PedidosView.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAgAAAAJAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T11:09:10.69Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 2,
-              "Title": "ContatoNovo.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml.cs",
-              "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml.cs",
-              "RelativeToolTip": "Teste\\View\\ContatoNovo.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAaAAAAAAAAAA==",
+              "Title": "TelaPrincipalCliente.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml.cs",
+              "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml.cs",
+              "RelativeToolTip": "Teste\\View\\TelaPrincipalCliente.xaml.cs",
+              "ViewState": "AgIAAC8AAAAAAAAAAAAQwE4AAAAJAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T14:22:26.704Z",
+              "WhenOpened": "2026-05-06T12:06:40.319Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
               "DocumentIndex": 3,
-              "Title": "ContatoNovo.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
-              "RelativeToolTip": "Teste\\View\\ContatoNovo.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T14:21:51.55Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 0,
               "Title": "TelaPrincipalCliente.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml",
@@ -224,95 +295,20 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
-              "Title": "TelaPrincipalCliente.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml.cs",
-              "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml.cs",
-              "RelativeToolTip": "Teste\\View\\TelaPrincipalCliente.xaml.cs",
-              "ViewState": "AgIAACQAAAAAAAAAAAAowEUAAAAIAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T12:06:40.319Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 6,
-              "Title": "CestaView.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\CestaView.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml",
-              "RelativeToolTip": "Teste\\View\\CestaView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T11:57:15.475Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 5,
-              "Title": "FacaSeuPedidoView.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
-              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T11:57:02.972Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 4,
-              "Title": "FacaSeuPedidoView.xaml.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml.cs",
-              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml.cs",
-              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABkAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T13:32:52.21Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
-              "Title": "BaseViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\BaseViewModel.cs",
-              "RelativeDocumentMoniker": "Teste\\ViewModel\\BaseViewModel.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\BaseViewModel.cs",
-              "RelativeToolTip": "Teste\\ViewModel\\BaseViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-29T13:45:55.859Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 7,
               "Title": "AcompanharPedidoViewModel.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\AcompanharPedidoViewModel.cs",
               "RelativeDocumentMoniker": "Teste\\ViewModel\\AcompanharPedidoViewModel.cs",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\AcompanharPedidoViewModel.cs",
               "RelativeToolTip": "Teste\\ViewModel\\AcompanharPedidoViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAABUAAAAtAAAAAAAAAA==",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAABsAAABBAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-04-29T13:28:58.072Z",
               "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
-              "Title": "FinalizarPedido.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FinalizarPedido.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\FinalizarPedido.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FinalizarPedido.xaml",
-              "RelativeToolTip": "Teste\\View\\FinalizarPedido.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-24T13:11:36.646Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 10,
+              "DocumentIndex": 8,
               "Title": "CadastroViewModel.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\CadastroViewModel.cs",
               "RelativeDocumentMoniker": "Teste\\ViewModel\\CadastroViewModel.cs",
@@ -325,33 +321,32 @@
             },
             {
               "$type": "Document",
+              "DocumentIndex": 9,
+              "Title": "BaseViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\BaseViewModel.cs",
+              "RelativeDocumentMoniker": "Teste\\ViewModel\\BaseViewModel.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\BaseViewModel.cs",
+              "RelativeToolTip": "Teste\\ViewModel\\BaseViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-04-29T13:45:55.859Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 10,
+              "Title": "CestaView.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\CestaView.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml",
+              "RelativeToolTip": "Teste\\View\\CestaView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-06T11:57:15.475Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
               "DocumentIndex": 11,
-              "Title": "Fa\u00E7aPedidoC.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
-              "RelativeDocumentMoniker": "Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
-              "RelativeToolTip": "Teste\\ViewModel\\Fa\u00E7aPedidoC.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-29T13:28:45.005Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 12,
-              "Title": "LoginViewModel.cs",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\LoginViewModel.cs",
-              "RelativeDocumentMoniker": "Teste\\ViewModel\\LoginViewModel.cs",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\LoginViewModel.cs",
-              "RelativeToolTip": "Teste\\ViewModel\\LoginViewModel.cs",
-              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T14:08:44.944Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 13,
               "Title": "RelayCommand.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\RelayCommand.cs",
               "RelativeDocumentMoniker": "Teste\\ViewModel\\RelayCommand.cs",
@@ -360,6 +355,55 @@
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-06T14:08:46.343Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 12,
+              "Title": "Login.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\Login.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
+              "RelativeToolTip": "Teste\\View\\Login.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-24T13:11:32.757Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 13,
+              "Title": "FacaSeuPedidoView.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
+              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-06T11:57:02.972Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 15,
+              "Title": "MainWindow.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\MainWindow.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
+              "RelativeToolTip": "Teste\\View\\MainWindow.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-29T13:36:44.267Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 16,
+              "Title": "LoginViewModel.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\LoginViewModel.cs",
+              "RelativeDocumentMoniker": "Teste\\ViewModel\\LoginViewModel.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\LoginViewModel.cs",
+              "RelativeToolTip": "Teste\\ViewModel\\LoginViewModel.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T14:08:44.944Z",
               "EditorCaption": ""
             },
             {
@@ -377,19 +421,89 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 21,
+              "Title": "ContatoNovo.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
+              "RelativeToolTip": "Teste\\View\\ContatoNovo.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-06T14:21:51.55Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 17,
+              "Title": "PedidoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\PedidoRepository.cs",
+              "RelativeDocumentMoniker": "Teste\\Repository\\PedidoRepository.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\PedidoRepository.cs",
+              "RelativeToolTip": "Teste\\Repository\\PedidoRepository.cs",
+              "ViewState": "AgIAAEoAAAAAAAAAAAAwwAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:39:24.148Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 20,
+              "Title": "ContatoNovo.xaml.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml.cs",
+              "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml.cs",
+              "RelativeToolTip": "Teste\\View\\ContatoNovo.xaml.cs",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAYAAAAaAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-06T14:22:26.704Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 19,
+              "Title": "pedidos.txt",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Dados\\pedidos.txt",
+              "RelativeDocumentMoniker": "Teste\\Dados\\pedidos.txt",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Dados\\pedidos.txt",
+              "RelativeToolTip": "Teste\\Dados\\pedidos.txt",
+              "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003109|",
+              "WhenOpened": "2026-05-07T10:39:27.894Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 18,
+              "Title": "ProdutoRepository.cs",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\ProdutoRepository.cs",
+              "RelativeDocumentMoniker": "Teste\\Repository\\ProdutoRepository.cs",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\ProdutoRepository.cs",
+              "RelativeToolTip": "Teste\\Repository\\ProdutoRepository.cs",
+              "ViewState": "AgIAACcAAAAAAAAAAAAowAAAAAAAAAAAAAAAAA==",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
+              "WhenOpened": "2026-05-07T10:39:35.969Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 22,
+              "Title": "FinalizarPedido.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FinalizarPedido.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\FinalizarPedido.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\FinalizarPedido.xaml",
+              "RelativeToolTip": "Teste\\View\\FinalizarPedido.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-04-24T13:11:36.646Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 23,
               "Title": "CarrinhoView.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\CarrinhoView.xaml",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
               "RelativeToolTip": "Teste\\View\\CarrinhoView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T13:54:21.036Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T13:54:21.036Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 24,
               "Title": "CestaView.xaml.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\CestaView.xaml.cs",
@@ -397,36 +511,33 @@
               "RelativeToolTip": "Teste\\View\\CestaView.xaml.cs",
               "ViewState": "AgIAACYAAAAAAAAAAAAkwEcAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T13:40:15.161Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T13:40:15.161Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 28,
               "Title": "DetalhesCesta.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesCesta.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesCesta.xaml",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesCesta.xaml",
               "RelativeToolTip": "Teste\\View\\Administrador\\DetalhesCesta.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-29T13:36:31.064Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-29T13:36:31.064Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 25,
               "Title": "PrincipalAdministrador.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
               "RelativeToolTip": "Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-24T14:15:14.021Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-24T14:15:14.021Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 29,
               "Title": "DetalhesCesta.xaml.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesCesta.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesCesta.xaml.cs",
@@ -434,36 +545,33 @@
               "RelativeToolTip": "Teste\\View\\Administrador\\DetalhesCesta.xaml.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T13:53:29.743Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T13:53:29.743Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 26,
               "Title": "PedidosAdminView.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PedidosAdminView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PedidosAdminView.xaml",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PedidosAdminView.xaml",
               "RelativeToolTip": "Teste\\View\\Administrador\\PedidosAdminView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-06T13:54:15.777Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T13:54:15.777Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 27,
               "Title": "HomeAdministrador.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\HomeAdministrador.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\HomeAdministrador.xaml",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\HomeAdministrador.xaml",
               "RelativeToolTip": "Teste\\View\\Administrador\\HomeAdministrador.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-29T13:36:33.493Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-29T13:36:33.493Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 33,
               "Title": "TelaListaCliente.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\TelaListaCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\TelaListaCliente.xaml",
@@ -474,7 +582,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 36,
               "Title": "CadastroCesta.xaml.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\CadastroCesta.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\CadastroCesta.xaml.cs",
@@ -486,19 +594,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
-              "Title": "MainWindow.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\MainWindow.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
-              "RelativeToolTip": "Teste\\View\\MainWindow.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-29T13:36:44.267Z",
-              "EditorCaption": ""
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 31,
               "Title": "CestaRepository.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\CestaRepository.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\CestaRepository.cs",
@@ -506,12 +602,11 @@
               "RelativeToolTip": "Teste\\Repository\\CestaRepository.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAwGUAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T12:01:27.399Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T12:01:27.399Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 32,
               "Title": "MemoriaCesta.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Repository\\MemoriaCesta.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\MemoriaCesta.cs",
@@ -519,12 +614,11 @@
               "RelativeToolTip": "Teste\\Repository\\MemoriaCesta.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAAAkAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-06T12:15:14.511Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-06T12:15:14.511Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 35,
               "Title": "Microsoft.WinFX.targets",
               "DocumentMoniker": "C:\\Program Files\\dotnet\\sdk\\9.0.310\\Sdks\\Microsoft.NET.Sdk.WindowsDesktop\\targets\\Microsoft.WinFX.targets",
               "RelativeDocumentMoniker": "..\\..\\..\\..\\..\\Program Files\\dotnet\\sdk\\9.0.310\\Sdks\\Microsoft.NET.Sdk.WindowsDesktop\\targets\\Microsoft.WinFX.targets",
@@ -536,7 +630,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 30,
               "Title": "Cesta.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Model\\Cesta.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\Cesta.cs",
@@ -544,12 +638,11 @@
               "RelativeToolTip": "Teste\\Model\\Cesta.cs",
               "ViewState": "AgIAACcAAAAAAAAAAAAYwEsAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-04-29T13:31:44.869Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-29T13:31:44.869Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 34,
               "Title": "TelaListaCliente.xaml.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\TelaListaCliente.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\TelaListaCliente.xaml.cs",
@@ -561,18 +654,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
-              "Title": "Login.xaml",
-              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\Login.xaml",
-              "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
-              "RelativeToolTip": "Teste\\View\\Login.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-24T13:11:32.757Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 38,
               "Title": "CadastroProduto.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\CadastroProduto.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\CadastroProduto.xaml",
@@ -583,7 +665,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 37,
               "Title": "CadastroCesta.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\CadastroCesta.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\CadastroCesta.xaml",
@@ -594,7 +676,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 39,
               "Title": "AcompanharPedido.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\AcompanharPedido.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\AcompanharPedido.xaml",
@@ -605,7 +687,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 40,
               "Title": "Pedido.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Model\\Pedido.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\Pedido.cs",
@@ -617,7 +699,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 37,
+              "DocumentIndex": 43,
               "Title": "PrincipalAdministrador.xaml.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PrincipalAdministrador.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PrincipalAdministrador.xaml.cs",
@@ -629,7 +711,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 42,
               "Title": "Produto.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Model\\Produto.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\Produto.cs",
@@ -641,7 +723,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 41,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\Model\\User.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\User.cs",

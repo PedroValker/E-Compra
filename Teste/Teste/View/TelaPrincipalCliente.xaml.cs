@@ -67,8 +67,11 @@ namespace Teste.View
         {
             ConteudoPrincipal.Content = new FacaSeuPedidoView();
         }
-        
 
+        private void Pedidos(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new PedidosView();
+        }
 
         private void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {

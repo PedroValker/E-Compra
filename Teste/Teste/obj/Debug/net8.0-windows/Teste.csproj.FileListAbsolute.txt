@@ -105,3 +105,6 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.genr
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\ref\Teste.dll
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.baml
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.g.cs
+C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.g.cs
+C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
+C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.baml

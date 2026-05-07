@@ -14,9 +14,19 @@
         public string FormaPagamento { get; set; }
         public string Status { get; set; }
         public decimal Total { get; set; }
+        public DateTime Dia { get; set; }
+        public string Produto { get; set; }
+        public int Quantidade { get; set; }
+        public decimal Valor { get; set; }
 
         public List<ItemPedido> Itens { get; set; }
         public string Observacoes { get; set; }
+    }
+
+    public class ItemResumo
+    {
+        public int Quantidade { get; set; }
+        public string Nome { get; set; }
     }
 
     // 🔥 ADICIONE ISTO AQUI: Guarda os pedidos globais do sistema
