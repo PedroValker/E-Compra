@@ -17,16 +17,20 @@
 
   <ItemGroup>
     <Compile Remove="View\CarrinhoEFinalizarPedido.cs" />
+    <Compile Remove="View\FaçaPedidoC.xaml.cs" />
   </ItemGroup>
 
   <ItemGroup>
     <None Remove="Dados\imagem\fundo.png" />
+    <None Remove="Dados\imagem\fundoteste.png" />
   </ItemGroup>
 
   <ItemGroup>
-    <Resource Include="Dados\imagem\fundo.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
+    <Page Remove="View\FaçaPedidoC.xaml" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Dados\imagem\fundoteste.png" />
   </ItemGroup>
 
 </Project>

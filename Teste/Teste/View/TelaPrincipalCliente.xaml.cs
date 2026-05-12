@@ -5,7 +5,7 @@ using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
 using Teste.Repository;
-using Teste.View.ContatoNovo;
+
 
 namespace Teste.View
 {
@@ -85,7 +85,34 @@ namespace Teste.View
         {
             ConteudoPrincipal.Content = new PedidosView();
         }
+        private void EntreEmContato(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new ContatoNovo();
+        }
+        private void Logoff_Click(object sender, System.Windows.RoutedEventArgs e)
+        {
+            // 1. Exibe a caixa de diálogo perguntando se ele quer sair
+            MessageBoxResult resposta = MessageBox.Show(
+                "Tem certeza que deseja sair da sua conta?",
+                "Confirmação de Logoff",
+                MessageBoxButton.YesNo,
+                MessageBoxImage.Question);
 
+            // 2. Verifica se o usuário clicou em "Sim"
+            if (resposta == MessageBoxResult.Yes)
+            {
+                // Limpa os dados do usuário logado na Sessão
+                Teste.Model.Sessao.UsuarioLogado = null;
+
+                // Instancia e abre a tela de Login novamente
+                var telaLogin = new Login();
+                telaLogin.Show();
+
+                // Fecha a tela atual (Dashboard)
+                this.Close();
+            }
+            // Se ele clicar em "Não", o código ignora o IF e a tela continua aberta normalmente!
+        }
         private void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
             // Agora isso vai funcionar perfeitamente e voltar o conteúdo original

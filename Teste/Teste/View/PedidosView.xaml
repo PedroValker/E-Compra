@@ -15,14 +15,16 @@
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <StackPanel Orientation="Horizontal" Grid.Row="0" Grid.ColumnSpan="2" Margin="0,0,0,20">
-            <TextBlock Text="Histórico de Pedidos" FontWeight="Bold" FontSize="18" Margin="0,0,20,0" Foreground="#212121"/>
-            <TextBlock Text="Pedidos Pendentes" FontSize="18" Foreground="#757575"/>
+        <StackPanel Orientation="Horizontal" Margin="0,0,0,20">
+            <TextBlock x:Name="AbaHistoricoTexto" Text="Histórico de Pedidos" MouseLeftButtonDown="AbaHistorico_Click" Cursor="Hand" FontWeight="Bold" Foreground="Black" Margin="0,0,20,0"/>
+            <TextBlock x:Name="AbaPendentesTexto" Text="Pedidos Pendentes" MouseLeftButtonDown="AbaPendentes_Click" Cursor="Hand" FontWeight="Normal" Foreground="Gray"/>
         </StackPanel>
 
         <Border Grid.Row="1" Grid.Column="0" BorderBrush="#E0E0E0" BorderThickness="1" CornerRadius="8" Padding="10" Margin="0,0,20,0">
-
-            <ListView ItemsSource="{Binding Pedidos}" BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+            <ListView x:Name="TabelaDePedidos" 
+                      ItemsSource="{Binding ListaPedidosEntregues}" 
+                      SelectedItem="{Binding PedidoSelecionado, Mode=TwoWay}"
+                      BorderThickness="0" Background="Transparent" ScrollViewer.HorizontalScrollBarVisibility="Disabled">
                 <ListView.ItemContainerStyle>
                     <Style TargetType="ListViewItem">
                         <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
@@ -85,8 +87,7 @@
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Ver Mais" 
-                                            Command="{Binding DataContext.VerMaisCommand, RelativeSource={RelativeSource AncestorType=UserControl}}"
-                                            CommandParameter="{Binding}"
+                                            Click="VerDetalhes_Click"
                                             Background="#212121" Foreground="White" 
                                             Padding="15,5" BorderThickness="0" Cursor="Hand">
                                         <Button.Resources>

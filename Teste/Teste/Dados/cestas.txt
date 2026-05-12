@@ -1,1 +1,1 @@
-ID:1 |Nome:Ricardo Premium |Preco:300,00 |Imagem:C:\Users\aluno\Documents\Acelera\Teste\Teste\Dados\imagem\CestaC.png |Produtos:Coca-Cola,Pão
+ID:1 |Nome:Ricardo Premium |Preco:340,00 |Imagem:C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\Dados\imagem\CestaC.png |Produtos:Coca-Cola,Coca-Cola,Pão,Pão,Arroz Agulhinha,Arroz Agulhinha,Café Torrado e Moído,Café Torrado e Moído,Leite em Pó Integral,Sabonete em Barra,Detergente Líquido,Creme Dental,Goiabada,Goiabada,Óleo de Soja,Óleo de Soja,Óleo de Soja

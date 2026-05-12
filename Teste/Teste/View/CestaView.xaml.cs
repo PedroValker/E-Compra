@@ -1,4 +1,6 @@
-﻿using System.Collections.ObjectModel;
+﻿using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
@@ -9,8 +11,6 @@ namespace CestaApp.Views
     {
         public Cesta CestaAtual { get; set; }
         public ObservableCollection<Produto> ProdutosDaCesta { get; set; }
-
-        // 🔥 Variável para guardar o texto da caixinha de observações
         public string Observacoes { get; set; }
 
         public CestaView(Cesta cesta)
@@ -18,10 +18,26 @@ namespace CestaApp.Views
             InitializeComponent();
             CestaAtual = cesta;
 
-            if (CestaAtual.Itens != null)
-                ProdutosDaCesta = new ObservableCollection<Produto>(CestaAtual.Itens);
-            else
-                ProdutosDaCesta = new ObservableCollection<Produto>();
+            ProdutosDaCesta = new ObservableCollection<Produto>();
+
+            if (CestaAtual != null && CestaAtual.Itens != null)
+            {
+                // Agrupamos os produtos para exibição na tela (1 linha por produto com a Qtd somada)
+                var itensAgrupados = CestaAtual.Itens
+                    .GroupBy(p => p.Nome)
+                    .Select(grupo => new Produto
+                    {
+                        Nome = grupo.First().Nome,
+                        Peso = grupo.First().Peso,
+                        Preco = grupo.First().Preco,
+                        QuantidadeSelecionada = grupo.Count() // Conta quantos tem na lista original
+                    });
+
+                foreach (var item in itensAgrupados)
+                {
+                    ProdutosDaCesta.Add(item);
+                }
+            }
 
             this.DataContext = this;
         }
@@ -30,22 +46,19 @@ namespace CestaApp.Views
         {
             InitializeComponent();
         }
-        // 🔥 Aumenta a quantidade do item específico
-        // 🔥 Aumenta a quantidade do item específico
+
         private void AumentarQtd_Click(object sender, RoutedEventArgs e)
         {
-            // O "is" já verifica se é um botão e já cria a variável "botao" ao mesmo tempo
-            if (sender is Button botao && botao.DataContext is Teste.Model.Produto produto)
+            if (sender is Button botao && botao.DataContext is Produto produto)
             {
                 produto.QuantidadeSelecionada++;
-                GridProdutos.Items.Refresh();
+                GridProdutos.Items.Refresh(); // Força a atualização visual da linha
             }
         }
 
-        // 🔥 Diminui a quantidade do item específico
         private void DiminuirQtd_Click(object sender, RoutedEventArgs e)
         {
-            if (sender is Button botao && botao.DataContext is Teste.Model.Produto produto)
+            if (sender is Button botao && botao.DataContext is Produto produto)
             {
                 if (produto.QuantidadeSelecionada > 0)
                 {
@@ -54,31 +67,50 @@ namespace CestaApp.Views
                 }
             }
         }
-        // 🔥 Ação do botão Adicionar ao Carrinho
+
         private void AdicionarCarrinho_Click(object sender, RoutedEventArgs e)
         {
             if (CestaAtual == null) return;
 
-            // 1. Cria um novo item para o carrinho
+            // --- LÓGICA DE SINCRONIZAÇÃO ---
+            // Precisamos que a CestaAtual.Itens tenha exatamente o que o usuário escolheu na tela.
+            // Se ele aumentou a goiabada para 3, a lista final deve conter o objeto "Goiabada" 3 vezes.
+            List<Produto> listaFinalParaCarrinho = new List<Produto>();
+
+            foreach (var p in ProdutosDaCesta)
+            {
+                // Adicionamos o produto na lista a quantidade de vezes definida no seletor (+ e -)
+                for (int i = 0; i < p.QuantidadeSelecionada; i++)
+                {
+                    listaFinalParaCarrinho.Add(new Produto
+                    {
+                        Nome = p.Nome,
+                        Preco = p.Preco,
+                        Peso = p.Peso
+                    });
+                }
+            }
+
+            // Atualizamos a lista de itens da cesta com a escolha atual do cliente
+            CestaAtual.Itens = listaFinalParaCarrinho;
+
+            // Criamos o item do carrinho passando a cesta já atualizada
             ItemCarrinho novoItem = new ItemCarrinho
             {
                 CestaSelecionada = CestaAtual,
-                Quantidade = 1, // Por padrão adiciona 1 cesta
-                Observacoes = this.Observacoes // Pega o texto que o usuário digitou
+                Quantidade = 1, // 1 unidade da Cesta (que agora contém os itens extras)
+                Observacoes = this.Observacoes
             };
 
-            // 2. Salva na memória do sistema
             MemoriaCarrinho.Itens.Add(novoItem);
 
-            // 3. Mostra mensagem de sucesso
             MessageBox.Show($"'{CestaAtual.Nome}' foi adicionada ao seu carrinho com sucesso!",
                             "Carrinho",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
 
-            // Opcional: Limpa as observações após adicionar
+            // Limpa campos e atualiza tela
             this.Observacoes = "";
-            // Atualiza a tela para limpar a caixinha visualmente (gambiarra simples do WPF)
             this.DataContext = null;
             this.DataContext = this;
         }

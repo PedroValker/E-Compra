@@ -1,4 +1,6 @@
-﻿namespace Teste.Model
+﻿using System.Collections.ObjectModel;
+
+namespace Teste.Model
 {
     public class ItemPedido
     {
@@ -34,5 +36,6 @@
     public static class MemoriaPedidos
     {
         public static List<Pedido> Lista { get; set; } = new List<Pedido>();
+    
     }
 }

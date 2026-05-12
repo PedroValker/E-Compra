@@ -14,6 +14,8 @@ namespace Teste.ViewModel
         private string _usuarioLogado;
 
         public ObservableCollection<Pedido> Pedidos { get; set; }
+        public ObservableCollection<Pedido> ListaPedidosEntregues { get; set; } = new ObservableCollection<Pedido>();
+        public ObservableCollection<Pedido> ListaPedidosPendentes { get; set; } = new ObservableCollection<Pedido>();
 
         private Pedido _pedidoSelecionado;
         public Pedido PedidoSelecionado
@@ -26,7 +28,6 @@ namespace Teste.ViewModel
             }
         }
 
-        // Comando para o botão "Ver Mais"
         public ICommand VerMaisCommand { get; }
 
         public PedidosViewModel(string usuarioLogado)
@@ -35,7 +36,6 @@ namespace Teste.ViewModel
             _repository = new PedidoRepository();
             Pedidos = new ObservableCollection<Pedido>();
 
-            // Comando que define o pedido selecionado para exibi-lo na direita
             VerMaisCommand = new RelayCommand<Pedido>(pedido => PedidoSelecionado = pedido);
 
             CarregarPedidosDoCliente();
@@ -43,10 +43,8 @@ namespace Teste.ViewModel
 
         private void CarregarPedidosDoCliente()
         {
-            // 1. Carrega todos os pedidos do txt para a MemoriaPedidos.Lista
             _repository.CarregarDoArquivo();
 
-            // 2. Filtra de forma robusta (Ignora espaços nas pontas e ignora Maiúsculas/Minúsculas)
             var pedidosFiltrados = MemoriaPedidos.Lista
                 .Where(p => !string.IsNullOrEmpty(p.Recebedor) &&
                             !string.IsNullOrEmpty(_usuarioLogado) &&
@@ -54,12 +52,24 @@ namespace Teste.ViewModel
                 .ToList();
 
             Pedidos.Clear();
+            ListaPedidosEntregues.Clear();
+            ListaPedidosPendentes.Clear();
+
             foreach (var pedido in pedidosFiltrados)
             {
                 Pedidos.Add(pedido);
+
+                // Separação por Status
+                if (pedido.Status != null && pedido.Status.Trim().Equals("Entregue", System.StringComparison.OrdinalIgnoreCase))
+                {
+                    ListaPedidosEntregues.Add(pedido);
+                }
+                else
+                {
+                    ListaPedidosPendentes.Add(pedido);
+                }
             }
 
-            // Seleciona o primeiro pedido por padrão para a tela não ficar vazia na direita
             if (Pedidos.Any())
             {
                 PedidoSelecionado = Pedidos.First();
@@ -71,7 +81,6 @@ namespace Teste.ViewModel
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
-    // Classe auxiliar simples para o comando do botão "Ver Mais"
     public class RelayCommand<T> : ICommand
     {
         private readonly System.Action<T> _execute;

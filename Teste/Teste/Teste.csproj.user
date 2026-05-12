@@ -11,9 +11,6 @@
     <Compile Update="View\Administrador\DetalhesCesta.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Administrador\DetalhesPedido.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\Administrador\HomeAdministrador.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
@@ -21,6 +18,9 @@
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\CarrinhoView.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
+    <Compile Update="View\DetalhesPedidoCliente.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
     <Compile Update="View\FacaSeuPedidoView.xaml.cs">

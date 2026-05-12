@@ -1,3 +1,25 @@
 Nome:Coca-Cola | Marca:Coca | Categoria:Alimentos | Preco:8,30 | Peso:2L
 Nome:Pão | Marca:N/A | Categoria:Alimentos | Preco:0,50 | Peso:50g
 Nome:Arroz | Marca:Dona Benta | Categoria:Alimentos | Preco:15,00 | Peso:500g
+Nome:Arroz Agulhinha | Marca:Camil | Categoria:Alimentos | Preco:25,90 | Peso:5kg
+Nome:Feijão Carioca | Marca:Kicaldo | Categoria:Alimentos | Preco:8,50 | Peso:1kg
+Nome:Óleo de Soja | Marca:Soya | Categoria:Alimentos | Preco:6,20 | Peso:900ml
+Nome:Açúcar Refinado | Marca:União | Categoria:Alimentos | Preco:4,90 | Peso:1kg
+Nome:Café Torrado e Moído | Marca:Pilão | Categoria:Alimentos | Preco:18,90 | Peso:500g
+Nome:Macarrão Espaguete | Marca:Galo | Categoria:Alimentos | Preco:3,50 | Peso:500g
+Nome:Molho de Tomate | Marca:Fugini | Categoria:Alimentos | Preco:1,99 | Peso:340g
+Nome:Farinha de Trigo | Marca:Dona Benta | Categoria:Alimentos | Preco:5,50 | Peso:1kg
+Nome:Farinha de Mandioca | Marca:Yoki | Categoria:Alimentos | Preco:6,90 | Peso:500g
+Nome:Fubá Mimoso | Marca:Yoki | Categoria:Alimentos | Preco:3,80 | Peso:500g
+Nome:Sal Refinado | Marca:Cisne | Categoria:Alimentos | Preco:2,20 | Peso:1kg
+Nome:Leite em Pó Integral | Marca:Ninho | Categoria:Alimentos | Preco:19,90 | Peso:400g
+Nome:Biscoito Água e Sal | Marca:Marilan | Categoria:Alimentos | Preco:4,20 | Peso:400g
+Nome:Biscoito Recheado Chocolate | Marca:Bauducco | Categoria:Alimentos | Preco:2,50 | Peso:140g
+Nome:Sardinha em Óleo | Marca:Gomes da Costa | Categoria:Alimentos | Preco:4,50 | Peso:125g
+Nome:Goiabada | Marca:Predilecta | Categoria:Alimentos | Preco:4,00 | Peso:300g
+Nome:Achocolatado em Pó | Marca:Nescau | Categoria:Alimentos | Preco:8,90 | Peso:400g
+Nome:Mistura para Bolo | Marca:Renata | Categoria:Alimentos | Preco:5,30 | Peso:400g
+Nome:Sabonete em Barra | Marca:Lux | Categoria:Higiene | Preco:2,10 | Peso:85g
+Nome:Creme Dental | Marca:Colgate | Categoria:Higiene | Preco:4,50 | Peso:90g
+Nome:Papel Higiênico 4 Rolos | Marca:Personal | Categoria:Higiene | Preco:6,50 | Peso:120m
+Nome:Detergente Líquido | Marca:Ypê | Categoria:Limpeza | Preco:2,40 | Peso:500ml

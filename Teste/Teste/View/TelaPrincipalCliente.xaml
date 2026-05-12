@@ -81,8 +81,8 @@
                                    VerticalAlignment="Center" 
                                    Margin="0,0,15,0"/>
 
-                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,15,0" ToolTip="Meu Perfil">
-                            <TextBlock Text="👤" FontSize="24"/>
+                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,15,0" ToolTip="Sair da Conta" Click="Logoff_Click">
+                            <TextBlock Text="🚪" FontSize="24"/>
                         </Button>
 
                         <Button Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click">
@@ -99,19 +99,34 @@
                     <TextBlock Text="Assinatura" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
                     <TextBlock Text="Pedidos" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="Pedidos" />
                     <TextBlock Text="Sobre" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
-                    <TextBlock Text="Entre em Contato" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777"/>
+                    <TextBlock Text="Entre em Contato" Style="{StaticResource MenuItemText}" FontWeight="SemiBold" Foreground="#777" MouseLeftButtonDown="EntreEmContato"/>
                 </StackPanel>
             </StackPanel>
         </Border>
 
         <ContentControl x:Name="ConteudoPrincipal" Grid.Row="1">
             <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel HorizontalAlignment="Center" MaxWidth="1300" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}" Margin="20,30,20,50">
-                    <Border CornerRadius="16" ClipToBounds="True" Background="#1E22D8" Height="280" Margin="0,0,0,40">
-                        <Grid>
-                            <Image Source="pack://application:,,,/Dados/imagem/fundo.png"/>
-                        </Grid>
-                    </Border>
+                <StackPanel HorizontalAlignment="Center" MaxWidth="1080" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}" Margin="20,30,20,50">
+                    <Grid Height="300" Margin="0,0,0,40">
+
+                        <Border CornerRadius="16">
+
+                            <Border.Effect>
+                                <DropShadowEffect BlurRadius="18"
+                              ShadowDepth="4"
+                              Opacity="0.15"
+                              Direction="270"
+                              Color="Black"/>
+                            </Border.Effect>
+
+                            <Border.Background>
+                                <ImageBrush ImageSource="pack://application:,,,/Dados/imagem/fundoteste.png"
+                        Stretch="Fill"/>
+                            </Border.Background>
+
+                        </Border>
+
+                    </Grid>
 
                     <StackPanel>
                         <TextBlock Text="Verifique nossos produtos" FontSize="30" FontWeight="Black" Foreground="#222" Margin="0,0,0,30" HorizontalAlignment="Center"/>
@@ -131,13 +146,23 @@
                                         </Border.Effect>
 
                                         <StackPanel>
-                                            <Border Background="#F4F6F8" Height="180" CornerRadius="12" Margin="0,0,0,20" ClipToBounds="True">
-                                                <Image Source="{Binding ImagemCompleta}"
-                                                   Stretch="Uniform"
-                                                   HorizontalAlignment="Center"
-                                                   VerticalAlignment="Center"/>         
+                                            <Border Background="#F4F6F8"
+        Height="250"
+        CornerRadius="12"
+        Margin="0,0,0,20"
+        ClipToBounds="True">
+
+                                                <Grid Margin="4">
+
+                                                    <Image Source="{Binding ImagemCompleta}"
+               Stretch="Uniform"
+               HorizontalAlignment="Center"
+               VerticalAlignment="Center"/>
+
+                                                </Grid>
+
                                             </Border>
-                                            
+
                                             <TextBlock Text="{Binding Nome}" FontWeight="Bold" FontSize="22" Foreground="#212529" TextWrapping="Wrap" Margin="0,0,0,8"/>
                                             <TextBlock Text="{Binding Preco, StringFormat='R$ {0:N2}'}" FontSize="18" FontWeight="SemiBold" Foreground="#6C757D" Margin="0,0,0,25"/>
 
