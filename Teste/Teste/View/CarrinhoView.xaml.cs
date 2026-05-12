@@ -68,16 +68,16 @@ namespace CestaApp.Views
                 });
             }
 
-            // 2. Junta todas as observações do carrinho em um texto só
+            // 2. Junta todas as observações
             string obsGeral = string.Join(" | ", ItensNoCarrinho
                 .Where(i => !string.IsNullOrWhiteSpace(i.Observacoes))
                 .Select(i => $"{i.CestaSelecionada.Nome}: {i.Observacoes}"));
 
-            // 3. Usa a SUA classe Pedido
+            // 3. Monta o objeto do Pedido
             Pedido novoPedido = new Pedido
             {
-                NomePedido = $"PED-{DateTime.Now:yyyyMMddHHmmss}", // Gera um nome único pro pedido baseado na data/hora
-                Recebedor = Sessao.UsuarioLogado, // Nome de quem logou
+                NomePedido = $"PED-{DateTime.Now:yyyyMMddHHmmss}",
+                Recebedor = Sessao.UsuarioLogado,
                 Endereco = "A combinar",
                 FormaPagamento = "A combinar",
                 Status = "Pendente",
@@ -86,14 +86,16 @@ namespace CestaApp.Views
                 Observacoes = string.IsNullOrEmpty(obsGeral) ? "Sem observações" : obsGeral
             };
 
-            // 4. Salva o pedido
-            MemoriaPedidos.Lista.Add(novoPedido);
+            // 4. SALVAMENTO CORRIGIDO ✅
             PedidoRepository repoPedido = new PedidoRepository();
-            repoPedido.AtualizarArquivoTxt();
+
+            // 🔥 TROCADO: Em vez de AtualizarArquivoTxt, usamos AdicionarNovoPedidoNoTxt
+            // Isso garante que o pedido seja ANEXADO ao arquivo, sem apagar os anteriores.
+            repoPedido.AdicionarNovoPedidoNoTxt(novoPedido);
 
             MessageBox.Show("Pedido finalizado com sucesso! O administrador já foi notificado.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // 5. Limpa o carrinho do cliente
+            // 5. Limpa o carrinho
             MemoriaCarrinho.Itens.Clear();
             ItensNoCarrinho.Clear();
 

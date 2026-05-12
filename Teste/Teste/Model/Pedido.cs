@@ -15,6 +15,7 @@
         public string Status { get; set; }
         public decimal Total { get; set; }
         public DateTime Dia { get; set; }
+        public string DataDoPedido { get; set; } = DateTime.Now.ToString("dd/MM/yyyy");
         public string Produto { get; set; }
         public int Quantidade { get; set; }
         public decimal Valor { get; set; }

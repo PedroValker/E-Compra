@@ -11,7 +11,28 @@ namespace Teste.Repository
         private string ObterCaminhoArquivo()
         {
             string pastaProjeto = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
-            return Path.Combine(pastaProjeto, "Dados", "pedidos.txt"); // Arquivo global do Admin
+            return Path.Combine(pastaProjeto, "Dados", "pedidos.txt");
+        }
+
+        public void AdicionarNovoPedidoNoTxt(Pedido p)
+        {
+            try
+            {
+                string caminho = ObterCaminhoArquivo();
+                Directory.CreateDirectory(Path.GetDirectoryName(caminho));
+
+                string stringDosItens = string.Join(",", p.Itens.Select(i => $"{i.Nome}={i.Quantidade}"));
+
+                // 🔥 PADRÃO DEFINIDO: Data na posição 0
+                string linha = $"Data:{p.DataDoPedido} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{p.Total} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
+
+                File.AppendAllText(caminho, linha + Environment.NewLine);
+                MemoriaPedidos.Lista.Add(p);
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao adicionar novo pedido: " + ex.Message);
+            }
         }
 
         public void AtualizarArquivoTxt()
@@ -25,11 +46,10 @@ namespace Teste.Repository
 
                 foreach (var p in MemoriaPedidos.Lista)
                 {
-                    // Transforma a lista de itens num texto simples: "Cesta Básica=1,Cesta Premium=2"
                     string stringDosItens = string.Join(",", p.Itens.Select(i => $"{i.Nome}={i.Quantidade}"));
 
-                    // Monta a linha com o formato que você já usa
-                    string linha = $"NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{p.Total} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
+                    // 🔥 CORRIGIDO: A data precisava estar aqui também, na mesma ordem!
+                    string linha = $"Data:{p.DataDoPedido} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{p.Total} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
                     linhasParaSalvar.Add(linha);
                 }
 
@@ -53,19 +73,24 @@ namespace Teste.Repository
             foreach (var linha in linhas)
             {
                 var partes = linha.Split('|');
-                if (partes.Length < 8) continue;
 
-                string nomePedido = partes[0].Replace("NomePedido:", "").Trim();
-                string recebedor = partes[1].Replace("Recebedor:", "").Trim();
-                string endereco = partes[2].Replace("Endereco:", "").Trim();
-                string pagamento = partes[3].Replace("Pagamento:", "").Trim();
-                string status = partes[4].Replace("Status:", "").Trim();
-                string totalStr = partes[5].Replace("Total:", "").Trim();
-                string obs = partes[6].Replace("Obs:", "").Trim();
-                string itensStr = partes[7].Replace("Itens:", "").Trim();
+                // 🔥 Agora são 9 partes por causa da data!
+                if (partes.Length < 9) continue;
+
+                // 🔥 Ordem correta seguindo a linha que montamos em cima
+                string dataPedido = partes[0].Replace("Data:", "").Trim();
+                string nomePedido = partes[1].Replace("NomePedido:", "").Trim();
+                string recebedor = partes[2].Replace("Recebedor:", "").Trim();
+                string endereco = partes[3].Replace("Endereco:", "").Trim();
+                string pagamento = partes[4].Replace("Pagamento:", "").Trim();
+                string status = partes[5].Replace("Status:", "").Trim();
+                string totalStr = partes[6].Replace("Total:", "").Trim();
+                string obs = partes[7].Replace("Obs:", "").Trim();
+                string itensStr = partes[8].Replace("Itens:", "").Trim();
 
                 Pedido p = new Pedido
                 {
+                    DataDoPedido = dataPedido,
                     NomePedido = nomePedido,
                     Recebedor = recebedor,
                     Endereco = endereco,
@@ -76,7 +101,6 @@ namespace Teste.Repository
                     Itens = new List<ItemPedido>()
                 };
 
-                // Desmembra os itens ("Cesta Básica=1") de volta para a lista ItemPedido
                 if (!string.IsNullOrEmpty(itensStr))
                 {
                     var itensSeparados = itensStr.Split(',');

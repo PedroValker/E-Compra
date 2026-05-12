@@ -13,7 +13,6 @@ C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\PrincipalAdministrador.baml
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CarrinhoView.baml
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CestaView.baml
-C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Contato.baml
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FacaSeuPedidoView.baml
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FinalizarPedido.baml
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Login.baml
@@ -30,7 +29,6 @@ C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Administrador\TelaListaCliente.g.cs
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CarrinhoView.g.cs
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\CestaView.g.cs
-C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Contato.g.cs
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FacaSeuPedidoView.g.cs
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\FinalizarPedido.g.cs
 C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Login.g.cs
@@ -108,3 +106,7 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\Conta
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\GeneratedInternalTypeHelper.g.cs
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.baml
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.baml
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\ContatoNovo.g.cs
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.g.cs
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\obj\Debug\net8.0-windows\View\PedidosView.baml

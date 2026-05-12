@@ -1,67 +1,83 @@
-﻿using System.Collections.Generic;
-using System.Collections.ObjectModel;
+﻿using System.Collections.ObjectModel;
 using System.ComponentModel;
+using System.Linq;
 using System.Runtime.CompilerServices;
-using System.Windows.Data;
+using System.Windows.Input;
 using Teste.Model;
-
+using Teste.Repository;
 
 namespace Teste.ViewModel
 {
     public class PedidosViewModel : INotifyPropertyChanged
     {
+        private PedidoRepository _repository;
+        private string _usuarioLogado;
+
         public ObservableCollection<Pedido> Pedidos { get; set; }
 
-        public ICollectionView PedidosView { get; set; }
-
-        private string _statusSelecionado;
-        public string StatusSelecionado
+        private Pedido _pedidoSelecionado;
+        public Pedido PedidoSelecionado
         {
-            get => _statusSelecionado;
+            get => _pedidoSelecionado;
             set
             {
-                _statusSelecionado = value;
+                _pedidoSelecionado = value;
                 OnPropertyChanged();
-                PedidosView.Refresh(); // 🔥 aplica filtro
             }
         }
 
-        public List<string> StatusDisponiveis { get; set; }
+        // Comando para o botão "Ver Mais"
+        public ICommand VerMaisCommand { get; }
 
-        public PedidosViewModel()
+        public PedidosViewModel(string usuarioLogado)
         {
-            Pedidos = new ObservableCollection<Pedido>
-        {
-            new Pedido { Produto = "Cesta Premium", Status = "Pendente", Valor = 574.50m },
-            new Pedido { Produto = "Cesta Limpeza", Status = "Entregue", Valor = 256.89m }
-        };
+            _usuarioLogado = usuarioLogado;
+            _repository = new PedidoRepository();
+            Pedidos = new ObservableCollection<Pedido>();
 
-            StatusDisponiveis = new List<string>
-        {
-            "Todos",
-            "Pendente",
-            "Entregue"
-        };
+            // Comando que define o pedido selecionado para exibi-lo na direita
+            VerMaisCommand = new RelayCommand<Pedido>(pedido => PedidoSelecionado = pedido);
 
-            StatusSelecionado = "Todos";
-
-            PedidosView = CollectionViewSource.GetDefaultView(Pedidos);
-            PedidosView.Filter = FiltrarPedidos;
+            CarregarPedidosDoCliente();
         }
 
-        private bool FiltrarPedidos(object obj)
+        private void CarregarPedidosDoCliente()
         {
-            if (obj is not Pedido pedido)
-                return false;
+            // 1. Carrega todos os pedidos do txt para a MemoriaPedidos.Lista
+            _repository.CarregarDoArquivo();
 
-            if (StatusSelecionado == "Todos")
-                return true;
+            // 2. Filtra de forma robusta (Ignora espaços nas pontas e ignora Maiúsculas/Minúsculas)
+            var pedidosFiltrados = MemoriaPedidos.Lista
+                .Where(p => !string.IsNullOrEmpty(p.Recebedor) &&
+                            !string.IsNullOrEmpty(_usuarioLogado) &&
+                            p.Recebedor.Trim().Equals(_usuarioLogado.Trim(), System.StringComparison.OrdinalIgnoreCase))
+                .ToList();
 
-            return pedido.Status == StatusSelecionado;
+            Pedidos.Clear();
+            foreach (var pedido in pedidosFiltrados)
+            {
+                Pedidos.Add(pedido);
+            }
+
+            // Seleciona o primeiro pedido por padrão para a tela não ficar vazia na direita
+            if (Pedidos.Any())
+            {
+                PedidoSelecionado = Pedidos.First();
+            }
         }
 
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
+    }
+
+    // Classe auxiliar simples para o comando do botão "Ver Mais"
+    public class RelayCommand<T> : ICommand
+    {
+        private readonly System.Action<T> _execute;
+        public RelayCommand(System.Action<T> execute) => _execute = execute;
+        public bool CanExecute(object parameter) => true;
+        public void Execute(object parameter) => _execute((T)parameter);
+        public event System.EventHandler CanExecuteChanged { add { } remove { } }
     }
 }

@@ -1,1 +1,3 @@
-NomePedido:PED-20260503141725 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:500,00 |Obs:Cesta Teste: pao com apo |Itens:Cesta Teste=1
+Data:11/05/2026 |NomePedido:PED-20260511225052 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Entregue |Total:300,00 |Obs:Sem observações |Itens:Ricardo Premium=1
+Data:11/05/2026 |NomePedido:PED-20260511225108 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Entregue |Total:300,00 |Obs:Sem observações |Itens:Ricardo Premium=1
+Data:11/05/2026 |NomePedido:PED-20260511225139 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Entregue |Total:300,00 |Obs:Ricardo Premium: diferente |Itens:Ricardo Premium=1
