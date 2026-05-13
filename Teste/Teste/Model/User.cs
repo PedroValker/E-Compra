@@ -11,6 +11,7 @@ namespace Teste.Model
         public string Email { get; set; } = "";
         public string Telefone { get; set; } = "";
         public string Senha { get; set; } = "";
+        public string FotoPerfil { get; set; } = "";
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
         // ✔ Construtor padrão (novo usuário)

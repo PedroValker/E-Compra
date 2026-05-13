@@ -8,15 +8,13 @@ namespace Teste.Repository
 {
     class UserRepository
     {
-        // Salva usuário na memória, mas só se passar as validações
+        // 🔥 CARREGAR DO ARQUIVO
         public void CarregarDoArquivo()
         {
-            MemoriaUsuarios.Lista.Clear(); // 🔥 evita duplicação
+            MemoriaUsuarios.Lista.Clear();
 
-            // Mude esta linha no seu UserRepository.cs:
             string pastaProjeto = Path.GetFullPath(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\") // <-- Coloque 3 vezes o ..\ aqui também!
-    
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")
             );
 
             string caminho = Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
@@ -47,11 +45,12 @@ namespace Teste.Repository
                 MemoriaUsuarios.Lista.Add(user);
             }
         }
+
+        // ✔ SALVAR NOVO USUÁRIO
         public bool Salvar(User user, out string mensagemErro)
         {
             mensagemErro = "";
 
-            // Validações básicas
             if (string.IsNullOrWhiteSpace(user.Nome) ||
                 string.IsNullOrWhiteSpace(user.Email) ||
                 string.IsNullOrWhiteSpace(user.Senha))
@@ -60,23 +59,64 @@ namespace Teste.Repository
                 return false;
             }
 
-            // Verifica se email já existe
             if (BuscarPorEmail(user.Email) != null)
             {
                 mensagemErro = "Este email já está cadastrado.";
                 return false;
             }
 
-            // Verifica se senha já existe
             if (SenhaExiste(user.Senha))
             {
-                mensagemErro = "Esta senha já está em uso, escolha outra.";
+                mensagemErro = "Esta senha já está em uso.";
                 return false;
             }
 
-            // Se passou tudo, adiciona na memória
             MemoriaUsuarios.Lista.Add(user);
+
+            SalvarArquivo(); // 🔥 grava no txt
+
             return true;
+        }
+
+        // 🔥 ATUALIZAR USUÁRIO (NOVO)
+        public void Atualizar(User user)
+        {
+            var usuarioExistente = MemoriaUsuarios.Lista
+                .FirstOrDefault(u => u.Id == user.Id);
+
+            if (usuarioExistente != null)
+            {
+                usuarioExistente.Nome = user.Nome;
+                usuarioExistente.Email = user.Email;
+                usuarioExistente.Telefone = user.Telefone;
+                usuarioExistente.Senha = user.Senha;
+            }
+
+            SalvarArquivo();
+        }
+
+        // 🔥 SALVAR NO TXT
+        public void SalvarArquivo()
+        {
+            string pastaProjeto = Path.GetFullPath(
+                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")
+            );
+
+            string caminho = Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
+
+            Directory.CreateDirectory(Path.GetDirectoryName(caminho));
+
+            List<string> linhas = new List<string>();
+
+            foreach (var u in MemoriaUsuarios.Lista)
+            {
+                string linha =
+                    $"Id:{u.Id} |Nome:{u.Nome} |Email:{u.Email} |Telefone:{u.Telefone} |Senha:{u.Senha}";
+
+                linhas.Add(linha);
+            }
+
+            File.WriteAllLines(caminho, linhas);
         }
 
         public bool SenhaExiste(string senha)

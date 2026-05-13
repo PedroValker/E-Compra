@@ -12,7 +12,6 @@ namespace Teste.ViewModel
     {
         private PedidoRepository _repository;
         private string _usuarioLogado;
-
         public ObservableCollection<Pedido> Pedidos { get; set; }
         public ObservableCollection<Pedido> ListaPedidosEntregues { get; set; } = new ObservableCollection<Pedido>();
         public ObservableCollection<Pedido> ListaPedidosPendentes { get; set; } = new ObservableCollection<Pedido>();

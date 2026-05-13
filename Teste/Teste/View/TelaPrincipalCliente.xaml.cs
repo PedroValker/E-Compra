@@ -3,9 +3,10 @@ using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media.Imaging;
 using Teste.Model;
 using Teste.Repository;
-
+using System.IO;
 
 namespace Teste.View
 {
@@ -15,13 +16,13 @@ namespace Teste.View
 
         // 🔥 CORREÇÃO 1: Trocado de UserControl para object
         private object _telaInicial;
-
+       
         public TelaPrincipalCliente(string nome)
         {
             InitializeComponent();
 
             Sessao.UsuarioLogado = nome;
-
+          
             ListaCestas = new ObservableCollection<Cesta>();
 
             this.DataContext = this;
@@ -34,7 +35,22 @@ namespace Teste.View
 
             Loaded += TelaPrincipalCliente_Loaded;
         }
+        public void AtualizarUsuario(string nome)
+        {
+            NomeUsuarioText.Text = $"Olá, {nome}";
+        }
 
+        public void AtualizarFoto(string caminho)
+        {
+            try
+            {
+                if (!string.IsNullOrEmpty(caminho) && File.Exists(caminho))
+                {
+                    ImagemPerfil.Source = new BitmapImage(new Uri(caminho));
+                }
+            }
+            catch { }
+        }
         private void TelaPrincipalCliente_Loaded(object sender, RoutedEventArgs e)
         {
             // 🔥 CORREÇÃO 2: Removido o "as UserControl". Agora ele pega o conteúdo puro!
@@ -64,6 +80,15 @@ namespace Teste.View
             foreach (var cesta in MemoriaCestas.Lista.Take(3))
                 ListaCestas.Add(cesta);
         }
+        private void AbrirMenuPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            if (sender is Button btn)
+            {
+                btn.ContextMenu.PlacementTarget = btn;
+                btn.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                btn.ContextMenu.IsOpen = true;
+            }
+        }
 
         private void FaçaPedido(object sender, RoutedEventArgs e)
         {
@@ -88,6 +113,18 @@ namespace Teste.View
         private void EntreEmContato(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new ContatoNovo();
+        }
+        private void EditarPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            User user = new User
+            {
+                Nome = Sessao.UsuarioLogado, // você já tem o nome
+                Email = "",
+                Telefone = "",
+                FotoPerfil = ""
+            };
+
+            ConteudoPrincipal.Content = new EditarPerfilCliente(user);
         }
         private void Logoff_Click(object sender, System.Windows.RoutedEventArgs e)
         {

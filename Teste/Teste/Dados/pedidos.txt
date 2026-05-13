@@ -9,3 +9,4 @@ Data:12/05/2026 |NomePedido:PED-20260512104247 |Recebedor:pedro |Endereco:A comb
 Data:12/05/2026 |NomePedido:PED-20260512105513 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:350,00 |Obs:Sem observações |Itens:Ricardo Premium=1
 Data:12/05/2026 |NomePedido:PED-20260512105933 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:350,00 |Obs:Ricardo Premium: tata |Itens:Ricardo Premium=1
 Data:12/05/2026 |NomePedido:PED-20260512112650 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:340,00 |Obs:Ricardo Premium: AOOOOOOO |Itens:Ricardo Premium=1
+Data:13/05/2026 |NomePedido:PED-20260513102806 |Recebedor:pedro |Endereco:A combinar |Pagamento:A combinar |Status:Pendente |Total:340,00 |Obs:Sem observações |Itens:Ricardo Premium=1
