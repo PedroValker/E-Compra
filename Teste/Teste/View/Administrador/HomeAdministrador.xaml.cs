@@ -1,21 +1,11 @@
-﻿using System.Windows.Controls;
+﻿using System.Linq;
+using System.Windows.Controls;
+using Teste.Model;
 
 namespace Teste.View
 {
     public partial class HomeAdministrador : UserControl
     {
-        public class DashboardVM
-        {
-            public string Vendas1 { get; set; } = "120 vendas";
-            public string Vendas2 { get; set; } = "250 vendas";
-            public string Vendas3 { get; set; } = "320 vendas";
-            public string Vendas4 { get; set; } = "450 vendas";
-
-            public string Faturamento { get; set; } = "R$ 45.900,00";
-
-            public string Crescimento { get; set; } = "+12% este mês";
-        }
-
         public HomeAdministrador(string nomeAdmin)
         {
             InitializeComponent();
@@ -23,8 +13,49 @@ namespace Teste.View
             BoasVindasTexto.Text =
                 $"Bem-vindo de volta, {nomeAdmin}! Aqui está o resumo de hoje.";
 
-            // IMPORTANTE
-            this.DataContext = new DashboardVM();
+            CarregarDashboard();
+        }
+
+        private void CarregarDashboard()
+        {
+            var pedidos = MemoriaPedidos.Lista;
+
+            // Total de pedidos
+            TxtPedidos.Text = pedidos.Count.ToString();
+
+            // Pedidos a entregar
+            TxtPedidosAEntregar.Text = pedidos.Count(p =>
+                p.Status != null &&
+                p.Status.ToLower().Contains("entregar"))
+                .ToString();
+
+            // Pagamentos pendentes
+            TxtPagPendentes.Text = pedidos.Count(p =>
+                p.FormaPagamento != null &&
+                p.FormaPagamento.ToLower().Contains("pendente"))
+                .ToString();
+
+            // Faturamento total
+            decimal total = pedidos.Sum(p => p.Total);
+
+            TxtFaturamento.Text = $"R$ {total:N2}";
+
+            // Quantidade de vendas por cesta
+            TxtVendas1.Text = pedidos.Count(p =>
+                p.NomePedido == "Cesta Econômica")
+                .ToString();
+
+            TxtVendas2.Text = pedidos.Count(p =>
+                p.NomePedido == "Cesta Família")
+                .ToString();
+
+            TxtVendas3.Text = pedidos.Count(p =>
+                p.NomePedido == "Cesta Especial")
+                .ToString();
+
+            TxtVendas4.Text = pedidos.Count(p =>
+                p.NomePedido == "Cesta Premium")
+                .ToString();
         }
     }
 }

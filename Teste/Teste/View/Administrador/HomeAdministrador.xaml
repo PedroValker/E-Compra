@@ -47,7 +47,7 @@
                                FontSize="14"
                                FontWeight="SemiBold"/>
 
-                    <TextBlock Text="50"
+                    <TextBlock x:Name="TxtPedidos"
                                FontSize="28"
                                FontWeight="Bold"
                                Foreground="#1F2937"
@@ -68,7 +68,7 @@
                                FontSize="14"
                                FontWeight="SemiBold"/>
 
-                    <TextBlock Text="8"
+                    <TextBlock x:Name="TxtPedidosAEntregar"
                                FontSize="28"
                                FontWeight="Bold"
                                Foreground="#D97706"
@@ -89,7 +89,7 @@
                                FontSize="14"
                                FontWeight="SemiBold"/>
 
-                    <TextBlock Text="2"
+                    <TextBlock x:Name="TxtPagPendentes"
                                FontSize="28"
                                FontWeight="Bold"
                                Foreground="#EF4444"
@@ -126,7 +126,7 @@
                                    FontSize="15"
                                    Foreground="#4B5563"/>
 
-                        <TextBlock Text="{Binding Vendas1}"
+                        <TextBlock x:Name="TxtVendas1"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#1F2937"
@@ -141,7 +141,7 @@
                                    FontSize="15"
                                    Foreground="#4B5563"/>
 
-                        <TextBlock Text="{Binding Vendas2}"
+                        <TextBlock x:Name="TxtVendas2"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#1F2937"
@@ -156,7 +156,7 @@
                                    FontSize="15"
                                    Foreground="#4B5563"/>
 
-                        <TextBlock Text="{Binding Vendas3}"
+                        <TextBlock  x:Name="TxtVendas3"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#1F2937"
@@ -171,7 +171,7 @@
                                    FontSize="15"
                                    Foreground="#4B5563"/>
 
-                        <TextBlock Text="{Binding Vendas4}"
+                        <TextBlock  x:Name="TxtVendas4"
                                    FontSize="15"
                                    FontWeight="SemiBold"
                                    Foreground="#1F2937"
@@ -197,15 +197,11 @@
                                Foreground="#6B7280"
                                Margin="0,0,0,10"/>
 
-                    <TextBlock Text="{Binding Faturamento}"
+                    <TextBlock x:Name="TxtFaturamento"
                                FontSize="30"
                                FontWeight="ExtraBold"
                                Foreground="#10B981"
                                Margin="0,0,0,5"/>
-
-                    <TextBlock Text="{Binding Crescimento}"
-                               FontSize="13"
-                               Foreground="#10B981"/>
 
                 </StackPanel>
             </Border>
