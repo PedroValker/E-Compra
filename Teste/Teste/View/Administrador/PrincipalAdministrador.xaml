@@ -79,9 +79,17 @@
 
                 <Border Grid.Row="1" Background="#2D3748" Margin="15,0,15,20" Padding="15" CornerRadius="12">
                     <StackPanel Orientation="Horizontal">
-                        <Ellipse Width="45" Height="45" Margin="0,0,12,0" Stroke="{StaticResource AccentBrush}" StrokeThickness="1">
+                        <Ellipse Width="45"
+                                 Height="45"
+                                 Margin="0,0,12,0"
+                                 Stroke="{StaticResource AccentBrush}"
+                                 StrokeThickness="1"
+                                 MouseDown="AlterarFoto_Click"
+                                 Cursor="Hand">
+
                             <Ellipse.Fill>
-                                <ImageBrush ImageSource="https://i.pravatar.cc/100"/>
+                                <ImageBrush x:Name="ImagemPerfilBrush"
+                                    ImageSource="../../Dados/imagem/perfil.png"/>
                             </Ellipse.Fill>
                         </Ellipse>
                         <StackPanel VerticalAlignment="Center">

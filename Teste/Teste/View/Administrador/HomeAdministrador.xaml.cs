@@ -1,6 +1,8 @@
 ﻿using System.Linq;
+using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
+using Teste.Repository;
 
 namespace Teste.View
 {
@@ -13,6 +15,11 @@ namespace Teste.View
             BoasVindasTexto.Text =
                 $"Bem-vindo de volta, {nomeAdmin}! Aqui está o resumo de hoje.";
 
+            // CARREGA O TXT
+            PedidoRepository repo = new PedidoRepository();
+            repo.CarregarDoArquivo();
+
+            // AGORA MONTA O DASHBOARD
             CarregarDashboard();
         }
 
@@ -25,14 +32,26 @@ namespace Teste.View
 
             // Pedidos a entregar
             TxtPedidosAEntregar.Text = pedidos.Count(p =>
-                p.Status != null &&
-                p.Status.ToLower().Contains("entregar"))
-                .ToString();
+              p.Status != null &&
+              p.Status.Trim().ToLower() != "entregue")
+              .ToString();
+
+            // Pedidos entregues
+            //TxtPedidosEntregues.Text = pedidos.Count(p =>
+            //  p.Status != null &&
+            //p.Status.ToLower() == "entregue")
+            //.ToString();
 
             // Pagamentos pendentes
             TxtPagPendentes.Text = pedidos.Count(p =>
                 p.FormaPagamento != null &&
-                p.FormaPagamento.ToLower().Contains("pendente"))
+                p.FormaPagamento.ToLower() == "pendente")
+                .ToString();
+
+            // Pedidos não pagos
+            TxtPagPendentes.Text = pedidos.Count(p =>
+                p.FormaPagamento != null &&
+                p.FormaPagamento.ToLower() != "pago")
                 .ToString();
 
             // Faturamento total
@@ -41,21 +60,20 @@ namespace Teste.View
             TxtFaturamento.Text = $"R$ {total:N2}";
 
             // Quantidade de vendas por cesta
-            TxtVendas1.Text = pedidos.Count(p =>
-                p.NomePedido == "Cesta Econômica")
-                .ToString();
 
-            TxtVendas2.Text = pedidos.Count(p =>
-                p.NomePedido == "Cesta Família")
-                .ToString();
 
-            TxtVendas3.Text = pedidos.Count(p =>
-                p.NomePedido == "Cesta Especial")
-                .ToString();
+            var vendasPorItem = pedidos
+    .Where(p => p.Itens != null)
+    .SelectMany(p => p.Itens)
+    .GroupBy(i => i.Nome.Trim().ToLower())
+    .Select(g => new
+    {
+        Nome = g.First().Nome, // mantém nome original
+        Quantidade = g.Sum(x => x.Quantidade)
+    })
+    .ToList();
 
-            TxtVendas4.Text = pedidos.Count(p =>
-                p.NomePedido == "Cesta Premium")
-                .ToString();
+            ListaVendas.ItemsSource = vendasPorItem;
         }
     }
 }

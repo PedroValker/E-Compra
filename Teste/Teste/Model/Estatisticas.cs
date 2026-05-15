@@ -36,7 +36,7 @@ namespace Teste.Model
                 // Conta pedidos com status "A Entregar"
                 PedidosAEntregar = pedidos.Count(p =>
                     p.Status != null &&
-                    p.Status.ToLower().Contains("entregar")),
+                    p.Status.ToLower() == "a entregar"),
 
                 // Conta pagamentos pendentes
                 PagPendentes = pedidos.Count(p =>

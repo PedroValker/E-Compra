@@ -111,7 +111,7 @@
                     CornerRadius="10"
                     Padding="25"
                     BorderBrush="#E5E7EB"
-                    BorderThickness="1">
+                    BorderThickness="1" Margin="0,4,0,-4">
 
                 <StackPanel>
 
@@ -120,63 +120,17 @@
                                FontWeight="Bold"
                                Foreground="#1F2937"
                                Margin="0,0,0,20"/>
-
-                    <Grid Margin="0,0,0,12">
-                        <TextBlock Text="Cesta Econômica"
-                                   FontSize="15"
-                                   Foreground="#4B5563"/>
-
-                        <TextBlock x:Name="TxtVendas1"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Foreground="#1F2937"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <Separator Background="#F3F4F6"
-                               Margin="0,0,0,12"/>
-
-                    <Grid Margin="0,0,0,12">
-                        <TextBlock Text="Cesta Família"
-                                   FontSize="15"
-                                   Foreground="#4B5563"/>
-
-                        <TextBlock x:Name="TxtVendas2"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Foreground="#1F2937"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <Separator Background="#F3F4F6"
-                               Margin="0,0,0,12"/>
-
-                    <Grid Margin="0,0,0,12">
-                        <TextBlock Text="Cesta Especial"
-                                   FontSize="15"
-                                   Foreground="#4B5563"/>
-
-                        <TextBlock  x:Name="TxtVendas3"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Foreground="#1F2937"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
-
-                    <Separator Background="#F3F4F6"
-                               Margin="0,0,0,12"/>
-
-                    <Grid Margin="0,0,0,5">
-                        <TextBlock Text="Cesta Premium"
-                                   FontSize="15"
-                                   Foreground="#4B5563"/>
-
-                        <TextBlock  x:Name="TxtVendas4"
-                                   FontSize="15"
-                                   FontWeight="SemiBold"
-                                   Foreground="#1F2937"
-                                   HorizontalAlignment="Right"/>
-                    </Grid>
+                    
+                    <ListBox x:Name="ListaVendas">
+                        <ListBox.ItemTemplate>
+                            <DataTemplate>
+                                <StackPanel Orientation="Horizontal">
+                                    <TextBlock Text="{Binding Nome}" Width="200"/>
+                                    <TextBlock Text="{Binding Quantidade}" FontWeight="Bold"/>
+                                </StackPanel>
+                            </DataTemplate>
+                        </ListBox.ItemTemplate>
+                    </ListBox>
 
                 </StackPanel>
             </Border>
