@@ -1,10 +1,9 @@
 ﻿using System;
+
 namespace Teste.Model
 {
     public class User
     {
-        private static int contador = 1;
-
         public int Id { get; set; }
 
         public string Nome { get; set; } = "";
@@ -14,22 +13,15 @@ namespace Teste.Model
         public string FotoPerfil { get; set; } = "";
         public DateTime DataCriacao { get; set; } = DateTime.Now;
 
-        // ✔ Construtor padrão (novo usuário)
-        public User()
-        {
-            Id = contador++;
-        }
+        public bool IsAdmin => Id == 1;
 
-        // 🔥 NOVO CONSTRUTOR (para carregar do arquivo)
+        // ✔ novo usuário
+        public User() { }
+
+        // ✔ usuário vindo do arquivo
         public User(int id)
         {
             Id = id;
-
-            // mantém o contador correto
-            if (id >= contador)
-                contador = id + 1;
         }
-
-        public bool IsAdmin => Id == 1;
     }
 }

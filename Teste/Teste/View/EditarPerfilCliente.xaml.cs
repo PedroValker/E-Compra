@@ -19,13 +19,10 @@ namespace Teste.View
             InitializeComponent();
 
             usuario = user;
-
             DataContext = usuario;
 
-            // se já tiver foto salva
             caminhoFoto = usuario.FotoPerfil;
-            UserRepository repo = new UserRepository();
-            repo.Atualizar(usuario);
+
             CarregarFotoPerfil();
         }
 
@@ -44,7 +41,10 @@ namespace Teste.View
                         new Uri("pack://application:,,,/Dados/imagem/perfil.png"));
                 }
             }
-            catch { }
+            catch
+            {
+                // opcional: log de erro
+            }
         }
 
         private void AlterarFoto_Click(object sender, RoutedEventArgs e)
@@ -57,30 +57,30 @@ namespace Teste.View
             if (abrir.ShowDialog() == true)
             {
                 caminhoFoto = abrir.FileName;
-
                 ImagemPerfil.Source = new BitmapImage(new Uri(caminhoFoto));
             }
         }
 
         private void Salvar_Click(object sender, RoutedEventArgs e)
         {
+            // Atualiza objeto em memória
             usuario.Nome = TxtNome.Text;
             usuario.Email = TxtEmail.Text;
             usuario.Telefone = TxtTelefone.Text;
 
             if (!string.IsNullOrWhiteSpace(TxtSenha.Password))
-            {
                 usuario.Senha = TxtSenha.Password;
-            }
 
-            // ✔ salva foto no usuário
             usuario.FotoPerfil = caminhoFoto;
 
-            // 🔥 ATUALIZA SESSÃO GLOBAL
+            // Atualiza apenas memória (NÃO arquivo aqui)
+            UserRepository repo = new UserRepository();
+            repo.Atualizar(usuario);
+
+            // Sessão
             Sessao.UsuarioLogado = usuario.Nome;
 
-
-            // 🔥 ATUALIZA HEADER DA TELA PRINCIPAL
+            // Atualiza UI principal
             var janela = Window.GetWindow(this) as TelaPrincipalCliente;
 
             if (janela != null)

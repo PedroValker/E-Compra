@@ -58,44 +58,35 @@ namespace Teste
             string email = EmailBox.Text.Trim();
             string senha = senhaVisivel ? SenhaVisivelBox.Text : SenhaBox.Password;
 
-            // 🔥 VALIDAÇÃO BÁSICA (IMPORTANTE)
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
             {
                 MessageBox.Show("Preencha email e senha.");
                 return;
             }
 
-            try
+            LoginViewModel vm = new LoginViewModel();
+            User user = vm.FazerLogin(email, senha);
+
+            if (user == null)
             {
-                LoginViewModel vm = new LoginViewModel();
-                User user = vm.FazerLogin(email, senha);
-
-                if (user == null)
-                {
-                    MessageBox.Show("Usuário não encontrado ou senha incorreta.");
-                    return;
-                }
-
-                MessageBox.Show($"Bem-vindo, {user.Nome}!");
-
-                Window tela;
-
-                if (user.IsAdmin)
-                {
-                    tela = new PrincipalAdministrador(user.Nome); ;
-                }
-                else
-                {
-                    tela = new TelaPrincipalCliente(user.Nome);
-                }
-
-                tela.Show();
-                this.Close();
+                MessageBox.Show("Usuário não encontrado ou senha incorreta.");
+                return;
             }
-            catch (Exception ex)
-            {
-                MessageBox.Show("Erro no login: " + ex.Message);
-            }
+
+            MessageBox.Show($"Bem-vindo, {user.Nome}!");
+
+            // ✅ GUARDA APENAS O ID (SEU PADRÃO)
+            Sessao.UsuarioLogado = user.Id;
+
+            Window tela;
+
+            if (user.IsAdmin)
+                tela = new PrincipalAdministrador(user);
+            else
+                tela = new TelaPrincipalCliente(user);
+
+            tela.Show();
+            this.Close();
         }
 
         private void AbrirCadastro_Click(object sender, MouseButtonEventArgs e)

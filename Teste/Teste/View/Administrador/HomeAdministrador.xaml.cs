@@ -1,18 +1,20 @@
 ﻿using System.Windows.Controls;
+using Teste.Model;
 
 namespace Teste.View
 {
-    /// <summary>
-    /// Lógica interna para HomeAdministrador.xaml
-    /// </summary>
     public partial class HomeAdministrador : UserControl
     {
-        public HomeAdministrador(string nomeAdmin)
+        private User usuarioAdmin;
+
+        public HomeAdministrador(User user)
         {
             InitializeComponent();
 
-            // Atualiza o texto grandão da tela principal
-            BoasVindasTexto.Text = $"Bem-vindo de volta, {nomeAdmin}! Aqui está o resumo de hoje.";
+            usuarioAdmin = user;
+
+            BoasVindasTexto.Text =
+                $"Bem-vindo de volta, {user.Nome}! Aqui está o resumo de hoje.";
         }
     }
 }

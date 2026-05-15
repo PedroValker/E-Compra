@@ -14,27 +14,31 @@ namespace Teste.View
     {
         public ObservableCollection<Cesta> ListaCestas { get; set; }
 
-        // 🔥 CORREÇÃO 1: Trocado de UserControl para object
         private object _telaInicial;
-       
-        public TelaPrincipalCliente(string nome)
+
+        private User usuarioLogado;
+
+        public TelaPrincipalCliente(User user)
         {
             InitializeComponent();
 
-            Sessao.UsuarioLogado = nome;
-          
-            ListaCestas = new ObservableCollection<Cesta>();
+            // ✔ usuário real vindo do login (COM ID correto)
+            usuarioLogado = user;
 
-            this.DataContext = this;
-            NomeUsuarioText.Text = $"Olá, {nome}";
+            // ✔ salva ID na sessão (ESSENCIAL)
+            Sessao.UsuarioLogado = user.Id;
+
+            NomeUsuarioText.Text = $"Olá, {user.Nome}";
+
+            ListaCestas = new ObservableCollection<Cesta>();
+            DataContext = this;
 
             CarregarCestasDoBanco();
-
-            CarrinhoRepository repoCarrinho = new CarrinhoRepository();
-            repoCarrinho.CarregarDoArquivo();
-
-            Loaded += TelaPrincipalCliente_Loaded;
         }
+
+        // =========================
+        // ATUALIZA UI
+        // =========================
         public void AtualizarUsuario(string nome)
         {
             NomeUsuarioText.Text = $"Olá, {nome}";
@@ -51,10 +55,27 @@ namespace Teste.View
             }
             catch { }
         }
+
+        // =========================
+        // LOAD INICIAL
+        // =========================
         private void TelaPrincipalCliente_Loaded(object sender, RoutedEventArgs e)
         {
-            // 🔥 CORREÇÃO 2: Removido o "as UserControl". Agora ele pega o conteúdo puro!
             _telaInicial = ConteudoPrincipal.Content;
+        }
+
+        // =========================
+        // CESTAS
+        // =========================
+        private void CarregarCestasDoBanco()
+        {
+            CestaRepository repo = new CestaRepository();
+            repo.CarregarDoArquivo();
+
+            ListaCestas.Clear();
+
+            foreach (var cesta in MemoriaCestas.Lista.Take(3))
+                ListaCestas.Add(cesta);
         }
 
         private void VerCarrinho_Click(object sender, RoutedEventArgs e)
@@ -70,39 +91,50 @@ namespace Teste.View
             }
         }
 
-        private void CarregarCestasDoBanco()
-        {
-            CestaRepository repo = new CestaRepository();
-            repo.CarregarDoArquivo();
-
-            ListaCestas.Clear();
-
-            foreach (var cesta in MemoriaCestas.Lista.Take(3))
-                ListaCestas.Add(cesta);
-        }
+        // =========================
+        // PERFIL (MENU)
+        // =========================
         private void AbrirMenuPerfil_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
             {
                 btn.ContextMenu.PlacementTarget = btn;
-                btn.ContextMenu.Placement = System.Windows.Controls.Primitives.PlacementMode.Bottom;
+                btn.ContextMenu.Placement =
+                    System.Windows.Controls.Primitives.PlacementMode.Bottom;
                 btn.ContextMenu.IsOpen = true;
             }
         }
 
+        // =========================
+        // EDITAR PERFIL (CORRIGIDO)
+        // =========================
+        private void EditarPerfil_Click(object sender, RoutedEventArgs e)
+        {
+            // ✔ pega usuário REAL da memória pelo ID
+            var user = MemoriaUsuarios.Lista
+     .FirstOrDefault(u => u.Id == Sessao.UsuarioLogado);
+
+            if (user == null)
+            {
+                MessageBox.Show("Usuário não encontrado.");
+                return;
+            }
+
+            ConteudoPrincipal.Content = new EditarPerfilCliente(user);
+        }
+
+        // =========================
+        // PEDIDOS
+        // =========================
         private void FaçaPedido(object sender, RoutedEventArgs e)
         {
-            // 1. Instancia a View
             var telaPedido = new FacaSeuPedidoView();
 
-            // 2. "Escuta" o evento. Quando a CestaSelecionada for disparada lá dentro...
             telaPedido.CestaSelecionada += (cesta) =>
             {
-                // ...ele troca o conteúdo principal para a CestaView!
                 ConteudoPrincipal.Content = new CestaView(cesta);
             };
 
-            // 3. Mostra a tela de pedidos na tela
             ConteudoPrincipal.Content = telaPedido;
         }
 
@@ -110,49 +142,39 @@ namespace Teste.View
         {
             ConteudoPrincipal.Content = new PedidosView();
         }
+
         private void EntreEmContato(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new ContatoNovo();
         }
-        private void EditarPerfil_Click(object sender, RoutedEventArgs e)
-        {
-            User user = new User
-            {
-                Nome = Sessao.UsuarioLogado, // você já tem o nome
-                Email = "",
-                Telefone = "",
-                FotoPerfil = ""
-            };
 
-            ConteudoPrincipal.Content = new EditarPerfilCliente(user);
-        }
-        private void Logoff_Click(object sender, System.Windows.RoutedEventArgs e)
+        // =========================
+        // LOGOFF
+        // =========================
+        private void Logoff_Click(object sender, RoutedEventArgs e)
         {
-            // 1. Exibe a caixa de diálogo perguntando se ele quer sair
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja sair da sua conta?",
                 "Confirmação de Logoff",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
-            // 2. Verifica se o usuário clicou em "Sim"
             if (resposta == MessageBoxResult.Yes)
             {
-                // Limpa os dados do usuário logado na Sessão
-                Teste.Model.Sessao.UsuarioLogado = null;
+                Sessao.UsuarioLogado = 0;
 
-                // Instancia e abre a tela de Login novamente
                 var telaLogin = new Login();
                 telaLogin.Show();
 
-                // Fecha a tela atual (Dashboard)
                 this.Close();
             }
-            // Se ele clicar em "Não", o código ignora o IF e a tela continua aberta normalmente!
         }
+
+        // =========================
+        // VOLTAR HOME
+        // =========================
         private void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
-            // Agora isso vai funcionar perfeitamente e voltar o conteúdo original
             ConteudoPrincipal.Content = _telaInicial;
         }
     }

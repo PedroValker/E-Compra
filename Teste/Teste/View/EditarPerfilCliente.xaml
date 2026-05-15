@@ -5,173 +5,303 @@
              HorizontalContentAlignment="Stretch"
              VerticalContentAlignment="Stretch">
 
-    <Grid Margin="30">
+    <!-- SCROLL PRINCIPAL -->
+    <ScrollViewer VerticalScrollBarVisibility="Auto"
+                  HorizontalScrollBarVisibility="Disabled">
 
-        <!-- TÍTULO -->
-        <TextBlock Text="Editar Perfil"
-                   FontSize="30"
-                   FontWeight="Bold"
-                   HorizontalAlignment="Center"
-                   Margin="0,0,0,30"/>
+        <Grid Margin="25"
+              MinWidth="900">
 
-        <Grid Margin="20">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.2*"/>
-                <ColumnDefinition Width="2*"/>
-            </Grid.ColumnDefinitions>
+            <!-- TÍTULO -->
+            <TextBlock Grid.Row="0"
+                       Text="Editar Perfil"
+                       FontSize="30"
+                       FontWeight="Bold"
+                       HorizontalAlignment="Center"
+                       Margin="0,0,0,25"/>
 
-            <!-- LADO ESQUERDO -->
-            <StackPanel Grid.Column="0"
-                        Margin="20">
+            <!-- CONTEÚDO -->
+            <Grid Grid.Row="1">
 
-                <TextBlock Text="Foto de Perfil"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Margin="0,0,0,20"/>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="320"/>
+                    <ColumnDefinition Width="25"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- FOTO -->
-                <Border Width="170"
-                        Height="170"
-                        CornerRadius="85"
-                        BorderThickness="3"
-                        BorderBrush="#E0E0E0"
-                        ClipToBounds="True"
-                        HorizontalAlignment="Center">
+                <!-- ========================================= -->
+                <!-- PAINEL ESQUERDO -->
+                <!-- ========================================= -->
 
-                    <Image x:Name="ImagemPerfil"
-                           Stretch="Fill"/>
+                <Border Grid.Column="0"
+                        Background="White"
+                        CornerRadius="14"
+                        Padding="25"
+                        VerticalAlignment="Top">
 
-                </Border>
+                    <StackPanel>
 
-                <!-- BOTÃO -->
-                <Button Content="Alterar Foto"
-                        Height="42"
-                        Margin="0,25,0,0"
-                        Background="#1E22D8"
-                        Foreground="White"
-                        FontWeight="Bold"
-                        Cursor="Hand"
-                        BorderThickness="0"
-                        Click="AlterarFoto_Click"/>
+                        <!-- FOTO -->
+                        <TextBlock Text="Foto de Perfil"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,20"/>
 
-                <!-- INFO -->
-                <TextBlock Text="Informações da Conta"
-                           FontSize="18"
-                           FontWeight="Bold"
-                           Margin="0,40,0,15"/>
+                        <Border Width="180"
+                                Height="180"
+                                CornerRadius="90"
+                                BorderThickness="3"
+                                BorderBrush="#E3E6EA"
+                                ClipToBounds="True"
+                                HorizontalAlignment="Center">
 
-                <TextBlock Text="ID do Usuário"/>
-                <Border Background="White"
-                        CornerRadius="8"
-                        Padding="12"
-                        Margin="0,5">
+                            <Image x:Name="ImagemPerfil"
+                                   Stretch="Fill"/>
 
-                    <TextBlock Text="{Binding Id}"/>
+                        </Border>
 
-                </Border>
-
-                <TextBlock Text="Conta Criada em"
-                           Margin="0,15,0,0"/>
-
-                <Border Background="White"
-                        CornerRadius="8"
-                        Padding="12"
-                        Margin="0,5">
-
-                    <TextBlock Text="{Binding DataCriacao}"/>
-
-                </Border>
-
-            </StackPanel>
-
-            <!-- FORMULÁRIO -->
-            <Border Grid.Column="1"
-                    Background="White"
-                    CornerRadius="12"
-                    Padding="30"
-                    Margin="20">
-
-                <StackPanel>
-
-                    <TextBlock Text="Dados Pessoais"
-                               FontSize="22"
-                               FontWeight="Bold"
-                               Margin="0,0,0,25"/>
-
-                    <!-- NOME -->
-                    <TextBlock Text="Nome"
-                               FontWeight="SemiBold"/>
-
-                    <TextBox x:Name="TxtNome"
-                             Height="40"
-                             Margin="0,8,0,20"
-                             Text="{Binding Nome}"/>
-
-                    <!-- EMAIL -->
-                    <TextBlock Text="Email"
-                               FontWeight="SemiBold"/>
-
-                    <TextBox x:Name="TxtEmail"
-                             Height="40"
-                             Margin="0,8,0,20"
-                             Text="{Binding Email}"/>
-
-                    <!-- TELEFONE -->
-                    <TextBlock Text="Telefone"
-                               FontWeight="SemiBold"/>
-
-                    <TextBox x:Name="TxtTelefone"
-                             Height="40"
-                             Margin="0,8,0,20"
-                             Text="{Binding Telefone}"/>
-
-                    <!-- SENHA -->
-                    <TextBlock Text="Nova Senha"
-                               FontWeight="SemiBold"/>
-
-                    <PasswordBox x:Name="TxtSenha"
-                                 Height="40"
-                                 Margin="0,8,0,25"/>
-
-                    <!-- BOTÕES -->
-                    <Grid Margin="0,20,0,0">
-
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition/>
-                            <ColumnDefinition/>
-                        </Grid.ColumnDefinitions>
-
-                        <Button Grid.Column="0"
-                                Content="Cancelar"
+                        <!-- BOTÃO FOTO -->
+                        <Button Content="Alterar Foto"
                                 Height="45"
-                                Margin="0,0,10,0"
-                                Background="#E9ECEF"
-                                Foreground="#222"
-                                BorderThickness="0"
+                                Margin="0,25,0,0"
+                                Background="#1E22D8"
+                                Foreground="White"
                                 FontWeight="Bold"
+                                FontSize="14"
                                 Cursor="Hand"
-                                Click="Cancelar_Click"/>
+                                BorderThickness="0">
 
-                        <Button Grid.Column="1"
-                                Content="Salvar Alterações"
-                                Height="45"
-                                Margin="10,0,0,0"
-                                Background="#FFD700"
-                                Foreground="#111"
-                                BorderThickness="0"
-                                FontWeight="Bold"
-                                Cursor="Hand"
-                                Click="Salvar_Click"/>
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Template">
+                                        <Setter.Value>
+                                            <ControlTemplate TargetType="Button">
+                                                <Border Background="{TemplateBinding Background}"
+                                                        CornerRadius="8">
+                                                    <ContentPresenter HorizontalAlignment="Center"
+                                                                      VerticalAlignment="Center"/>
+                                                </Border>
+                                            </ControlTemplate>
+                                        </Setter.Value>
+                                    </Setter>
+                                </Style>
+                            </Button.Style>
+
+                        </Button>
+
+                        <!-- INFO -->
+                        <TextBlock Text="Informações da Conta"
+                                   FontSize="20"
+                                   FontWeight="Bold"
+                                   Margin="0,40,0,18"/>
+
+                        <!-- ID -->
+                        <TextBlock Text="ID do Usuário"
+                                   FontWeight="SemiBold"
+                                   Foreground="#555"/>
+
+                        <Border Background="#F8F9FA"
+                                CornerRadius="8"
+                                Padding="12"
+                                Margin="0,6,0,15">
+
+                            <TextBlock Text="{Binding Id}"
+                                       FontSize="14"/>
+
+                        </Border>
+
+                        <!-- DATA -->
+                        <TextBlock Text="Conta Criada em"
+                                   FontWeight="SemiBold"
+                                   Foreground="#555"/>
+
+                        <Border Background="#F8F9FA"
+                                CornerRadius="8"
+                                Padding="12"
+                                Margin="0,6,0,0">
+
+                            <TextBlock Text="{Binding DataCriacao}"
+                                       FontSize="14"/>
+
+                        </Border>
+
+                    </StackPanel>
+
+                </Border>
+
+                <!-- ========================================= -->
+                <!-- FORMULÁRIO -->
+                <!-- ========================================= -->
+
+                <Border Grid.Column="2"
+                        Background="White"
+                        CornerRadius="14"
+                        Padding="35">
+
+                    <Grid>
+
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <!-- TÍTULO -->
+                        <TextBlock Grid.Row="0"
+                                   Text="Dados Pessoais"
+                                   FontSize="24"
+                                   FontWeight="Bold"
+                                   Margin="0,0,0,30"/>
+
+                        <!-- NOME -->
+                        <StackPanel Grid.Row="1"
+                                    Margin="0,0,0,18">
+
+                            <TextBlock Text="Nome"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+
+                            <TextBox x:Name="TxtNome"
+                                     Height="42"
+                                     Padding="10"
+                                     FontSize="14"
+                                     Text="{Binding Nome}"/>
+
+                        </StackPanel>
+
+                        <!-- EMAIL -->
+                        <StackPanel Grid.Row="2"
+                                    Margin="0,0,0,18">
+
+                            <TextBlock Text="Email"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+
+                            <TextBox x:Name="TxtEmail"
+                                     Height="42"
+                                     Padding="10"
+                                     FontSize="14"
+                                     Text="{Binding Email}"/>
+
+                        </StackPanel>
+
+                        <!-- TELEFONE -->
+                        <StackPanel Grid.Row="3"
+                                    Margin="0,0,0,18">
+
+                            <TextBlock Text="Telefone"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+
+                            <TextBox x:Name="TxtTelefone"
+                                     Height="42"
+                                     Padding="10"
+                                     FontSize="14"
+                                     Text="{Binding Telefone}"/>
+
+                        </StackPanel>
+
+                        <!-- SENHA -->
+                        <StackPanel Grid.Row="4"
+                                    Margin="0,0,0,25">
+
+                            <TextBlock Text="Nova Senha"
+                                       FontWeight="SemiBold"
+                                       Margin="0,0,0,8"/>
+
+                            <PasswordBox x:Name="TxtSenha"
+                                         Height="42"
+                                         Padding="10"
+                                         FontSize="14"/>
+
+                        </StackPanel>
+
+                        <!-- BOTÕES -->
+                        <Grid Grid.Row="5"
+                              Margin="0,10,0,0">
+
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="15"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- CANCELAR -->
+                            <Button Grid.Column="0"
+                                    Content="Cancelar"
+                                    Height="45"
+                                    Background="#E9ECEF"
+                                    Foreground="#222"
+                                    FontWeight="Bold"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Click="Cancelar_Click">
+
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="8">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+
+                            </Button>
+
+                            <!-- SALVAR -->
+                            <Button Grid.Column="2"
+                                    Content="Salvar Alterações"
+                                    Height="45"
+                                    Background="#FFD700"
+                                    Foreground="#111"
+                                    FontWeight="Bold"
+                                    BorderThickness="0"
+                                    Cursor="Hand"
+                                    Click="Salvar_Click">
+
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Border Background="{TemplateBinding Background}"
+                                                            CornerRadius="8">
+                                                        <ContentPresenter HorizontalAlignment="Center"
+                                                                          VerticalAlignment="Center"/>
+                                                    </Border>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Button.Style>
+
+                            </Button>
+
+                        </Grid>
 
                     </Grid>
 
-                </StackPanel>
+                </Border>
 
-            </Border>
+            </Grid>
 
         </Grid>
 
-    </Grid>
+    </ScrollViewer>
 
 </UserControl>

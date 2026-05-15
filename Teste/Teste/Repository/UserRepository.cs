@@ -8,7 +8,11 @@ namespace Teste.Repository
 {
     class UserRepository
     {
-        // 🔥 CARREGAR DO ARQUIVO
+        private static int _ultimoId = 0;
+
+        // =========================================
+        // CARREGAR DO ARQUIVO
+        // =========================================
         public void CarregarDoArquivo()
         {
             MemoriaUsuarios.Lista.Clear();
@@ -34,8 +38,9 @@ namespace Teste.Repository
                 if (!int.TryParse(partes[0].Replace("Id:", "").Trim(), out int id))
                     continue;
 
-                var user = new User(id)
+                var user = new User
                 {
+                    Id = id,
                     Nome = partes[1].Replace("Nome:", "").Trim(),
                     Email = partes[2].Replace("Email:", "").Trim(),
                     Telefone = partes[3].Replace("Telefone:", "").Trim(),
@@ -43,10 +48,16 @@ namespace Teste.Repository
                 };
 
                 MemoriaUsuarios.Lista.Add(user);
+
+                // 🔥 controla o maior ID
+                if (id > _ultimoId)
+                    _ultimoId = id;
             }
         }
 
-        // ✔ SALVAR NOVO USUÁRIO
+        // =========================================
+        // SALVAR (SÓ MEMÓRIA)
+        // =========================================
         public bool Salvar(User user, out string mensagemErro)
         {
             mensagemErro = "";
@@ -71,54 +82,35 @@ namespace Teste.Repository
                 return false;
             }
 
-            MemoriaUsuarios.Lista.Add(user);
+            // 🔥 AQUI GARANTE ID CORRETO
+            user.Id = ++_ultimoId;
 
-            SalvarArquivo(); // 🔥 grava no txt
+            MemoriaUsuarios.Lista.Add(user);
 
             return true;
         }
 
-        // 🔥 ATUALIZAR USUÁRIO (NOVO)
+        // =========================================
+        // ATUALIZAR (SÓ MEMÓRIA)
+        // =========================================
         public void Atualizar(User user)
         {
             var usuarioExistente = MemoriaUsuarios.Lista
                 .FirstOrDefault(u => u.Id == user.Id);
 
-            if (usuarioExistente != null)
-            {
-                usuarioExistente.Nome = user.Nome;
-                usuarioExistente.Email = user.Email;
-                usuarioExistente.Telefone = user.Telefone;
-                usuarioExistente.Senha = user.Senha;
-            }
+            if (usuarioExistente == null)
+                return;
 
-            SalvarArquivo();
+            usuarioExistente.Nome = user.Nome;
+            usuarioExistente.Email = user.Email;
+            usuarioExistente.Telefone = user.Telefone;
+            usuarioExistente.Senha = user.Senha;
+            usuarioExistente.FotoPerfil = user.FotoPerfil;
         }
 
-        // 🔥 SALVAR NO TXT
-        public void SalvarArquivo()
-        {
-            string pastaProjeto = Path.GetFullPath(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")
-            );
-
-            string caminho = Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
-
-            Directory.CreateDirectory(Path.GetDirectoryName(caminho));
-
-            List<string> linhas = new List<string>();
-
-            foreach (var u in MemoriaUsuarios.Lista)
-            {
-                string linha =
-                    $"Id:{u.Id} |Nome:{u.Nome} |Email:{u.Email} |Telefone:{u.Telefone} |Senha:{u.Senha}";
-
-                linhas.Add(linha);
-            }
-
-            File.WriteAllLines(caminho, linhas);
-        }
-
+        // =========================================
+        // UTILITÁRIOS
+        // =========================================
         public bool SenhaExiste(string senha)
         {
             return MemoriaUsuarios.Lista.Any(u => u.Senha == senha);
@@ -126,8 +118,7 @@ namespace Teste.Repository
 
         public User BuscarPorEmail(string email)
         {
-            return MemoriaUsuarios.Lista
-                .FirstOrDefault(u => u.Email == email);
+            return MemoriaUsuarios.Lista.FirstOrDefault(u => u.Email == email);
         }
     }
 }
