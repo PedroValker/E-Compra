@@ -1,4 +1,5 @@
 ﻿using CestaApp.Views;
+using System;
 using System.Collections.ObjectModel;
 using System.Linq;
 using System.Windows;
@@ -14,19 +15,22 @@ namespace Teste.View
     {
         public ObservableCollection<Cesta> ListaCestas { get; set; }
 
-        // 🔥 CORREÇÃO 1: Trocado de UserControl para object
         private object _telaInicial;
-       
-        public TelaPrincipalCliente(string nome)
+
+        // 🔥 CORREÇÃO: Construtor agora recebe o objeto User completo!
+        public TelaPrincipalCliente(User usuario)
         {
             InitializeComponent();
 
-            Sessao.UsuarioLogado = nome;
-          
+            // Guardamos o usuário completo na Sessão para não perder o ID!
+            Sessao.UsuarioLogado = usuario;
+
             ListaCestas = new ObservableCollection<Cesta>();
 
             this.DataContext = this;
-            NomeUsuarioText.Text = $"Olá, {nome}";
+
+            // Buscamos o nome de dentro do objeto do usuário
+            NomeUsuarioText.Text = $"Olá, {usuario.Nome}";
 
             CarregarCestasDoBanco();
 
@@ -35,7 +39,8 @@ namespace Teste.View
 
             Loaded += TelaPrincipalCliente_Loaded;
         }
-        public void AtualizarUsuario(string nome)
+
+        public void UpdateUsuario(string nome)
         {
             NomeUsuarioText.Text = $"Olá, {nome}";
         }
@@ -51,9 +56,9 @@ namespace Teste.View
             }
             catch { }
         }
+
         private void TelaPrincipalCliente_Loaded(object sender, RoutedEventArgs e)
         {
-            // 🔥 CORREÇÃO 2: Removido o "as UserControl". Agora ele pega o conteúdo puro!
             _telaInicial = ConteudoPrincipal.Content;
         }
 
@@ -80,6 +85,7 @@ namespace Teste.View
             foreach (var cesta in MemoriaCestas.Lista.Take(3))
                 ListaCestas.Add(cesta);
         }
+
         private void AbrirMenuPerfil_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button btn)
@@ -92,17 +98,13 @@ namespace Teste.View
 
         private void FaçaPedido(object sender, RoutedEventArgs e)
         {
-            // 1. Instancia a View
             var telaPedido = new FacaSeuPedidoView();
 
-            // 2. "Escuta" o evento. Quando a CestaSelecionada for disparada lá dentro...
             telaPedido.CestaSelecionada += (cesta) =>
             {
-                // ...ele troca o conteúdo principal para a CestaView!
                 ConteudoPrincipal.Content = new CestaView(cesta);
             };
 
-            // 3. Mostra a tela de pedidos na tela
             ConteudoPrincipal.Content = telaPedido;
         }
 
@@ -110,49 +112,41 @@ namespace Teste.View
         {
             ConteudoPrincipal.Content = new PedidosView();
         }
+
         private void EntreEmContato(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = new ContatoNovo();
         }
+
         private void EditarPerfil_Click(object sender, RoutedEventArgs e)
         {
-            User user = new User
-            {
-                Nome = Sessao.UsuarioLogado, // você já tem o nome
-                Email = "",
-                Telefone = "",
-                FotoPerfil = ""
-            };
-
-            ConteudoPrincipal.Content = new EditarPerfilCliente(user);
+            // 🔥 CORREÇÃO: Passamos o objeto Usuário que está salvo na Sessão.
+            // Ele vai com ID, Nome, Email e tudo preenchido do TXT!
+            ConteudoPrincipal.Content = new EditarPerfilCliente(Sessao.UsuarioLogado);
         }
+
         private void Logoff_Click(object sender, System.Windows.RoutedEventArgs e)
         {
-            // 1. Exibe a caixa de diálogo perguntando se ele quer sair
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja sair da sua conta?",
                 "Confirmação de Logoff",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 
-            // 2. Verifica se o usuário clicou em "Sim"
             if (resposta == MessageBoxResult.Yes)
             {
-                // Limpa os dados do usuário logado na Sessão
-                Teste.Model.Sessao.UsuarioLogado = null;
+                // Limpa a sessão colocando null
+                Sessao.UsuarioLogado = null;
 
-                // Instancia e abre a tela de Login novamente
                 var telaLogin = new Login();
                 telaLogin.Show();
 
-                // Fecha a tela atual (Dashboard)
                 this.Close();
             }
-            // Se ele clicar em "Não", o código ignora o IF e a tela continua aberta normalmente!
         }
+
         private void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
-            // Agora isso vai funcionar perfeitamente e voltar o conteúdo original
             ConteudoPrincipal.Content = _telaInicial;
         }
     }

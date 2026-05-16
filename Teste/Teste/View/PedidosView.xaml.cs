@@ -1,6 +1,7 @@
 ﻿using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
+using System.Linq; // Garante que o FirstOrDefault() funcione aqui
 using Teste;
 using Teste.Model;
 using Teste.ViewModel;
@@ -13,8 +14,12 @@ namespace Teste.View
         {
             InitializeComponent();
 
-            // Instancia o ViewModel passando o usuário logado
-            DataContext = new PedidosViewModel(Sessao.UsuarioLogado);
+            // 🔥 CORREÇÃO: Passamos apenas a String que a ViewModel espera (ex: Nome)
+            // Se a sua ViewModel buscar os pedidos pelo Email, mude para: Sessao.UsuarioLogado.Email
+            if (Sessao.UsuarioLogado != null)
+            {
+                DataContext = new PedidosViewModel(Sessao.UsuarioLogado.Nome);
+            }
         }
 
         private void AbaHistorico_Click(object sender, MouseButtonEventArgs e)
@@ -23,8 +28,7 @@ namespace Teste.View
             {
                 TabelaDePedidos.ItemsSource = vm.ListaPedidosEntregues;
 
-                // 🔥 MÁGICA AQUI: Seleciona automaticamente o primeiro item da lista nova
-                // para o painel da direita não ficar vazio ou mostrar item errado.
+                // Seleciona automaticamente o primeiro item da lista nova
                 vm.PedidoSelecionado = vm.ListaPedidosEntregues.FirstOrDefault();
             }
 
@@ -41,7 +45,7 @@ namespace Teste.View
             {
                 TabelaDePedidos.ItemsSource = vm.ListaPedidosPendentes;
 
-                // 🔥 MÁGICA AQUI: Seleciona automaticamente o primeiro item da lista nova
+                // Seleciona automaticamente o primeiro item da lista nova
                 vm.PedidoSelecionado = vm.ListaPedidosPendentes.FirstOrDefault();
             }
 
@@ -51,7 +55,7 @@ namespace Teste.View
             AbaHistoricoTexto.FontWeight = System.Windows.FontWeights.Normal;
             AbaHistoricoTexto.Foreground = new SolidColorBrush(Colors.Gray);
         }
-        // Adicione junto com os outros cliques (AbaHistorico_Click, etc)
+
         private void VerDetalhes_Click(object sender, System.Windows.RoutedEventArgs e)
         {
             // Pegamos o botão que foi clicado e extraímos o Pedido que está associado a ele
@@ -60,10 +64,9 @@ namespace Teste.View
                 // Instancia a sua janela de detalhes passando o pedido específico
                 var janelaDetalhes = new DetalhesPedidoCliente(pedidoClicado);
 
-                // Abre a janela como um "Pop-up" (o usuário não consegue clicar no fundo até fechar)
+                // Abre a janela como um "Pop-up"
                 janelaDetalhes.ShowDialog();
             }
         }
-       
     }
 }

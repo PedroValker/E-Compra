@@ -9,6 +9,7 @@ namespace Teste.Repository
     class UserRepository
     {
         // 🔥 CARREGAR DO ARQUIVO
+        // 🔥 CARREGAR DO ARQUIVO (Versão Corrigida e Protegida)
         public void CarregarDoArquivo()
         {
             MemoriaUsuarios.Lista.Clear();
@@ -26,20 +27,26 @@ namespace Teste.Repository
 
             foreach (var linha in linhas)
             {
+                if (string.IsNullOrWhiteSpace(linha)) continue;
+
                 var partes = linha.Split('|');
 
                 if (partes.Length < 5)
                     continue;
 
-                if (!int.TryParse(partes[0].Replace("Id:", "").Trim(), out int id))
+                // Limpa a string de forma mais segura contra espaços extras
+                string idTexto = partes[0].ToLower().Replace("id:", "").Trim();
+
+                if (!int.TryParse(idTexto, out int id))
                     continue;
 
+                // Usa o construtor correto passando o ID lido!
                 var user = new User(id)
                 {
-                    Nome = partes[1].Replace("Nome:", "").Trim(),
-                    Email = partes[2].Replace("Email:", "").Trim(),
-                    Telefone = partes[3].Replace("Telefone:", "").Trim(),
-                    Senha = partes[4].Replace("Senha:", "").Trim()
+                    Nome = partes[1].ToLower().Contains("nome:") ? partes[1].Substring(partes[1].IndexOf(':') + 1).Trim() : partes[1].Trim(),
+                    Email = partes[2].ToLower().Contains("email:") ? partes[2].Substring(partes[2].IndexOf(':') + 1).Trim() : partes[2].Trim(),
+                    Telefone = partes[3].ToLower().Contains("telefone:") ? partes[3].Substring(partes[3].IndexOf(':') + 1).Trim() : partes[3].Trim(),
+                    Senha = partes[4].ToLower().Contains("senha:") ? partes[4].Substring(partes[4].IndexOf(':') + 1).Trim() : partes[4].Trim()
                 };
 
                 MemoriaUsuarios.Lista.Add(user);

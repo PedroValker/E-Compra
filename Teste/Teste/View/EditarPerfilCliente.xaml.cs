@@ -77,15 +77,14 @@ namespace Teste.View
             usuario.FotoPerfil = caminhoFoto;
 
             // 🔥 ATUALIZA SESSÃO GLOBAL
-            Sessao.UsuarioLogado = usuario.Nome;
-
+          Sessao.UsuarioLogado = usuario;
 
             // 🔥 ATUALIZA HEADER DA TELA PRINCIPAL
             var janela = Window.GetWindow(this) as TelaPrincipalCliente;
 
             if (janela != null)
             {
-                janela.AtualizarUsuario(usuario.Nome);
+                janela.UpdateUsuario(usuario.Nome);
                 janela.AtualizarFoto(usuario.FotoPerfil);
             }
 

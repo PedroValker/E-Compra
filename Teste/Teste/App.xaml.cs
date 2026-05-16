@@ -28,12 +28,15 @@ namespace Teste
             CarrinhoRepository repoCarrinho = new CarrinhoRepository();
             repoCarrinho.CarregarDoArquivo();
         }
-
         protected override void OnExit(ExitEventArgs e)
         {
             try
             {
-                // 🔥 Usamos os repositórios que já sabem salvar no formato certinho!
+                // ✔ Agora usamos o UserRepository para salvar os usuários! 
+                // Ele vai usar o formato idêntico ao que ele mesmo lê.
+                UserRepository repoUsers = new UserRepository();
+                repoUsers.SalvarArquivo();
+
                 ProdutoRepository repoProdutos = new ProdutoRepository();
                 repoProdutos.AtualizarArquivoTxt();
 
@@ -42,10 +45,6 @@ namespace Teste
 
                 CarrinhoRepository repoCarrinho = new CarrinhoRepository();
                 repoCarrinho.AtualizarArquivoTxt();
-
-                // Mantenho a sua lógica de salvar usuários do jeito que você fez
-                string pastaProjeto = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
-                SalvarUsuarios(pastaProjeto);
             }
             catch (Exception ex)
             {
@@ -54,27 +53,6 @@ namespace Teste
 
             base.OnExit(e);
         }
-
-        // Mantive apenas o de Usuários, pois Produtos e Cestas agora se salvam sozinhos com os Repositórios
-        private void SalvarUsuarios(string pastaProjeto)
-        {
-            string pasta = Path.Combine(pastaProjeto, "cadastroUsers");
-
-            if (!Directory.Exists(pasta))
-                Directory.CreateDirectory(pasta);
-
-            string arquivo = Path.Combine(pasta, "cadastroUsers.txt");
-
-            List<string> linhas = new List<string>();
-
-            foreach (var user in MemoriaUsuarios.Lista)
-            {
-                // Se futuramente o UserRepository der erro ao carregar, lembre-se de 
-                // verificar se ele está esperando esse formato cheio de textos "Id:", "Nome:"
-                linhas.Add($"Id:{user.Id} | Nome:{user.Nome} | Email:{user.Email} | Telefone:{user.Telefone} | Senha:{user.Senha} | Data:{user.DataCriacao}");
-            }
-
-            File.WriteAllLines(arquivo, linhas, Encoding.UTF8);
-        }
+     
     }
 }

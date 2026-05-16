@@ -77,7 +77,7 @@ namespace CestaApp.Views
             Pedido novoPedido = new Pedido
             {
                 NomePedido = $"PED-{DateTime.Now:yyyyMMddHHmmss}",
-                Recebedor = Sessao.UsuarioLogado,
+                Recebedor = Sessao.UsuarioLogado.Nome,
                 Endereco = "A combinar",
                 FormaPagamento = "A combinar",
                 Status = "Pendente",

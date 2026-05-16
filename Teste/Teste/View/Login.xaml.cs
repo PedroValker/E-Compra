@@ -58,7 +58,6 @@ namespace Teste
             string email = EmailBox.Text.Trim();
             string senha = senhaVisivel ? SenhaVisivelBox.Text : SenhaBox.Password;
 
-            // 🔥 VALIDAÇÃO BÁSICA (IMPORTANTE)
             if (string.IsNullOrEmpty(email) || string.IsNullOrEmpty(senha))
             {
                 MessageBox.Show("Preencha email e senha.");
@@ -76,17 +75,20 @@ namespace Teste
                     return;
                 }
 
+                // 🔥 LINHA NOVA: Salva o usuário encontrado (com o ID correto) na sessão global
+                Sessao.UsuarioLogado = user;
+
                 MessageBox.Show($"Bem-vindo, {user.Nome}!");
 
                 Window tela;
-
                 if (user.IsAdmin)
                 {
-                    tela = new PrincipalAdministrador(user.Nome); ;
+                    tela = new PrincipalAdministrador(user.Nome);
                 }
                 else
                 {
-                    tela = new TelaPrincipalCliente(user.Nome);
+                    // Se sua tela principal precisar do ID, você já pode pegar de Sessao.UsuarioLogado.Id
+                    tela = new TelaPrincipalCliente(user);
                 }
 
                 tela.Show();
@@ -97,7 +99,6 @@ namespace Teste
                 MessageBox.Show("Erro no login: " + ex.Message);
             }
         }
-
         private void AbrirCadastro_Click(object sender, MouseButtonEventArgs e)
         {
             MainWindow cadastro = new MainWindow();
