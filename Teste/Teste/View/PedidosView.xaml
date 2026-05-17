@@ -34,7 +34,7 @@
 
                 <ListView.View>
                     <GridView>
-                        <GridViewColumn Header="Dia" Width="100">
+                        <GridViewColumn Header="Dia" Width="90">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding DataDoPedido}" VerticalAlignment="Center"/>
@@ -42,9 +42,17 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Produto" DisplayMemberBinding="{Binding NomePedido}" Width="150"/>
+                        <GridViewColumn Header="Produto" DisplayMemberBinding="{Binding NomePedido}" Width="120"/>
 
-                        <GridViewColumn Header="Status do Pedido" Width="130">
+                        <GridViewColumn Header="Cesta" Width="120">
+                            <GridViewColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding CestaComprada.Nome}" VerticalAlignment="Center" TextTrimming="CharacterEllipsis"/>
+                                </DataTemplate>
+                            </GridViewColumn.CellTemplate>
+                        </GridViewColumn>
+
+                        <GridViewColumn Header="Status do Pedido" Width="120">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Border Padding="10,4" CornerRadius="12" HorizontalAlignment="Left">
@@ -67,7 +75,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Qtd" Width="60">
+                        <GridViewColumn Header="Qtd" Width="45">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="1" VerticalAlignment="Center" HorizontalAlignment="Center"/>
@@ -75,7 +83,7 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="Valor" Width="100">
+                        <GridViewColumn Header="Valor" Width="90">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <TextBlock Text="{Binding Total, StringFormat='R$ \{0:N2\}'}" VerticalAlignment="Center"/>
@@ -83,13 +91,13 @@
                             </GridViewColumn.CellTemplate>
                         </GridViewColumn>
 
-                        <GridViewColumn Header="" Width="100">
+                        <GridViewColumn Header="" Width="90">
                             <GridViewColumn.CellTemplate>
                                 <DataTemplate>
                                     <Button Content="Ver Mais" 
                                             Click="VerDetalhes_Click"
                                             Background="#212121" Foreground="White" 
-                                            Padding="15,5" BorderThickness="0" Cursor="Hand">
+                                            Padding="12,5" BorderThickness="0" Cursor="Hand">
                                         <Button.Resources>
                                             <Style TargetType="Border">
                                                 <Setter Property="CornerRadius" Value="15"/>
@@ -120,6 +128,7 @@
                                             <ColumnDefinition Width="20"/>
                                             <ColumnDefinition Width="*"/>
                                         </Grid.ColumnDefinitions>
+
                                         <TextBlock Text="{Binding Quantidade}" FontWeight="Bold" Grid.Column="0" FontSize="12"/>
                                         <TextBlock Text="{Binding Nome}" Grid.Column="1" TextTrimming="CharacterEllipsis" FontSize="12"/>
                                     </Grid>

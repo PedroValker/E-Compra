@@ -90,7 +90,7 @@
                 <DataGrid x:Name="GridProdutos" ItemsSource="{Binding ProdutosDaCesta}">
                     <DataGrid.Columns>
 
-                        <DataGridTextColumn Header="Qtd" Binding="{Binding QuantidadeFixa, FallbackValue=1}" Width="50" IsReadOnly="True"/>
+                        <DataGridTextColumn Header="Qtd" Binding="{Binding Peso, FallbackValue=0}" Width="50" IsReadOnly="True" FontWeight="Bold"/>
 
                         <DataGridTextColumn Header="Produto" Binding="{Binding Nome}" Width="*" IsReadOnly="True"/>
 
@@ -100,17 +100,17 @@
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
 
                                         <Button Content="-"
-                                                Style="{StaticResource QtyButtonStyle}"
-                                                Click="DiminuirQtd_Click"/>
+                                Style="{StaticResource QtyButtonStyle}"
+                                Click="DiminuirQtd_Click"/>
 
                                         <TextBlock Text="{Binding QuantidadeSelecionada, FallbackValue=1}"
-                                                   Margin="10,0"
-                                                   FontWeight="SemiBold"
-                                                   VerticalAlignment="Center"/>
+                                   Margin="10,0"
+                                   FontWeight="SemiBold"
+                                   VerticalAlignment="Center"/>
 
                                         <Button Content="+"
-                                                Style="{StaticResource QtyButtonStyle}"
-                                                Click="AumentarQtd_Click"/>
+                                Style="{StaticResource QtyButtonStyle}"
+                                Click="AumentarQtd_Click"/>
 
                                     </StackPanel>
                                 </DataTemplate>

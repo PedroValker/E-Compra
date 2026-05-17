@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Input;
@@ -46,7 +47,10 @@ namespace Teste.View
             }
 
             // Define a tabela inicial como pendentes
-            GridPedidos.ItemsSource = ListaPedidosPendentes;
+            if (GridPedidos != null)
+            {
+                GridPedidos.ItemsSource = ListaPedidosPendentes;
+            }
         }
 
         private void VerItens_Click(object sender, RoutedEventArgs e)
@@ -54,7 +58,7 @@ namespace Teste.View
             // Descobre qual pedido o admin clicou
             if (sender is Button botao && botao.DataContext is Pedido pedidoClicado)
             {
-                // Abre a janela de detalhes (Certifique-se de que o nome da sua janela modal é esse mesmo)
+                // Instancia e abre a Janela Modal correta passando o pedido clicado
                 DetalhesPedidoCliente modal = new DetalhesPedidoCliente(pedidoClicado);
                 modal.ShowDialog();
             }
@@ -112,11 +116,10 @@ namespace Teste.View
                     repo.AtualizarArquivoTxt();
 
                     // 3. MÁGICA DE UI: Tira o pedido da lista de pendentes e joga pra lista de entregues!
-                    // A tabela se atualiza sozinha sem precisar do "Refresh()".
                     ListaPedidosPendentes.Remove(pedidoClicado);
                     ListaPedidosEntregues.Add(pedidoClicado);
 
-                    MessageBox.Show("Pedido atualizado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Pedido updated com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }

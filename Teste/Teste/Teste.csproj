@@ -30,6 +30,10 @@
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="itext7" Version="9.6.0" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Resource Include="Dados\imagem\fundoteste.png" />
   </ItemGroup>
 

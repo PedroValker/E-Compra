@@ -8,17 +8,31 @@ namespace Teste.Repository
 {
     class UserRepository
     {
-        // 🔥 CARREGAR DO ARQUIVO
-        // 🔥 CARREGAR DO ARQUIVO (Versão Corrigida e Protegida)
-        public void CarregarDoArquivo()
+        // 🔥 Caminho absoluto fixo no Windows para evitar problemas entre usuários
+        private string ObterPastaImagensPerfil()
         {
-            MemoriaUsuarios.Lista.Clear();
+            string caminhoRaiz = @"C:\TesteSistema\Dados\imagemUser";
+            if (!Directory.Exists(caminhoRaiz))
+            {
+                Directory.CreateDirectory(caminhoRaiz);
+            }
+            return caminhoRaiz;
+        }
 
+        private string ObterCaminhoTxt()
+        {
             string pastaProjeto = Path.GetFullPath(
                 Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")
             );
+            return Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
+        }
 
-            string caminho = Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
+        // 🔥 CARREGAR DO ARQUIVO (Versão Atualizada com FotoPerfil)
+        // 🔥 CARREGAR DO ARQUIVO (Versão Corrigida para Carregar a Foto de Perfil)
+        public void CarregarDoArquivo()
+        {
+            MemoriaUsuarios.Lista.Clear();
+            string caminho = ObterCaminhoTxt();
 
             if (!File.Exists(caminho))
                 return;
@@ -29,31 +43,53 @@ namespace Teste.Repository
             {
                 if (string.IsNullOrWhiteSpace(linha)) continue;
 
+                // Separa as colunas por '|'
                 var partes = linha.Split('|');
 
                 if (partes.Length < 5)
                     continue;
 
-                // Limpa a string de forma mais segura contra espaços extras
-                string idTexto = partes[0].ToLower().Replace("id:", "").Trim();
+                // Dicionário para guardar as chaves (Id, Nome, Email, etc.) e seus respectivos valores
+                var dadosUsuario = new Dictionary<string, string>(StringComparer.OrdinalIgnoreCase);
 
-                if (!int.TryParse(idTexto, out int id))
+                foreach (var parte in partes)
+                {
+                    var divisaoChaveValor = parte.Split(new[] { ':' }, 2);
+                    if (divisaoChaveValor.Length == 2)
+                    {
+                        string chave = divisaoChaveValor[0].Trim();
+                        string valor = divisaoChaveValor[1].Trim();
+                        dadosUsuario[chave] = valor;
+                    }
+                }
+
+                // Tenta ler o ID da estrutura mapeada
+                if (!dadosUsuario.TryGetValue("Id", out string idTexto) || !int.TryParse(idTexto, out int id))
                     continue;
 
-                // Usa o construtor correto passando o ID lido!
+                // Cria o usuário com os dados extraídos com total segurança contra nulos ou falta de colunas
                 var user = new User(id)
                 {
-                    Nome = partes[1].ToLower().Contains("nome:") ? partes[1].Substring(partes[1].IndexOf(':') + 1).Trim() : partes[1].Trim(),
-                    Email = partes[2].ToLower().Contains("email:") ? partes[2].Substring(partes[2].IndexOf(':') + 1).Trim() : partes[2].Trim(),
-                    Telefone = partes[3].ToLower().Contains("telefone:") ? partes[3].Substring(partes[3].IndexOf(':') + 1).Trim() : partes[3].Trim(),
-                    Senha = partes[4].ToLower().Contains("senha:") ? partes[4].Substring(partes[4].IndexOf(':') + 1).Trim() : partes[4].Trim()
+                    Nome = dadosUsuario.TryGetValue("Nome", out string nome) ? nome : "",
+                    Email = dadosUsuario.TryGetValue("Email", out string email) ? email : "",
+                    Telefone = dadosUsuario.TryGetValue("Telefone", out string telefone) ? telefone : "",
+                    Senha = dadosUsuario.TryGetValue("Senha", out string senha) ? senha : ""
                 };
+
+                // 🔥 AQUI ESTÁ A CORREÇÃO DA FOTO:
+                if (dadosUsuario.TryGetValue("FotoPerfil", out string foto) && foto != "null")
+                {
+                    user.FotoPerfil = foto;
+                }
+                else
+                {
+                    user.FotoPerfil = "";
+                }
 
                 MemoriaUsuarios.Lista.Add(user);
             }
         }
-
-        // ✔ SALVAR NOVO USUÁRIO
+        // ✔ SALVAR NOVO USUÁRIO (Com processamento da imagem)
         public bool Salvar(User user, out string mensagemErro)
         {
             mensagemErro = "";
@@ -78,15 +114,17 @@ namespace Teste.Repository
                 return false;
             }
 
-            MemoriaUsuarios.Lista.Add(user);
+            // 🔥 PROCESSAR FOTO DE PERFIL ANTES DE SALVAR
+            user.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil);
 
-            SalvarArquivo(); // 🔥 grava no txt
+            MemoriaUsuarios.Lista.Add(user);
+            SalvarArquivo();
 
             return true;
         }
 
-        // 🔥 ATUALIZAR USUÁRIO (NOVO)
-        public void Atualizar(User user)
+        // 🔥 ATUALIZAR USUÁRIO
+        public void Atuallizar(User user)
         {
             var usuarioExistente = MemoriaUsuarios.Lista
                 .FirstOrDefault(u => u.Id == user.Id);
@@ -97,33 +135,75 @@ namespace Teste.Repository
                 usuarioExistente.Email = user.Email;
                 usuarioExistente.Telefone = user.Telefone;
                 usuarioExistente.Senha = user.Senha;
+
+                // 🔥 Atualiza a foto tratando o caminho absoluto
+                usuarioExistente.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil);
             }
 
             SalvarArquivo();
         }
 
-        // 🔥 SALVAR NO TXT
+        // 🔥 SALVAR NO TXT (Incluindo a propriedade FotoPerfil)
         public void SalvarArquivo()
         {
-            string pastaProjeto = Path.GetFullPath(
-                Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\")
-            );
-
-            string caminho = Path.Combine(pastaProjeto, "cadastroUsers", "cadastroUsers.txt");
-
+            string caminho = ObterCaminhoTxt();
             Directory.CreateDirectory(Path.GetDirectoryName(caminho));
 
             List<string> linhas = new List<string>();
 
             foreach (var u in MemoriaUsuarios.Lista)
             {
-                string linha =
-                    $"Id:{u.Id} |Nome:{u.Nome} |Email:{u.Email} |Telefone:{u.Telefone} |Senha:{u.Senha}";
+                string foto = string.IsNullOrEmpty(u.FotoPerfil) ? "null" : u.FotoPerfil;
+
+                // Adicionado "|FotoPerfil:" no final da linha do TXT
+                string linha = $"Id:{u.Id} |Nome:{u.Nome} |Email:{u.Email} |Telefone:{u.Telefone} |Senha:{u.Senha} |FotoPerfil:{foto}";
 
                 linhas.Add(linha);
             }
 
             File.WriteAllLines(caminho, linhas);
+        }
+
+        // 🔥 MÉTODO AUXILIAR: Faz a cópia segura da foto para a pasta absoluta C:\
+        private string SalvarFotoNoCaminhoAbsoluto(string caminhoOrigem)
+        {
+            if (string.IsNullOrEmpty(caminhoOrigem) || !File.Exists(caminhoOrigem))
+            {
+                // Se o arquivo não existe ou já está salvo no caminho absoluto, mantém como está
+                if (!string.IsNullOrEmpty(caminhoOrigem) && caminhoOrigem.StartsWith(@"C:\TesteSistema"))
+                    return caminhoOrigem;
+
+                return "";
+            }
+
+            try
+            {
+                string pastaDestino = ObterPastaImagensPerfil();
+                string extensao = Path.GetExtension(caminhoOrigem);
+
+                // Nome único baseado em Guid para evitar sobrescrever fotos de usuários diferentes
+                string nomeArquivo = $"{Guid.NewGuid()}{extensao}";
+                string caminhoDestinoCompleto = Path.Combine(pastaDestino, nomeArquivo);
+
+                string origemAbsoluta = Path.GetFullPath(caminhoOrigem);
+
+                if (!origemAbsoluta.Equals(caminhoDestinoCompleto, StringComparison.OrdinalIgnoreCase))
+                {
+                    // Stream seguro que não trava o arquivo original aberto na tela
+                    using (var streamOrigem = new FileStream(origemAbsoluta, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    using (var streamDestino = new FileStream(caminhoDestinoCompleto, FileMode.Create, FileAccess.Write, FileShare.None))
+                    {
+                        streamOrigem.CopyTo(streamDestino);
+                    }
+                }
+
+                return caminhoDestinoCompleto; // Retorna ex: "C:\TesteSistema\Dados\imagemUser\guid.jpg"
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao processar foto de perfil: " + ex.Message);
+                return "";
+            }
         }
 
         public bool SenhaExiste(string senha)

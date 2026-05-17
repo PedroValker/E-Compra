@@ -7,6 +7,7 @@ using System.Windows.Media.Imaging;
 using Teste.Model;
 using Teste.Repository;
 
+
 namespace Teste.View
 {
     public partial class EditarPerfilCliente : UserControl
@@ -19,24 +20,33 @@ namespace Teste.View
             InitializeComponent();
 
             usuario = user;
-
             DataContext = usuario;
 
-            // se já tiver foto salva
+            // Se já tiver foto salva
             caminhoFoto = usuario.FotoPerfil;
-            UserRepository repo = new UserRepository();
-            repo.Atualizar(usuario);
+
+            // 🔥 REMOVIDO DAQUI: O repositório não deve atualizar o TXT ao abrir a tela!
+
             CarregarFotoPerfil();
         }
 
+        // 🔥 CORREÇÃO: Carregamento usando FileStream seguro (evita travar o arquivo no Windows)
         private void CarregarFotoPerfil()
         {
             try
             {
-                if (!string.IsNullOrEmpty(caminhoFoto) &&
-                    File.Exists(caminhoFoto))
+                if (!string.IsNullOrEmpty(caminhoFoto) && File.Exists(caminhoFoto))
                 {
-                    ImagemPerfil.Source = new BitmapImage(new Uri(caminhoFoto));
+                    BitmapImage imagem = new BitmapImage();
+                    using (var stream = new FileStream(caminhoFoto, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        imagem.BeginInit();
+                        imagem.CacheOption = BitmapCacheOption.OnLoad;
+                        imagem.StreamSource = stream;
+                        imagem.EndInit();
+                        imagem.Freeze(); // Libera o arquivo para que o Repository consiga copiá-lo
+                    }
+                    ImagemPerfil.Source = imagem;
                 }
                 else
                 {
@@ -44,7 +54,10 @@ namespace Teste.View
                         new Uri("pack://application:,,,/Dados/imagem/perfil.png"));
                 }
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao carregar foto de perfil: " + ex.Message);
+            }
         }
 
         private void AlterarFoto_Click(object sender, RoutedEventArgs e)
@@ -58,7 +71,24 @@ namespace Teste.View
             {
                 caminhoFoto = abrir.FileName;
 
-                ImagemPerfil.Source = new BitmapImage(new Uri(caminhoFoto));
+                // Carrega a pré-visualização da foto escolhida também de forma segura
+                try
+                {
+                    BitmapImage imagem = new BitmapImage();
+                    using (var stream = new FileStream(caminhoFoto, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        imagem.BeginInit();
+                        imagem.CacheOption = BitmapCacheOption.OnLoad;
+                        imagem.StreamSource = stream;
+                        imagem.EndInit();
+                        imagem.Freeze();
+                    }
+                    ImagemPerfil.Source = imagem;
+                }
+                catch
+                {
+                    ImagemPerfil.Source = new BitmapImage(new Uri(caminhoFoto));
+                }
             }
         }
 
@@ -73,23 +103,30 @@ namespace Teste.View
                 usuario.Senha = TxtSenha.Password;
             }
 
-            // ✔ salva foto no usuário
+            // ✔ Salva o caminho temporário ou definitivo da foto no usuário
             usuario.FotoPerfil = caminhoFoto;
 
+            // 🔥 CORRIGIDO: Agora aponta para "Atualizar" com apenas um 'l'
+            UserRepository repo = new UserRepository();
+            repo.Atuallizar(usuario);
+
+            // A propriedade 'usuario.FotoPerfil' agora contém o caminho definitivo (C:\...) gerado pelo Repository
+            caminhoFoto = usuario.FotoPerfil;
+
             // 🔥 ATUALIZA SESSÃO GLOBAL
-          Sessao.UsuarioLogado = usuario;
+            Sessao.UsuarioLogado = usuario;
 
             // 🔥 ATUALIZA HEADER DA TELA PRINCIPAL
             var janela = Window.GetWindow(this) as TelaPrincipalCliente;
-
             if (janela != null)
             {
+                // Certifique-se de que esses métodos existam na sua TelaPrincipalCliente
                 janela.UpdateUsuario(usuario.Nome);
                 janela.AtualizarFoto(usuario.FotoPerfil);
             }
 
             MessageBox.Show(
-                "Perfil atualizado com sucesso!",
+                "Perfil updated com sucesso!",
                 "Sucesso",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

@@ -1,7 +1,7 @@
 ﻿<Window x:Class="Teste.View.DetalhesPedidoCliente"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Resumo do Pedido" Height="550" Width="800"
+        Title="Resumo Profissional do Pedido" Height="650" Width="950"
         WindowStartupLocation="CenterScreen"
         Background="#F4F6F8"
         FontFamily="Segoe UI, Tahoma, sans-serif">
@@ -15,65 +15,92 @@
 
         <StackPanel Grid.Row="0" Margin="0,0,0,20">
             <TextBlock Text="{Binding Recebedor, StringFormat='Pedido de {0}'}" FontSize="26" FontWeight="Black" Foreground="#111"/>
-
             <StackPanel Orientation="Horizontal" Margin="0,8,0,0">
                 <TextBlock Text="📅 Data:" FontWeight="SemiBold" Foreground="#555" Margin="0,0,5,0"/>
                 <TextBlock Text="{Binding DataDoPedido}" Foreground="#555" Margin="0,0,20,0"/>
-
                 <TextBlock Text="📍 Entrega:" FontWeight="SemiBold" Foreground="#555" Margin="0,0,5,0"/>
-                <TextBlock Text="{Binding Endereco}" Foreground="#555" TextTrimming="CharacterEllipsis" MaxWidth="350"/>
+                <TextBlock Text="{Binding Endereco}" Foreground="#555" TextTrimming="CharacterEllipsis" MaxWidth="500"/>
             </StackPanel>
         </StackPanel>
 
-        <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="5" BorderBrush="#E0E0E0" BorderThickness="1">
-            <DataGrid x:Name="GridItens" AutoGenerateColumns="False" IsReadOnly="True" 
-                      HeadersVisibility="Column" Background="Transparent" BorderThickness="0" 
-                      GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EEEEEE"
-                      RowHeight="40" Margin="0,-4,0,4">
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.2*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
 
-                <DataGrid.Resources>
-                    <Style TargetType="DataGridColumnHeader">
-                        <Setter Property="FontWeight" Value="Bold"/>
-                        <Setter Property="Background" Value="#F8F9FA"/>
-                        <Setter Property="Padding" Value="10,5"/>
-                        <Setter Property="HorizontalContentAlignment" Value="Left"/>
-                    </Style>
-                </DataGrid.Resources>
+            <Border Grid.Column="0" Background="White" CornerRadius="8" Padding="15" BorderBrush="#E0E0E0" BorderThickness="1" Margin="0,0,10,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+                    <TextBlock Grid.Row="0" Text="Cestas no Pedido" FontSize="16" FontWeight="Bold" Foreground="#212529" Margin="0,0,0,10"/>
 
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="50">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="HorizontalAlignment" Value="Center"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
+                    <DataGrid x:Name="GridCestas" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                              HeadersVisibility="Column" Background="Transparent" BorderThickness="0" 
+                              GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#EEEEEE" RowHeight="40">
+                        <DataGrid.Resources>
+                            <Style TargetType="DataGridColumnHeader">
                                 <Setter Property="FontWeight" Value="Bold"/>
+                                <Setter Property="Background" Value="#F8F9FA"/>
+                                <Setter Property="Padding" Value="8,5"/>
                             </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                        </DataGrid.Resources>
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="50" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Itens" Binding="{Binding Nome}" Width="*"/>
+                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='R$ {0:N2}'}" Width="110" FontWeight="Bold"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
 
-                    <DataGridTextColumn Header="Nome da Cesta" Binding="{Binding Nome}" Width="150"/>
+            <Grid Grid.Column="1" Margin="10,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
 
-                    <DataGridTextColumn Header="Produtos na Cesta" Binding="{Binding Produtos}" Width="*">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="TextWrapping" Value="Wrap"/>
-                                <Setter Property="Foreground" Value="#666"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
+                <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="15" BorderBrush="#A3E635" BorderThickness="1.5" Margin="0,0,0,10">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <StackPanel Grid.Row="0" Orientation="Horizontal" Margin="0,0,0,8">
+                            <TextBlock Text="➕ Itens Adicionados / Extras" FontSize="14" FontWeight="Bold" Foreground="#15803D"/>
+                        </StackPanel>
 
-                    <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='R$ {0:N2}'}" Width="100">
-                        <DataGridTextColumn.ElementStyle>
-                            <Style TargetType="TextBlock">
-                                <Setter Property="FontWeight" Value="Bold"/>
-                                <Setter Property="VerticalAlignment" Value="Center"/>
-                            </Style>
-                        </DataGridTextColumn.ElementStyle>
-                    </DataGridTextColumn>
-                </DataGrid.Columns>
-            </DataGrid>
-        </Border>
+                        <DataGrid x:Name="GridAdicionados" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                                  HeadersVisibility="Column" Background="Transparent" BorderThickness="0" RowHeight="32">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Produto" Binding="{Binding Produto}" Width="*"/>
+                                <DataGridTextColumn Header="Qtd Extra" Binding="{Binding Qtd}" Width="80" FontWeight="Bold"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Background="White" CornerRadius="8" Padding="15" BorderBrush="#FCA5A5" BorderThickness="1.5" Margin="0,10,0,0">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="➖ Itens Removidos / Menos" FontSize="14" FontWeight="Bold" Foreground="#B91C1C" Margin="0,0,0,8"/>
+
+                        <DataGrid x:Name="GridRemovidos" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                                  HeadersVisibility="Column" Background="Transparent" BorderThickness="0" RowHeight="32">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Produto" Binding="{Binding Produto}" Width="*"/>
+                                <DataGridTextColumn Header="Qtd Retirada" Binding="{Binding Qtd}" Width="90" FontWeight="Bold"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
 
         <Grid Grid.Row="2" Margin="0,20,0,0">
             <Grid.ColumnDefinitions>
@@ -84,24 +111,34 @@
             <StackPanel Grid.Column="0" Margin="0,0,20,0">
                 <TextBlock Text="Forma de Pagamento:" FontWeight="SemiBold" Foreground="#333"/>
                 <TextBlock Text="{Binding FormaPagamento}" Foreground="#555" Margin="0,0,0,10"/>
-
                 <TextBlock Text="Observações:" FontWeight="SemiBold" Foreground="#333"/>
                 <TextBlock Text="{Binding Observacoes}" Foreground="#555" TextWrapping="Wrap" FontStyle="Italic"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Right" MinWidth="200">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" MinWidth="240">
                 <TextBlock Text="Total do Pedido" FontSize="14" Foreground="#777" HorizontalAlignment="Right"/>
                 <TextBlock Text="{Binding Total, StringFormat='R$ \{0:N2\}'}" FontSize="32" FontWeight="Black" Foreground="#002DB3" HorizontalAlignment="Right" Margin="0,-5,0,15"/>
 
-                <Button Content="Fechar" Click="Fechar_Click" Height="40" Background="#212529" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
-                    <Button.Resources>
-                        <Style TargetType="Border">
-                            <Setter Property="CornerRadius" Value="8"/>
-                        </Style>
-                    </Button.Resources>
-                </Button>
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button Content="Gerar PDF" Click="GerarPdf_Click" Height="40" Width="110" Margin="0,0,10,0" Background="#F59E0B" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                    <Button Content="Fechar Janela" Click="Fechar_Click" Height="40" Width="110" Background="#212529" Foreground="White" FontWeight="Bold" BorderThickness="0" Cursor="Hand">
+                        <Button.Resources>
+                            <Style TargetType="Border">
+                                <Setter Property="CornerRadius" Value="6"/>
+                            </Style>
+                        </Button.Resources>
+                    </Button>
+
+                </StackPanel>
             </StackPanel>
         </Grid>
-
     </Grid>
 </Window>

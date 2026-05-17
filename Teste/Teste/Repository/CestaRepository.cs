@@ -37,25 +37,21 @@ namespace Teste.Repository
 
                 string imagemFinal = "null";
 
-                // 🔥 TRATAMENTO DA IMAGEM
+                // TRATAMENTO DA IMAGEM
                 if (!string.IsNullOrEmpty(cesta.ImagemPath) && File.Exists(cesta.ImagemPath))
                 {
                     string pastaImagens = ObterPastaImagens();
                     Directory.CreateDirectory(pastaImagens);
 
                     string extensao = Path.GetExtension(cesta.ImagemPath);
-
-                    // 🔥 Nome único evita conflito e sobrescrita
                     string nomeArquivo = $"{Guid.NewGuid()}{extensao}";
                     string destino = Path.Combine(pastaImagens, nomeArquivo);
 
                     string origemCompleta = Path.GetFullPath(cesta.ImagemPath);
                     string destinoCompleto = Path.GetFullPath(destino);
 
-                    // 🔥 Evita copiar o arquivo para ele mesmo
                     if (!origemCompleta.Equals(destinoCompleto, StringComparison.OrdinalIgnoreCase))
                     {
-                        // 🔥 Copia de forma segura (evita arquivo travado)
                         using (var streamOrigem = new FileStream(origemCompleta, FileMode.Open, FileAccess.Read, FileShare.Read))
                         using (var streamDestino = new FileStream(destinoCompleto, FileMode.Create, FileAccess.Write, FileShare.None))
                         {
@@ -66,7 +62,13 @@ namespace Teste.Repository
                     imagemFinal = Path.Combine("Dados", "imagem", nomeArquivo);
                 }
 
-                string nomesProdutos = string.Join(",", cesta.Itens.Select(p => p.Nome));
+                // 🔥 NOVA LÓGICA DE ESCREVER (Agrupa e salva como 10x Pão)
+                var stringsProdutos = cesta.Itens
+                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                    .GroupBy(p => p.Nome.Trim())
+                    .Select(grupo => $"{grupo.Count()}x {grupo.Key}");
+
+                string nomesProdutos = string.Join(",", stringsProdutos);
 
                 string linha = $"ID:{cesta.Id} |Nome:{cesta.Nome} |Preco:{cesta.Preco} |Imagem:{imagemFinal} |Produtos:{nomesProdutos}";
 
@@ -98,7 +100,13 @@ namespace Teste.Repository
 
                 foreach (var cesta in MemoriaCestas.Lista)
                 {
-                    string nomesProdutos = string.Join(",", cesta.Itens.Select(p => p.Nome));
+                    // 🔥 NOVA LÓGICA DE ATUALIZAR (Agrupa e salva como 10x Pão)
+                    var stringsProdutos = cesta.Itens
+                        .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                        .GroupBy(p => p.Nome.Trim())
+                        .Select(grupo => $"{grupo.Count()}x {grupo.Key}");
+
+                    string nomesProdutos = string.Join(",", stringsProdutos);
 
                     string imagem = string.IsNullOrEmpty(cesta.ImagemPath) ? "null" : cesta.ImagemPath;
 
@@ -147,15 +155,44 @@ namespace Teste.Repository
                     ImagemPath = imagemLimpa == "null" ? "" : imagemLimpa
                 };
 
-                string[] nomesProdutos = produtosLimpos.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
+                // Pega cada pedaço (ex: "10x Pão" ou "Pão" puro caso venha do modelo antigo)
+                string[] itensComQuantidade = produtosLimpos.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
-                foreach (var nome in nomesProdutos)
+                foreach (var itemRaw in itensComQuantidade)
                 {
+                    string itemTratado = itemRaw.Trim();
+                    int quantidade = 1;
+                    string nomeProduto = itemTratado;
+
+                    // 🔥 NOVA LÓGICA DE LEITURA: Verifica se o texto contém o multiplicador "x "
+                    if (itemTratado.Contains("x "))
+                    {
+                        var partesQtd = itemTratado.Split(new[] { "x " }, StringSplitOptions.None);
+                        if (partesQtd.Length == 2 && int.TryParse(partesQtd[0].Trim(), out int qtdInterpretada))
+                        {
+                            quantidade = qtdInterpretada;
+                            nomeProduto = partesQtd[1].Trim();
+                        }
+                    }
+
+                    // Busca o produto correspondente no cadastro geral de produtos
                     Produto prodEncontrado = MemoriaProdutos.Lista
-                        .FirstOrDefault(p => p.Nome == nome.Trim());
+         .FirstOrDefault(p => p.Nome != null && p.Nome.Trim().ToUpper() == nomeProduto.Trim().ToUpper());
 
                     if (prodEncontrado != null)
-                        c.Itens.Add(prodEncontrado);
+                    {
+                        // Adiciona o produto na lista a quantidade de vezes que o arquivo mandou
+                        for (int i = 0; i < quantidade; i++)
+                        {
+                            c.Itens.Add(new Produto
+                            {
+                                Nome = prodEncontrado.Nome,
+                                Preco = prodEncontrado.Preco,
+                                Peso = prodEncontrado.Peso,
+                                QuantidadeSelecionada = 1
+                            });
+                        }
+                    }
                 }
 
                 MemoriaCestas.Lista.Add(c);

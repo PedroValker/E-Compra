@@ -17,13 +17,15 @@ namespace Teste.View
 
         private object _telaInicial;
 
-        // 🔥 CORREÇÃO: Construtor agora recebe o objeto User completo!
+        // 🔥 Construtor recebe o objeto User completo
         public TelaPrincipalCliente(User usuario)
         {
             InitializeComponent();
 
             // Guardamos o usuário completo na Sessão para não perder o ID!
             Sessao.UsuarioLogado = usuario;
+
+            AtualizarFotoPerfilNaTela();
 
             ListaCestas = new ObservableCollection<Cesta>();
 
@@ -51,7 +53,16 @@ namespace Teste.View
             {
                 if (!string.IsNullOrEmpty(caminho) && File.Exists(caminho))
                 {
-                    ImagemPerfil.Source = new BitmapImage(new Uri(caminho));
+                    BitmapImage imagem = new BitmapImage();
+                    using (var stream = new FileStream(caminho, FileMode.Open, FileAccess.Read, FileShare.Read))
+                    {
+                        imagem.BeginInit();
+                        imagem.CacheOption = BitmapCacheOption.OnLoad;
+                        imagem.StreamSource = stream;
+                        imagem.EndInit();
+                        imagem.Freeze();
+                    }
+                    ImagemPerfil.Source = imagem;
                 }
             }
             catch { }
@@ -118,11 +129,46 @@ namespace Teste.View
             ConteudoPrincipal.Content = new ContatoNovo();
         }
 
+        // 🔥 CORRIGIDO: Removido o ShowDialog que quebrava a compilação
         private void EditarPerfil_Click(object sender, RoutedEventArgs e)
         {
-            // 🔥 CORREÇÃO: Passamos o objeto Usuário que está salvo na Sessão.
-            // Ele vai com ID, Nome, Email e tudo preenchido do TXT!
+            // Instancia o painel passando o usuário da sessão e joga diretamente no centro da tela
             ConteudoPrincipal.Content = new EditarPerfilCliente(Sessao.UsuarioLogado);
+
+            // Nota: Como o UserControl roda acoplado dentro desta tela, a atualização visual da bolinha 
+            // e do nome do usuário é feita diretamente pelo método "Salvar_Click" da tela EditarPerfilCliente,
+            // que chama "janela.UpdateUsuario()" e "janela.AtualizarFoto()" em tempo real!
+        }
+
+        private void AtualizarFotoPerfilNaTela()
+        {
+            try
+            {
+                if (Sessao.UsuarioLogado != null &&
+                    !string.IsNullOrEmpty(Sessao.UsuarioLogado.FotoPerfil) &&
+                    System.IO.File.Exists(Sessao.UsuarioLogado.FotoPerfil))
+                {
+                    BitmapImage imagem = new BitmapImage();
+                    using (var stream = new System.IO.FileStream(Sessao.UsuarioLogado.FotoPerfil, System.IO.FileMode.Open, System.IO.FileAccess.Read, System.IO.FileShare.Read))
+                    {
+                        imagem.BeginInit();
+                        imagem.CacheOption = BitmapCacheOption.OnLoad;
+                        imagem.StreamSource = stream;
+                        imagem.EndInit();
+                        imagem.Freeze();
+                    }
+
+                    ImagemPerfil.Source = imagem;
+                }
+                else
+                {
+                    ImagemPerfil.Source = null;
+                }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao carregar foto na bolinha: " + ex.Message);
+            }
         }
 
         private void Logoff_Click(object sender, System.Windows.RoutedEventArgs e)
@@ -135,7 +181,6 @@ namespace Teste.View
 
             if (resposta == MessageBoxResult.Yes)
             {
-                // Limpa a sessão colocando null
                 Sessao.UsuarioLogado = null;
 
                 var telaLogin = new Login();
