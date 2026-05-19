@@ -22,7 +22,7 @@ namespace Teste.View
         {
             InitializeComponent();
 
-            // Guardamos o usuário completo na Sessão para não perder o ID!
+            // Guardamos o usuário completo na Sessão para não perder o ID e Endereço!
             Sessao.UsuarioLogado = usuario;
 
             AtualizarFotoPerfilNaTela();
@@ -38,6 +38,9 @@ namespace Teste.View
 
             CarrinhoRepository repoCarrinho = new CarrinhoRepository();
             repoCarrinho.CarregarDoArquivo();
+
+            // 🚀 INJEÇÃO CRÍTICA: Força a verificação e renderização do endereço salvo assim que a tela abre
+            AtualizarEnderecoNaTela();
 
             Loaded += TelaPrincipalCliente_Loaded;
         }
@@ -62,12 +65,37 @@ namespace Teste.View
                         imagem.EndInit();
                         imagem.Freeze();
                     }
-                    ImagemPerfil.Source = imagem;
+                    // Mude para ImageSource
+                    ImagemPerfil.ImageSource = new BitmapImage(new Uri("caminho_da_imagem"));
                 }
             }
             catch { }
         }
+        public void AtualizarEnderecoNaTela()
+        {
+            // Verifica se o TextBlock com o x:Name="EnderecoTextBlock" existe no XAML
+            if (this.FindName("EnderecoTextBlock") is TextBlock textBlockEndereco)
+            {
+                if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
+                {
+                    var end = Sessao.UsuarioLogado.Endereco;
 
+                    // Só monta o endereço se o usuário digitou alguma coisa
+                    if (!string.IsNullOrWhiteSpace(end.Rua))
+                    {
+                        textBlockEndereco.Text = $"{end.Rua}, {end.Numero} - {end.Bairro} ˅";
+                    }
+                    else
+                    {
+                        textBlockEndereco.Text = "Nenhum endereço cadastrado ˅";
+                    }
+                }
+                else
+                {
+                    textBlockEndereco.Text = "Nenhum endereço cadastrado ˅";
+                }
+            }
+        }
         private void TelaPrincipalCliente_Loaded(object sender, RoutedEventArgs e)
         {
             _telaInicial = ConteudoPrincipal.Content;
@@ -158,11 +186,11 @@ namespace Teste.View
                         imagem.Freeze();
                     }
 
-                    ImagemPerfil.Source = imagem;
+                    ImagemPerfil.ImageSource = imagem;
                 }
                 else
                 {
-                    ImagemPerfil.Source = null;
+                    ImagemPerfil.ImageSource = null;
                 }
             }
             catch (Exception ex)
@@ -189,8 +217,20 @@ namespace Teste.View
                 this.Close();
             }
         }
-
-        private void VoltarInicio_Click(object sender, RoutedEventArgs e)
+        private void VoltarParaLoja_Click(object sender, RoutedEventArgs e)
+        {
+            var janelaPrincipal = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
+            if (janelaPrincipal != null)
+            {
+                janelaPrincipal.RetornarParaHome(); // 🚀 Mais limpo e elegante!
+            }
+        }
+        // Método limpo para ser chamado de fora
+        public void RetornarParaHome()
+        {
+            ConteudoPrincipal.Content = _telaInicial;
+        }
+        public void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = _telaInicial;
         }

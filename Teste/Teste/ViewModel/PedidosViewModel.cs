@@ -11,7 +11,10 @@ namespace Teste.ViewModel
     public class PedidosViewModel : INotifyPropertyChanged
     {
         private PedidoRepository _repository;
-        private string _usuarioLogado;
+
+        // 🚀 ALTERAÇÃO: Mudou de string para int para armazenar o ID fixo do usuário
+        private int _idUsuarioLogado;
+
         public ObservableCollection<Pedido> Pedidos { get; set; }
         public ObservableCollection<Pedido> ListaPedidosEntregues { get; set; } = new ObservableCollection<Pedido>();
         public ObservableCollection<Pedido> ListaPedidosPendentes { get; set; } = new ObservableCollection<Pedido>();
@@ -29,9 +32,10 @@ namespace Teste.ViewModel
 
         public ICommand VerMaisCommand { get; }
 
-        public PedidosViewModel(string usuarioLogado)
+        // 🚀 ALTERAÇÃO: O construtor agora aceita formalmente o 'int idUsuario' vindo da View
+        public PedidosViewModel(int idUsuario)
         {
-            _usuarioLogado = usuarioLogado;
+            _idUsuarioLogado = idUsuario;
             _repository = new PedidoRepository();
             Pedidos = new ObservableCollection<Pedido>();
 
@@ -42,12 +46,12 @@ namespace Teste.ViewModel
 
         private void CarregarPedidosDoCliente()
         {
+            // Força o repositório a ler as linhas atualizadas do arquivo pedidos.txt
             _repository.CarregarDoArquivo();
 
+            // 🚀 ALTERAÇÃO CRÍTICA: Agora filtramos diretamente pelo ID numérico amarrado ao pedido
             var pedidosFiltrados = MemoriaPedidos.Lista
-                .Where(p => !string.IsNullOrEmpty(p.Recebedor) &&
-                            !string.IsNullOrEmpty(_usuarioLogado) &&
-                            p.Recebedor.Trim().Equals(_usuarioLogado.Trim(), System.StringComparison.OrdinalIgnoreCase))
+                .Where(p => p.IdUsuario == _idUsuarioLogado)
                 .ToList();
 
             Pedidos.Clear();
@@ -58,7 +62,7 @@ namespace Teste.ViewModel
             {
                 Pedidos.Add(pedido);
 
-                // Separação por Status
+                // Separação por Status de forma segura
                 if (pedido.Status != null && pedido.Status.Trim().Equals("Entregue", System.StringComparison.OrdinalIgnoreCase))
                 {
                     ListaPedidosEntregues.Add(pedido);

@@ -91,7 +91,10 @@ namespace Teste.Model
         }
 
         // Propriedades nativas de Persistência e Controle Cadastral
+        // Adicione esta propriedade dentro da sua classe Pedido
+        public int IdUsuario { get; set; }
         public string NomePedido { get; set; }
+
         public string Recebedor { get; set; }
         public string Endereco { get; set; }
         public string FormaPagamento { get; set; }

@@ -1,12 +1,12 @@
 ﻿using Microsoft.Win32;
 using System;
 using System.IO;
+using System.Net.Http;
 using System.Windows;
 using System.Windows.Controls;
 using System.Windows.Media.Imaging;
 using Teste.Model;
 using Teste.Repository;
-
 
 namespace Teste.View
 {
@@ -22,15 +22,12 @@ namespace Teste.View
             usuario = user;
             DataContext = usuario;
 
-            // Se já tiver foto salva
             caminhoFoto = usuario.FotoPerfil;
 
-            // 🔥 REMOVIDO DAQUI: O repositório não deve atualizar o TXT ao abrir a tela!
-
             CarregarFotoPerfil();
+            CarregarDadosEndereco();
         }
 
-        // 🔥 CORREÇÃO: Carregamento usando FileStream seguro (evita travar o arquivo no Windows)
         private void CarregarFotoPerfil()
         {
             try
@@ -44,13 +41,13 @@ namespace Teste.View
                         imagem.CacheOption = BitmapCacheOption.OnLoad;
                         imagem.StreamSource = stream;
                         imagem.EndInit();
-                        imagem.Freeze(); // Libera o arquivo para que o Repository consiga copiá-lo
+                        imagem.Freeze();
                     }
-                    ImagemPerfil.Source = imagem;
+                    ImagemPerfil.ImageSource = imagem;
                 }
                 else
                 {
-                    ImagemPerfil.Source = new BitmapImage(
+                    ImagemPerfil.ImageSource = new BitmapImage(
                         new Uri("pack://application:,,,/Dados/imagem/perfil.png"));
                 }
             }
@@ -58,6 +55,94 @@ namespace Teste.View
             {
                 Console.WriteLine("Erro ao carregar foto de perfil: " + ex.Message);
             }
+        }
+
+        private void CarregarDadosEndereco()
+        {
+            if (usuario.Endereco != null)
+            {
+                TxtCEP.Text = usuario.Endereco.CEP;
+                TxtRua.Text = usuario.Endereco.Rua;
+                TxtNumero.Text = usuario.Endereco.Numero;
+                TxtBairro.Text = usuario.Endereco.Bairro;
+            }
+        }
+
+        // 🚀 NOVO: Captura a digitação e consulta a API de CEP automaticamente ao chegar a 8 dígitos
+        private async void TxtCEP_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            // Remove traços ou espaços que o usuário possa digitar
+            string cepLimpo = TxtCEP.Text.Replace("-", "").Replace(" ", "").Trim();
+
+            // A API do ViaCEP exige exatamente 8 dígitos numéricos
+            if (cepLimpo.Length == 8)
+            {
+                try
+                {
+                    using (HttpClient client = new HttpClient())
+                    {
+                        // Faz a requisição assíncrona para não congelar o layout do software
+                        string url = $"https://viacep.com.br/ws/{cepLimpo}/json/";
+                        HttpResponseMessage response = await client.GetAsync(url);
+
+                        if (response.IsSuccessStatusCode)
+                        {
+                            string jsonResult = await response.Content.ReadAsStringAsync();
+
+                            // Tratamento de string simples para não te obrigar a instalar pacotes adicionais como Newtonsoft.Json
+                            if (jsonResult.Contains("\"erro\": true") || jsonResult.Contains("\"erro\":\"true\""))
+                            {
+                                MessageBox.Show("CEP não encontrado base de dados dos Correios.", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+                                LimparCamposEndereco(manterCep: true);
+                                return;
+                            }
+
+                            // Extrai os valores das tags do JSON de forma manual e segura
+                            string logradouro = ExtrairValorJson(jsonResult, "logradouro");
+                            string bairro = ExtrairValorJson(jsonResult, "bairro");
+
+                            // Injeta os dados direto nas caixas de texto
+                            TxtRua.Text = logradouro;
+                            TxtBairro.Text = bairro;
+
+                            // Move o foco do teclado direto para o Número para agilizar o preenchimento do cliente
+                            TxtNumero.Focus();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    Console.WriteLine("Falha de conexão com a API de CEP: " + ex.Message);
+                }
+            }
+        }
+
+        // Método auxiliar para ler o JSON sem dependências externas
+        private string ExtrairValorJson(string json, string chave)
+        {
+            try
+            {
+                string chaveMapeada = $"\"{chave}\": \"";
+                int indexChave = json.IndexOf(chaveMapeada);
+                if (indexChave == -1) return "";
+
+                int inicioValor = indexChave + chaveMapeada.Length;
+                int fimValor = json.IndexOf("\"", inicioValor);
+
+                return json.Substring(inicioValor, fimValor - inicioValor);
+            }
+            catch
+            {
+                return "";
+            }
+        }
+
+        private void LimparCamposEndereco(bool manterCep)
+        {
+            if (!manterCep) TxtCEP.Text = "";
+            TxtRua.Text = "";
+            TxtBairro.Text = "";
+            TxtNumero.Text = "";
         }
 
         private void AlterarFoto_Click(object sender, RoutedEventArgs e)
@@ -71,7 +156,6 @@ namespace Teste.View
             {
                 caminhoFoto = abrir.FileName;
 
-                // Carrega a pré-visualização da foto escolhida também de forma segura
                 try
                 {
                     BitmapImage imagem = new BitmapImage();
@@ -83,11 +167,11 @@ namespace Teste.View
                         imagem.EndInit();
                         imagem.Freeze();
                     }
-                    ImagemPerfil.Source = imagem;
+                    ImagemPerfil.ImageSource = imagem;
                 }
                 catch
                 {
-                    ImagemPerfil.Source = new BitmapImage(new Uri(caminhoFoto));
+                    ImagemPerfil.ImageSource = new BitmapImage(new Uri(caminhoFoto));
                 }
             }
         }
@@ -103,30 +187,35 @@ namespace Teste.View
                 usuario.Senha = TxtSenha.Password;
             }
 
-            // ✔ Salva o caminho temporário ou definitivo da foto no usuário
             usuario.FotoPerfil = caminhoFoto;
 
-            // 🔥 CORRIGIDO: Agora aponta para "Atualizar" com apenas um 'l'
-            UserRepository repo = new UserRepository();
-            repo.Atuallizar(usuario);
+            if (usuario.Endereco == null)
+            {
+                usuario.Endereco = new Endereco();
+            }
 
-            // A propriedade 'usuario.FotoPerfil' agora contém o caminho definitivo (C:\...) gerado pelo Repository
+            usuario.Endereco.CEP = TxtCEP.Text;
+            usuario.Endereco.Rua = TxtRua.Text;
+            usuario.Endereco.Numero = TxtNumero.Text;
+            usuario.Endereco.Bairro = TxtBairro.Text;
+
+            UserRepository repo = new UserRepository();
+            repo.Atualizar(usuario);
+
             caminhoFoto = usuario.FotoPerfil;
 
-            // 🔥 ATUALIZA SESSÃO GLOBAL
             Sessao.UsuarioLogado = usuario;
 
-            // 🔥 ATUALIZA HEADER DA TELA PRINCIPAL
             var janela = Window.GetWindow(this) as TelaPrincipalCliente;
             if (janela != null)
             {
-                // Certifique-se de que esses métodos existam na sua TelaPrincipalCliente
                 janela.UpdateUsuario(usuario.Nome);
                 janela.AtualizarFoto(usuario.FotoPerfil);
+                janela.AtualizarEnderecoNaTela();
             }
 
             MessageBox.Show(
-                "Perfil updated com sucesso!",
+                "Perfil atualizado com sucesso!",
                 "Sucesso",
                 MessageBoxButton.OK,
                 MessageBoxImage.Information);

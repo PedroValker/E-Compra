@@ -14,12 +14,10 @@ namespace Teste.Repository
             return Path.Combine(pastaProjeto, "Dados", "pedidos.txt");
         }
 
-        // 🔥 MÉTODO AUXILIAR CORRIGIDO: Varre o carrinho e agrupa perfeitamente as alterações da UI
         private string GerarStringDosItens(Pedido p)
         {
             var dicionarioAgrupado = new Dictionary<string, int>();
 
-            // ESTRATÉGIA 1: Se o pedido já possui os sub-itens por extenso explicitamente em p.Itens
             if (p.Itens != null && p.Itens.Count > 1)
             {
                 foreach (var item in p.Itens)
@@ -34,10 +32,8 @@ namespace Teste.Repository
                         dicionarioAgrupado[nome] = qtd;
                 }
             }
-            // ESTRATÉGIA 2: INTERCEPTADOR GLOBAL - Pega os produtos gerados pelo laço 'for' do botão Adicionar ao Carrinho
             else if (p.CestaComprada != null)
             {
-                // Busca o item correspondente dentro da MemoriaCarrinho que foi preenchida na CestaView
                 var itemNoCarrinho = MemoriaCarrinho.Itens.FirstOrDefault(c =>
                     c.CestaSelecionada != null &&
                     c.CestaSelecionada.Nome.Trim().ToUpper() == p.CestaComprada.Nome.Trim().ToUpper());
@@ -48,8 +44,6 @@ namespace Teste.Repository
                     {
                         if (string.IsNullOrEmpty(prod.Nome)) continue;
                         string nome = prod.Nome.Trim();
-
-                        // Como cada item da lista final clonada foi inserido um por um com valor 1, agrupamos somando
                         int qtdReal = prod.QuantidadeSelecionada > 0 ? prod.QuantidadeSelecionada : 1;
 
                         if (dicionarioAgrupado.ContainsKey(nome))
@@ -58,7 +52,6 @@ namespace Teste.Repository
                             dicionarioAgrupado[nome] = qtdReal;
                     }
                 }
-                // Fallback local: Se não encontrou na memória global do carrinho, tenta ler da árvore do parâmetro
                 else if (p.CestaComprada.Itens != null && p.CestaComprada.Itens.Any())
                 {
                     foreach (var prod in p.CestaComprada.Itens)
@@ -75,7 +68,6 @@ namespace Teste.Repository
                 }
             }
 
-            // ESTRATÉGIA 3: Fallback de segurança para listas simples de 1 item
             if (!dicionarioAgrupado.Any() && p.Itens != null && p.Itens.Any())
             {
                 foreach (var item in p.Itens)
@@ -91,27 +83,32 @@ namespace Teste.Repository
                 }
             }
 
-            // Segurança contra strings vazias
             if (!dicionarioAgrupado.Any() && p.CestaComprada != null)
             {
                 dicionarioAgrupado[p.CestaComprada.Nome ?? "Cesta"] = 1;
             }
 
-            // Converte para o formato compactado desejado: "14x Pão,5x Arroz Agulhinha"
             var itensFormatados = dicionarioAgrupado.Select(kvp => $"{kvp.Value}x {kvp.Key}");
             return string.Join(",", itensFormatados);
         }
 
+        // 🔥 CORREÇÃO: Adicionado o campo "|IdUsuario:{p.IdUsuario}" na montagem da linha texto
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
-            return $"{numeroLinha}- Data:{p.DataDoPedido} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
+            return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
         }
 
         public void AdicionarNovoPedidoNoTxt(Pedido p)
         {
             try
             {
+                // Antes de salvar, certifique-se de injetar o ID do usuário logado no pedido que veio da UI
+                if (Sessao.UsuarioLogado != null)
+                {
+                    p.IdUsuario = Sessao.UsuarioLogado.Id;
+                }
+
                 string caminho = ObterCaminhoArquivo();
                 Directory.CreateDirectory(Path.GetDirectoryName(caminho));
 
@@ -155,6 +152,7 @@ namespace Teste.Repository
             }
         }
 
+        // 🔥 CORREÇÃO NA LEITURA: Mapeamento de índices alterado para capturar a nova coluna sem quebrar
         public void CarregarDoArquivo()
         {
             try
@@ -181,17 +179,24 @@ namespace Teste.Repository
                     }
 
                     var partes = linhaProcessada.Split('|');
-                    if (partes.Length < 9) continue;
+                    // Como adicionamos 1 campo, a linha processada agora precisa ter no mínimo 10 partes
+                    if (partes.Length < 10) continue;
 
                     string dataPedido = partes[0].Replace("Data:", "").Trim();
-                    string nomePedido = partes[1].Replace("NomePedido:", "").Trim();
-                    string recebedor = partes[2].Replace("Recebedor:", "").Trim();
-                    string endereco = partes[3].Replace("Endereco:", "").Trim();
-                    string pagamento = partes[4].Replace("Pagamento:", "").Trim();
-                    string status = partes[5].Replace("Status:", "").Trim();
-                    string totalStr = partes[6].Replace("Total:", "").Trim();
-                    string obs = partes[7].Replace("Obs:", "").Trim();
-                    string itensStr = partes[8].Replace("Itens:", "").Trim();
+
+                    // Lendo o IdUsuario recém-criado
+                    string idUsuarioStr = partes[1].Replace("IdUsuario:", "").Trim();
+                    int.TryParse(idUsuarioStr, out int idUsuarioConvertido);
+
+                    // Deslocamos o índice das demais variáveis em +1
+                    string nomePedido = partes[2].Replace("NomePedido:", "").Trim();
+                    string recebedor = partes[3].Replace("Recebedor:", "").Trim();
+                    string endereco = partes[4].Replace("Endereco:", "").Trim();
+                    string pagamento = partes[5].Replace("Pagamento:", "").Trim();
+                    string status = partes[6].Replace("Status:", "").Trim();
+                    string totalStr = partes[7].Replace("Total:", "").Trim();
+                    string obs = partes[8].Replace("Obs:", "").Trim();
+                    string itensStr = partes[9].Replace("Itens:", "").Trim();
 
                     totalStr = totalStr.Replace(",", ".");
                     decimal.TryParse(totalStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal totalConvertido);
@@ -199,6 +204,7 @@ namespace Teste.Repository
                     Pedido p = new Pedido
                     {
                         DataDoPedido = dataPedido,
+                        IdUsuario = idUsuarioConvertido, // Atribuído ao objeto carregado na memória
                         NomePedido = nomePedido,
                         Recebedor = recebedor,
                         Endereco = endereco,
@@ -233,7 +239,6 @@ namespace Teste.Repository
                                 var dadosItem = itemRaw.Split('=');
                                 if (dadosItem.Length == 2)
                                 {
-
                                     int.TryParse(dadosItem[1].Trim(), out int qtdItem);
                                     p.Itens.Add(new ItemPedido { Nome = dadosItem[0].Trim(), Quantidade = qtdItem });
                                 }

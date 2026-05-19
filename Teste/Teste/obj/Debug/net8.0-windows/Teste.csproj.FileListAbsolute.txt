@@ -166,3 +166,5 @@ C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.cspr
 C:\Users\aluno\Documents\Acelera\Teste\Teste\obj\Debug\net8.0-windows\Teste.csproj.Up2Date
 C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\BouncyCastle.Cryptography.dll
 C:\Users\aluno\Documents\Acelera\Teste\Teste\bin\Debug\net8.0-windows\itext.bouncy-castle-adapter.dll
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\bin\Debug\net8.0-windows\BouncyCastle.Cryptography.dll
+C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\bin\Debug\net8.0-windows\itext.bouncy-castle-adapter.dll
