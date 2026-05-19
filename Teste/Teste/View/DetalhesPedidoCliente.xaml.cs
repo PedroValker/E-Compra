@@ -1,8 +1,18 @@
-﻿using Microsoft.Win32;
+﻿using iText.IO.Font;
+using iText.Kernel.Colors;
+using iText.Kernel.Font;
+using iText.Kernel.Pdf;
+using iText.Layout;
+using iText.Layout.Element;
+using iText.Layout.Properties;
+
+using Microsoft.Win32;
+
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
+
 using Teste.Model;
 using Teste.Repository;
 
@@ -146,201 +156,328 @@ namespace Teste.View
         {
             if (!(this.DataContext is Model.Pedido pedido))
             {
-                MessageBox.Show("Erro ao recuperar os dados do pedido.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
+                MessageBox.Show(
+                    "Erro ao recuperar os dados do pedido.",
+                    "Erro",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
                 return;
             }
 
             SaveFileDialog saveFileDialog = new SaveFileDialog
             {
                 Filter = "Arquivos PDF (*.pdf)|*.pdf",
-                FileName = $"Pedido_{pedido.NomePedido ?? "SemNome"}.pdf",
+                FileName = $"Pedido_{Safe(pedido.NomePedido)}.pdf",
                 Title = "Salvar Comprovante do Pedido"
             };
 
-            if (saveFileDialog.ShowDialog() == true)
+            if (saveFileDialog.ShowDialog() != true)
+                return;
+
+            try
             {
-                try
+                // FONTES UNICODE
+                string fontNormalPath = @"C:\Windows\Fonts\arial.ttf";
+                string fontBoldPath = @"C:\Windows\Fonts\arialbd.ttf";
+                string fontItalicPath = @"C:\Windows\Fonts\ariali.ttf";
+
+                using (PdfWriter writer = new PdfWriter(saveFileDialog.FileName))
+                using (PdfDocument pdf = new PdfDocument(writer))
+                using (Document document = new Document(pdf))
                 {
-                    // 🔥 CORREÇÃO DO PDF CORROMPIDO: Todo o fluxo de gravação estruturado e isolado
-                    using (iText.Kernel.Pdf.PdfWriter writer = new iText.Kernel.Pdf.PdfWriter(saveFileDialog.FileName))
-                    using (iText.Kernel.Pdf.PdfDocument pdf = new iText.Kernel.Pdf.PdfDocument(writer))
-                    using (iText.Layout.Document document = new iText.Layout.Document(pdf))
+                    // CORES
+                    Color azulTema = new DeviceRgb(43, 108, 176);
+                    Color cinzaEscuro = new DeviceRgb(45, 55, 72);
+                    Color cinzaClaro = new DeviceRgb(247, 250, 252);
+
+                    // FONTES
+                    PdfFont fonteNormal = PdfFontFactory.CreateFont(
+                        fontNormalPath,
+                        PdfEncodings.IDENTITY_H
+                    );
+
+                    PdfFont fonteNegrito = PdfFontFactory.CreateFont(
+                        fontBoldPath,
+                        PdfEncodings.IDENTITY_H
+                    );
+
+                    PdfFont fonteItalico = PdfFontFactory.CreateFont(
+                        fontItalicPath,
+                        PdfEncodings.IDENTITY_H
+                    );
+
+                    document.SetFont(fonteNormal);
+
+                    // =====================================================
+                    // TÍTULO
+                    // =====================================================
+
+                    Paragraph titulo = new Paragraph("COMPROVANTE DE PEDIDO")
+                        .SetFontSize(20)
+                        .SetFont(fonteNegrito)
+                        .SetFontColor(azulTema);
+
+                    document.Add(titulo);
+
+                    Paragraph subTitulo = new Paragraph(
+                        $"Pedido: {Safe(pedido.NomePedido)} | Status: {Safe(pedido.Status)}"
+                    )
+                    .SetFontSize(11)
+                    .SetFontColor(cinzaEscuro)
+                    .SetMarginBottom(20);
+
+                    document.Add(subTitulo);
+
+                    // =====================================================
+                    // INFORMAÇÕES
+                    // =====================================================
+
+                    Paragraph infoTitulo = new Paragraph("Informações Gerais")
+                        .SetFontSize(13)
+                        .SetFont(fonteNegrito)
+                        .SetFontColor(azulTema);
+
+                    document.Add(infoTitulo);
+
+                    Table tabelaInfo = new Table(
+                        UnitValue.CreatePercentArray(new float[] { 25, 75 })
+                    ).UseAllAvailableWidth();
+
+                    // Cliente
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph("Cliente").SetFont(fonteNegrito))
+                            .SetBackgroundColor(cinzaClaro)
+                    );
+
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph(Safe(pedido.Recebedor)))
+                    );
+
+                    // Data
+                    string dataPedido;
+
+                    try
                     {
-                        iText.Kernel.Colors.Color azulTema = new iText.Kernel.Colors.DeviceRgb(43, 108, 176);
-                        iText.Kernel.Colors.Color cinzaEscuro = new iText.Kernel.Colors.DeviceRgb(45, 55, 72);
-                        iText.Kernel.Colors.Color cinzaClaro = new iText.Kernel.Colors.DeviceRgb(247, 250, 252);
-                        iText.Kernel.Colors.Color verdeAdd = new iText.Kernel.Colors.DeviceRgb(47, 133, 90);
-                        iText.Kernel.Colors.Color vermelhoRem = new iText.Kernel.Colors.DeviceRgb(155, 44, 44);
+                        if (pedido.DataDoPedido != null)
+                            dataPedido = Convert
+                                .ToDateTime(pedido.DataDoPedido)
+                                .ToString("dd/MM/yyyy");
+                        else
+                            dataPedido = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
+                    catch
+                    {
+                        dataPedido = DateTime.Now.ToString("dd/MM/yyyy");
+                    }
 
-                        iText.Kernel.Font.PdfFont fonteNormal = iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA);
-                        iText.Kernel.Font.PdfFont fonteNegrito = iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_BOLD);
-                        iText.Kernel.Font.PdfFont fontItalico = iText.Kernel.Font.PdfFontFactory.CreateFont(iText.IO.Font.Constants.StandardFonts.HELVETICA_OBLIQUE);
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph("Data").SetFont(fonteNegrito))
+                            .SetBackgroundColor(cinzaClaro)
+                    );
 
-                        document.SetFont(fonteNormal);
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph(dataPedido))
+                    );
 
-                        // --- CABEÇALHO ---
-                        iText.Layout.Element.Paragraph titulo = new iText.Layout.Element.Paragraph("COMPROVANTE DE PEDIDO")
-                            .SetFontSize(20)
-                            .SetFont(fonteNegrito)
-                            .SetFontColor(azulTema);
-                        document.Add(titulo);
+                    // Endereço
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph("Endereço").SetFont(fonteNegrito))
+                            .SetBackgroundColor(cinzaClaro)
+                    );
 
-                        iText.Layout.Element.Paragraph subTitulo = new iText.Layout.Element.Paragraph($"ID único: {pedido.NomePedido ?? "N/A"} | Status: {pedido.Status ?? "Pendente"}")
-                            .SetFontSize(11)
-                            .SetFontColor(cinzaEscuro)
-                            .SetMarginBottom(20);
-                        document.Add(subTitulo);
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph(Safe(pedido.Endereco)))
+                    );
 
-                        // --- BLOCO: INFORMAÇÕES GERAIS ---
-                        iText.Layout.Element.Paragraph pInfoTitle = new iText.Layout.Element.Paragraph("Informações Gerais")
+                    // Pagamento
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph("Pagamento").SetFont(fonteNegrito))
+                            .SetBackgroundColor(cinzaClaro)
+                    );
+
+                    tabelaInfo.AddCell(
+                        new Cell()
+                            .Add(new Paragraph(Safe(pedido.FormaPagamento)))
+                    );
+
+                    tabelaInfo.SetMarginBottom(20);
+
+                    document.Add(tabelaInfo);
+
+                    // =====================================================
+                    // TABELA DE ITENS
+                    // =====================================================
+
+                    Paragraph itensTitulo = new Paragraph("Itens do Pedido")
+                        .SetFontSize(13)
+                        .SetFont(fonteNegrito)
+                        .SetFontColor(azulTema);
+
+                    document.Add(itensTitulo);
+
+                    Table tabelaItens = new Table(
+                        UnitValue.CreatePercentArray(new float[] { 15, 60, 25 })
+                    ).UseAllAvailableWidth();
+
+                    // HEADER QTD
+                    tabelaItens.AddHeaderCell(
+                        new Cell()
+                            .Add(
+                                new Paragraph("Qtd")
+                                    .SetFont(fonteNegrito)
+                                    .SetFontColor(ColorConstants.WHITE)
+                            )
+                            .SetBackgroundColor(azulTema)
+                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                    );
+
+                    // HEADER DESCRIÇÃO
+                    tabelaItens.AddHeaderCell(
+                        new Cell()
+                            .Add(
+                                new Paragraph("Descrição")
+                                    .SetFont(fonteNegrito)
+                                    .SetFontColor(ColorConstants.WHITE)
+                            )
+                            .SetBackgroundColor(azulTema)
+                    );
+
+                    // HEADER SUBTOTAL
+                    tabelaItens.AddHeaderCell(
+                        new Cell()
+                            .Add(
+                                new Paragraph("Subtotal")
+                                    .SetFont(fonteNegrito)
+                                    .SetFontColor(ColorConstants.WHITE)
+                            )
+                            .SetBackgroundColor(azulTema)
+                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                    );
+
+                    // ITENS
+                    if (GridCestas.ItemsSource != null)
+                    {
+                        foreach (var row in GridCestas.ItemsSource.Cast<object>().Where(x => x != null))
+                        {
+                            try
+                            {
+                                var propQtd = row.GetType()
+                                    .GetProperty("Quantidade")
+                                    ?.GetValue(row);
+
+                                var propNome = row.GetType()
+                                    .GetProperty("Nome")
+                                    ?.GetValue(row);
+
+                                string qtd = Safe(propQtd);
+                                string nome = Safe(propNome);
+
+                                if (string.IsNullOrWhiteSpace(qtd))
+                                    qtd = "1";
+
+                                if (string.IsNullOrWhiteSpace(nome))
+                                    nome = "Produto";
+
+                                tabelaItens.AddCell(
+                                    new Cell()
+                                        .Add(new Paragraph(qtd))
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
+                                );
+
+                                tabelaItens.AddCell(
+                                    new Cell()
+                                        .Add(new Paragraph(nome))
+                                );
+
+                                tabelaItens.AddCell(
+                                    new Cell()
+                                        .Add(new Paragraph("R$ 0,00"))
+                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                                );
+                            }
+                            catch
+                            {
+                            }
+                        }
+                    }
+
+                    // TOTAL
+                    tabelaItens.AddCell(
+                        new Cell(1, 2)
+                            .Add(
+                                new Paragraph("Valor Total:")
+                                    .SetFont(fonteNegrito)
+                            )
+                            .SetBackgroundColor(cinzaClaro)
+                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                    );
+
+                    tabelaItens.AddCell(
+                        new Cell()
+                            .Add(
+                                new Paragraph($"R$ {pedido.Total:N2}")
+                                    .SetFont(fonteNegrito)
+                            )
+                            .SetBackgroundColor(cinzaClaro)
+                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
+                    );
+
+                    tabelaItens.SetMarginBottom(20);
+
+                    document.Add(tabelaItens);
+
+                    // =====================================================
+                    // OBSERVAÇÕES
+                    // =====================================================
+
+                    if (!string.IsNullOrWhiteSpace(Safe(pedido.Observacoes)))
+                    {
+                        Paragraph tituloObs = new Paragraph("Observações")
                             .SetFontSize(13)
                             .SetFont(fonteNegrito)
                             .SetFontColor(azulTema);
-                        document.Add(pInfoTitle);
 
-                        iText.Layout.Element.Table tabelaInfo = new iText.Layout.Element.Table(iText.Layout.Properties.UnitValue.CreatePercentArray(new float[] { 25, 75 })).UseAllAvailableWidth();
+                        document.Add(tituloObs);
 
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Cliente / Recebedor:").SetFont(fonteNegrito))).SetBackgroundColor(cinzaClaro);
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph((pedido.Recebedor ?? "Não informado").ToString())));
+                        Paragraph obs = new Paragraph(Safe(pedido.Observacoes))
+                            .SetFont(fonteItalico)
+                            .SetFontSize(10)
+                            .SetPadding(8)
+                            .SetBackgroundColor(new DeviceRgb(255, 250, 240));
 
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Data do Pedido:").SetFont(fonteNegrito))).SetBackgroundColor(cinzaClaro);
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph((pedido.DataDoPedido ?? DateTime.Now.ToString("dd/MM/yyyy")).ToString())));
-
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Endereço de Entrega:").SetFont(fonteNegrito))).SetBackgroundColor(cinzaClaro);
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph((pedido.Endereco ?? "A combinar").ToString())));
-
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Forma de Pagamento:").SetFont(fonteNegrito))).SetBackgroundColor(cinzaClaro);
-                        tabelaInfo.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph((pedido.FormaPagamento ?? "A combinar").ToString())));
-
-                        tabelaInfo.SetMarginBottom(20);
-                        document.Add(tabelaInfo);
-
-                        // --- BLOCO: CONTEÚDO FINAL DA CESTA ---
-                        iText.Layout.Element.Paragraph pItensTitle = new iText.Layout.Element.Paragraph("Conteúdo Final da Cesta (Para Separação Física)")
-                            .SetFontSize(13)
-                            .SetFont(fonteNegrito)
-                            .SetFontColor(azulTema);
-                        document.Add(pItensTitle);
-
-                        iText.Layout.Element.Table tabelaItens = new iText.Layout.Element.Table(iText.Layout.Properties.UnitValue.CreatePercentArray(new float[] { 15, 60, 25 })).UseAllAvailableWidth();
-
-                        tabelaItens.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Qtd").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(azulTema).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-                        tabelaItens.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Descrição do Item").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(azulTema));
-                        tabelaItens.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Subtotal").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(azulTema).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
-
-                        if (GridCestas.ItemsSource != null)
-                        {
-                            foreach (var row in GridCestas.ItemsSource)
-                            {
-                                var propQtd = row.GetType().GetProperty("Quantidade")?.GetValue(row, null);
-                                var propNome = row.GetType().GetProperty("Nome")?.GetValue(row, null);
-
-                                string stringQtd = propQtd != null ? propQtd.ToString() : "1";
-                                string stringNome = propNome != null ? propNome.ToString() : "Produto";
-
-                                tabelaItens.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(stringQtd)).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-                                tabelaItens.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(stringNome)));
-                                tabelaItens.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("R$ 0,00")).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
-                            }
-                        }
-
-                        tabelaItens.AddCell(new iText.Layout.Element.Cell(1, 2).Add(new iText.Layout.Element.Paragraph("Valor Total do Pedido:").SetFont(fonteNegrito)).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBackgroundColor(cinzaClaro));
-                        tabelaItens.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph($"R$ {pedido.Total:N2}").SetFont(fonteNegrito)).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT).SetBackgroundColor(cinzaClaro));
-
-                        tabelaItens.SetMarginBottom(20);
-                        document.Add(tabelaItens);
-
-                        // --- BLOCO: HISTÓRICO DE MODIFICAÇÕES ---
-                        iText.Layout.Element.Paragraph pDiffTitle = new iText.Layout.Element.Paragraph("Histórico de Alterações (Em relação à Cesta Padrão)")
-                            .SetFontSize(13)
-                            .SetFont(fonteNegrito)
-                            .SetFontColor(azulTema);
-                        document.Add(pDiffTitle);
-
-                        iText.Layout.Element.Table tabelaDiff = new iText.Layout.Element.Table(iText.Layout.Properties.UnitValue.CreatePercentArray(new float[] { 50, 50 })).UseAllAvailableWidth();
-
-                        // Célula da esquerda: Itens Adicionados
-                        iText.Layout.Element.Cell cellAdd = new iText.Layout.Element.Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetPaddingRight(5);
-                        iText.Layout.Element.Table tAdd = new iText.Layout.Element.Table(iText.Layout.Properties.UnitValue.CreatePercentArray(new float[] { 75, 25 })).UseAllAvailableWidth();
-                        tAdd.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Itens Adicionados").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(verdeAdd));
-                        tAdd.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Qtd").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(verdeAdd).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-
-                        bool temAdicionados = false;
-                        if (GridAdicionados.ItemsSource != null)
-                        {
-                            foreach (var row in GridAdicionados.ItemsSource)
-                            {
-                                var propProd = row.GetType().GetProperty("Produto")?.GetValue(row, null);
-                                var propQtdExtra = row.GetType().GetProperty("Qtd")?.GetValue(row, null);
-
-                                if (propProd != null)
-                                {
-                                    tAdd.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(propProd.ToString())));
-                                    tAdd.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(propQtdExtra?.ToString() ?? "+1")).SetFontColor(verdeAdd).SetFont(fonteNegrito).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-                                    temAdicionados = true;
-                                }
-                            }
-                        }
-                        if (!temAdicionados)
-                        {
-                            tAdd.AddCell(new iText.Layout.Element.Cell(1, 2).Add(new iText.Layout.Element.Paragraph("Nenhuma alteração avulsa")).SetFont(fontItalico).SetFontColor(iText.Kernel.Colors.ColorConstants.GRAY));
-                        }
-                        cellAdd.Add(tAdd);
-                        tabelaDiff.AddCell(cellAdd);
-
-                        // Célula da direita: Itens Retirados
-                        iText.Layout.Element.Cell cellRem = new iText.Layout.Element.Cell().SetBorder(iText.Layout.Borders.Border.NO_BORDER).SetPaddingLeft(5);
-                        iText.Layout.Element.Table tRem = new iText.Layout.Element.Table(iText.Layout.Properties.UnitValue.CreatePercentArray(new float[] { 75, 25 })).UseAllAvailableWidth();
-                        tRem.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Itens Retirados").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(vermelhoRem));
-                        tRem.AddHeaderCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph("Qtd").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(vermelhoRem).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-
-                        bool temRemovidos = false;
-                        if (GridRemovidos.ItemsSource != null)
-                        {
-                            foreach (var row in GridRemovidos.ItemsSource)
-                            {
-                                var propProd = row.GetType().GetProperty("Produto")?.GetValue(row, null);
-                                var propQtdRet = row.GetType().GetProperty("Qtd")?.GetValue(row, null);
-
-                                if (propProd != null)
-                                {
-                                    tRem.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(propProd.ToString())));
-                                    tRem.AddCell(new iText.Layout.Element.Cell().Add(new iText.Layout.Element.Paragraph(propQtdRet?.ToString() ?? "-1")).SetFontColor(vermelhoRem).SetFont(fonteNegrito).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-                                    temRemovidos = true;
-                                }
-                            }
-                        }
-                        if (!temRemovidos)
-                        {
-                            tRem.AddCell(new iText.Layout.Element.Cell(1, 2).Add(new iText.Layout.Element.Paragraph("Nenhum item removido")).SetFont(fontItalico).SetFontColor(iText.Kernel.Colors.ColorConstants.GRAY));
-                        }
-                        cellRem.Add(tRem);
-                        tabelaDiff.AddCell(cellRem);
-
-                        tabelaDiff.SetMarginBottom(20);
-                        document.Add(tabelaDiff);
-
-                        // --- BLOCO: OBSERVAÇÕES ---
-                        if (!string.IsNullOrEmpty(pedido.Observacoes))
-                        {
-                            document.Add(new iText.Layout.Element.Paragraph("Observações do Pedido").SetFontSize(13).SetFont(fonteNegrito).SetFontColor(azulTema));
-                            iText.Layout.Element.Paragraph obs = new iText.Layout.Element.Paragraph(pedido.Observacoes.ToString())
-                                .SetFontSize(10)
-                                .SetFont(fontItalico)
-                                .SetPadding(8)
-                                .SetBackgroundColor(new iText.Kernel.Colors.DeviceRgb(255, 250, 240));
-                            document.Add(obs);
-                        }
-                    } // 🔥 O arquivo PDF fecha fisicamente AQUI de forma segura!
-
-                    // 🔥 AGORA SIM: Exibe o aviso após liberar o documento do iText
-                    MessageBox.Show("Documento PDF gerado e salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                        document.Add(obs);
+                    }
                 }
-                catch (Exception ex)
-                {
-                    MessageBox.Show($"Ocorreu um erro ao gerar o PDF: {ex.Message}", "Erro Crítico", MessageBoxButton.OK, MessageBoxImage.Error);
-                }
+
+                MessageBox.Show(
+                    "PDF gerado com sucesso!",
+                    "Sucesso",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information
+                );
             }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.ToString(),
+                    "Erro Completo",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error
+                );
+            }
+        }
+
+        private string Safe(object value)
+        {
+            return value?.ToString() ?? "";
         }
     }
 }
