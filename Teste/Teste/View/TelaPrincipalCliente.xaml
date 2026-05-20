@@ -68,7 +68,8 @@
                     </Grid.ColumnDefinitions>
 
                     <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="🛒 Basic" FontSize="32" FontWeight="Black" Foreground="#002DB3"/>
+                        <TextBlock Text="🛒 E-Compra
+" FontSize="32" FontWeight="Black" Foreground="#002DB3"/>
                     </StackPanel>
 
                     <TextBlock x:Name="EnderecoTextBlock"
@@ -185,10 +186,11 @@
                     <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
                 <Grid Grid.Row="0" Margin="0,0,0,20">
-                    <TextBlock Text="🛒 Basic" Foreground="White" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
+                    <TextBlock Text="🛒 E-Compra
+" Foreground="White" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
                 </Grid>
                 <Separator Grid.Row="1" Background="White" Opacity="0.15" Margin="0,0,0,15"/>
-                <TextBlock Grid.Row="2" Text="© 2026 Basic Cestas. Todos os direitos reservados." Foreground="White" Opacity="0.5" FontSize="12" HorizontalAlignment="Center"/>
+                <TextBlock Grid.Row="2" Text="© 2026 E-Compra. Todos os direitos reservados." Foreground="White" Opacity="0.5" FontSize="12" HorizontalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

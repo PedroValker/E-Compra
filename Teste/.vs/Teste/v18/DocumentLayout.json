@@ -3,24 +3,28 @@
   "WorkspaceRootPath": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\mainwindow.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\pedidosview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\editarperfilcliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -151,10 +155,6 @@
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
     {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\facaseupedidoview.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\cestaview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\cestaview.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     },
@@ -249,7 +249,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 7,
+          "SelectedChildIndex": 5,
           "Children": [
             {
               "$type": "Bookmark",
@@ -261,18 +261,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 10,
-              "Title": "CarrinhoView.xaml",
-              "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\CarrinhoView.xaml",
-              "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
-              "RelativeToolTip": "Teste\\View\\CarrinhoView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-03T15:38:58.321Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 8,
+              "DocumentIndex": 9,
               "Title": "CarrinhoView.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\CarrinhoView.xaml.cs",
@@ -284,7 +273,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 5,
+              "DocumentIndex": 6,
               "Title": "EditarPerfilCliente.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\EditarPerfilCliente.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\EditarPerfilCliente.xaml.cs",
@@ -292,12 +281,11 @@
               "RelativeToolTip": "Teste\\View\\EditarPerfilCliente.xaml.cs",
               "ViewState": "AgIAALkAAAAAAAAAAAAowOQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T12:09:32.513Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T12:09:32.513Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 5,
               "Title": "PedidosView.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\PedidosView.xaml",
@@ -309,7 +297,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 0,
               "Title": "TelaPrincipalCliente.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml",
@@ -321,7 +309,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 4,
               "Title": "ContatoNovo.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml",
@@ -333,7 +321,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 3,
               "Title": "Login.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Login.xaml",
@@ -357,18 +345,42 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 6,
+              "DocumentIndex": 1,
+              "Title": "FacaSeuPedidoView.xaml",
+              "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml",
+              "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
+              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-04T18:58:00.789Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 11,
+              "Title": "CarrinhoView.xaml",
+              "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\CarrinhoView.xaml",
+              "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CarrinhoView.xaml",
+              "RelativeToolTip": "Teste\\View\\CarrinhoView.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-05-03T15:38:58.321Z"
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 7,
               "Title": "EditarPerfilCliente.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\EditarPerfilCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\EditarPerfilCliente.xaml",
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\EditarPerfilCliente.xaml",
               "RelativeToolTip": "Teste\\View\\EditarPerfilCliente.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-17T17:50:14.829Z"
+              "WhenOpened": "2026-05-17T17:50:14.829Z",
+              "EditorCaption": ""
             },
             {
               "$type": "Document",
-              "DocumentIndex": 11,
+              "DocumentIndex": 12,
               "Title": "Endereco.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Model\\Endereco.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\Endereco.cs",
@@ -380,7 +392,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 12,
+              "DocumentIndex": 13,
               "Title": "User.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Model\\User.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\User.cs",
@@ -392,7 +404,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 7,
+              "DocumentIndex": 8,
               "Title": "DetalhesPedidoCliente.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\DetalhesPedidoCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\DetalhesPedidoCliente.xaml",
@@ -403,7 +415,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 9,
+              "DocumentIndex": 10,
               "Title": "TelaPrincipalCliente.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml.cs",
@@ -415,7 +427,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 13,
+              "DocumentIndex": 14,
               "Title": "UserRepository.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\UserRepository.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\UserRepository.cs",
@@ -427,7 +439,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 14,
+              "DocumentIndex": 15,
               "Title": "Login.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Login.xaml.cs",
@@ -439,7 +451,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 16,
+              "DocumentIndex": 17,
               "Title": "PedidoRepository.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\PedidoRepository.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\PedidoRepository.cs",
@@ -451,7 +463,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 15,
+              "DocumentIndex": 16,
               "Title": "App.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\App.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\App.xaml.cs",
@@ -463,7 +475,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 19,
+              "DocumentIndex": 20,
               "Title": "Sessao.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\Sessao.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\Sessao.cs",
@@ -475,7 +487,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 20,
+              "DocumentIndex": 21,
               "Title": "Pedido.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Model\\Pedido.cs",
               "RelativeDocumentMoniker": "Teste\\Model\\Pedido.cs",
@@ -487,7 +499,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 17,
+              "DocumentIndex": 18,
               "Title": "PedidosView.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\PedidosView.xaml.cs",
@@ -499,7 +511,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 21,
+              "DocumentIndex": 22,
               "Title": "PrincipalAdministrador.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PrincipalAdministrador.xaml",
@@ -510,7 +522,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 18,
+              "DocumentIndex": 19,
               "Title": "PedidosViewModel.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\ViewModel\\PedidosViewModel.cs",
               "RelativeDocumentMoniker": "Teste\\ViewModel\\PedidosViewModel.cs",
@@ -522,7 +534,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 22,
+              "DocumentIndex": 23,
               "Title": "DetalhesPedidoCliente.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\DetalhesPedidoCliente.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\DetalhesPedidoCliente.xaml.cs",
@@ -534,7 +546,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 26,
+              "DocumentIndex": 27,
               "Title": "DetalhesPedido.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesPedido.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesPedido.xaml",
@@ -545,7 +557,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 24,
+              "DocumentIndex": 25,
               "Title": "PrincipalAdministrador.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PrincipalAdministrador.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PrincipalAdministrador.xaml.cs",
@@ -557,7 +569,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 23,
+              "DocumentIndex": 24,
               "Title": "PedidosAdminView.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PedidosAdminView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PedidosAdminView.xaml",
@@ -568,7 +580,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 25,
+              "DocumentIndex": 26,
               "Title": "HomeAdministrador.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\HomeAdministrador.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\HomeAdministrador.xaml",
@@ -579,7 +591,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 27,
+              "DocumentIndex": 28,
               "Title": "DetalhesCesta.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesCesta.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesCesta.xaml.cs",
@@ -591,7 +603,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 28,
+              "DocumentIndex": 29,
               "Title": "DetalhesCesta.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesCesta.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesCesta.xaml",
@@ -602,7 +614,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 29,
+              "DocumentIndex": 30,
               "Title": "DetalhesPedido.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\DetalhesPedido.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\DetalhesPedido.xaml.cs",
@@ -614,7 +626,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 30,
+              "DocumentIndex": 31,
               "Title": "PedidosAdminView.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\PedidosAdminView.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\PedidosAdminView.xaml.cs",
@@ -626,7 +638,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 31,
+              "DocumentIndex": 32,
               "Title": "CadastroCesta.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Administrador\\CadastroCesta.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\Administrador\\CadastroCesta.xaml.cs",
@@ -638,7 +650,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 32,
+              "DocumentIndex": 33,
               "Title": "MemoriaProduto.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\MemoriaProduto.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\MemoriaProduto.cs",
@@ -650,7 +662,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 33,
+              "DocumentIndex": 34,
               "Title": "MemoriaCesta.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\MemoriaCesta.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\MemoriaCesta.cs",
@@ -662,7 +674,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 34,
+              "DocumentIndex": 35,
               "Title": "CestaView.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\CestaView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\CestaView.xaml",
@@ -673,7 +685,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 35,
+              "DocumentIndex": 36,
               "Title": "CestaRepository.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\Repository\\CestaRepository.cs",
               "RelativeDocumentMoniker": "Teste\\Repository\\CestaRepository.cs",
@@ -685,7 +697,7 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 36,
+              "DocumentIndex": 37,
               "Title": "FacaSeuPedidoView.xaml.cs",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml.cs",
               "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml.cs",
@@ -694,18 +706,6 @@
               "ViewState": "AgIAABMAAAAAAAAAAAAYwCsAAAAgAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-04T18:58:20.489Z"
-            },
-            {
-              "$type": "Document",
-              "DocumentIndex": 37,
-              "Title": "FacaSeuPedidoView.xaml",
-              "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
-              "RelativeDocumentMoniker": "Teste\\View\\FacaSeuPedidoView.xaml",
-              "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
-              "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml",
-              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-04T18:58:00.789Z",
-              "EditorCaption": ""
             },
             {
               "$type": "Document",

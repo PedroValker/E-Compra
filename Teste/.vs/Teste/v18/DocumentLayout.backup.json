@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
@@ -17,10 +21,6 @@
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\login.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
-    },
-    {
-      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
-      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     },
     {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\yago avelar\\documents\\acelera\\teste\\teste\\view\\editarperfilcliente.xaml.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
@@ -249,7 +249,7 @@
       "DocumentGroups": [
         {
           "DockedWidth": 200,
-          "SelectedChildIndex": 6,
+          "SelectedChildIndex": 7,
           "Children": [
             {
               "$type": "Bookmark",
@@ -292,36 +292,33 @@
               "RelativeToolTip": "Teste\\View\\EditarPerfilCliente.xaml.cs",
               "ViewState": "AgIAALkAAAAAAAAAAAAowOQAAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-16T12:09:32.513Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-16T12:09:32.513Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 2,
+              "DocumentIndex": 3,
               "Title": "PedidosView.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\PedidosView.xaml",
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\PedidosView.xaml",
               "RelativeToolTip": "Teste\\View\\PedidosView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-12T01:03:25.922Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-12T01:03:25.922Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 0,
+              "DocumentIndex": 1,
               "Title": "TelaPrincipalCliente.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml",
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
               "RelativeToolTip": "Teste\\View\\TelaPrincipalCliente.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-12T11:49:44.84Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-12T11:49:44.84Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 4,
+              "DocumentIndex": 0,
               "Title": "ContatoNovo.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\ContatoNovo.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml",
@@ -333,27 +330,25 @@
             },
             {
               "$type": "Document",
-              "DocumentIndex": 3,
+              "DocumentIndex": 4,
               "Title": "Login.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\Login.xaml",
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\Login.xaml",
               "RelativeToolTip": "Teste\\View\\Login.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-26T14:30:17.608Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-26T14:30:17.608Z"
             },
             {
               "$type": "Document",
-              "DocumentIndex": 1,
+              "DocumentIndex": 2,
               "Title": "MainWindow.xaml",
               "DocumentMoniker": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\MainWindow.xaml",
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\MainWindow.xaml",
               "RelativeToolTip": "Teste\\View\\MainWindow.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-04-21T07:51:14.457Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-04-21T07:51:14.457Z"
             },
             {
               "$type": "Document",
@@ -704,8 +699,7 @@
               "ToolTip": "C:\\Users\\Yago Avelar\\Documents\\Acelera\\Teste\\Teste\\View\\FacaSeuPedidoView.xaml",
               "RelativeToolTip": "Teste\\View\\FacaSeuPedidoView.xaml",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
-              "WhenOpened": "2026-05-04T18:58:00.789Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-04T18:58:00.789Z"
             },
             {
               "$type": "Document",

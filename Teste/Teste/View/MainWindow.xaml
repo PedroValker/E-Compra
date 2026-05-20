@@ -171,15 +171,15 @@
             <Grid>
                 <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="400">
 
-                    <TextBlock Text="🛒 Basic"
+                    <TextBlock
                                FontSize="28"
                                FontWeight="Black"
                                Foreground="White"
                                Opacity="0.9"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,24"/>
+                               Margin="0,0,0,24" Text="🛒 E-Compra"/>
 
-                    <TextBlock Text="Seja bem-vindo ao ecossistema de compras Basic."
+                    <TextBlock Text="Seja bem-vindo ao ecossistema de compras E-Compra."
                                FontSize="36"
                                FontWeight="Bold"
                                Foreground="White"
