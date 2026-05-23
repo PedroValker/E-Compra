@@ -126,7 +126,7 @@
                     <TextBlock Text="Início" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#002DB3" MouseLeftButtonDown="VoltarInicio_Click"/>
                     <TextBlock Text="Faça seu Pedido" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="FaçaPedido"/>
                     <TextBlock Text="Pedidos" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="Pedidos"/>
-                    <TextBlock Text="Sobre" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555"/>
+                    <TextBlock Text="Sobre" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="EntreEmContato"/>
                 </StackPanel>
             </StackPanel>
         </Border>

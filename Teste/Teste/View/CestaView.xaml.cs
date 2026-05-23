@@ -1,7 +1,10 @@
-﻿using System;
+﻿using CestaApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel; // 🔥 Importante para o INotifyPropertyChanged
 using System.Linq;
+using System.Runtime.CompilerServices; // 🔥 Importante para o CallerMemberName
 using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
@@ -9,20 +12,22 @@ using Teste.Repository;
 
 namespace CestaApp.Views
 {
-    public partial class CestaView : UserControl
+    // 🔥 Adicionado INotifyPropertyChanged à classe para que a tela mude o preço na hora
+    public partial class CestaView : UserControl, INotifyPropertyChanged
     {
         public Cesta CestaAtual { get; set; }
         public ObservableCollection<Produto> ProdutosDaCesta { get; set; }
         public string Observacoes { get; set; }
 
-        // Dicionário privado para armazenar rigidamente a receita padrão de fábrica do TXT
+        // 🔥 Propriedade calculada dinâmica: varre os produtos e soma (Preço * QuantidadeSelecionada)
+        public decimal ValorTotalCesta => ProdutosDaCesta != null ? ProdutosDaCesta.Sum(p => p.Preco * p.QuantidadeSelecionada) : 0;
+
         private Dictionary<string, int> _quantidadesOriginaisFabrica = new Dictionary<string, int>();
 
         public CestaView(Cesta cesta)
         {
             InitializeComponent();
 
-            // Resgata o registro de fábrica direto da memória global para garantir integridade
             var cestaOriginal = MemoriaCestas.Lista.FirstOrDefault(c =>
                 c.Nome != null && c.Nome.Trim().ToUpper() == cesta?.Nome?.Trim()?.ToUpper());
 
@@ -32,7 +37,6 @@ namespace CestaApp.Views
 
             if (CestaAtual != null && CestaAtual.Itens != null)
             {
-                // Agrupa contando quantas ocorrências existem no arquivo txt
                 var itensAgrupados = CestaAtual.Itens
                     .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
                     .GroupBy(p => p.Nome.Trim().ToUpper())
@@ -41,22 +45,23 @@ namespace CestaApp.Views
                         var primeiroItem = grupo.First();
                         int totalDeFabrica = grupo.Count();
 
-                        // Guarda a quantidade original estável no dicionário para cálculo de Diff
                         _quantidadesOriginaisFabrica[primeiroItem.Nome.Trim().ToUpper()] = totalDeFabrica;
 
                         return new Produto
                         {
                             Nome = primeiroItem.Nome,
                             Preco = primeiroItem.Preco,
-                            // 🔥 RESOLVIDO: A primeira coluna inicia exibindo a quantidade padrão de fábrica (ex: 12)
                             Peso = totalDeFabrica.ToString(),
-                            // O contador da direita também inicia com o valor total cheio
                             QuantidadeSelecionada = totalDeFabrica
                         };
                     }).ToList();
 
                 foreach (var item in itensAgrupados)
                 {
+                    // 🔥 AMARRAÇÃO CRÍTICA: Faz a tela escutar se as propriedades deste produto mudaram
+                    item.PropertyChanged -= Produto_PropertyChanged;
+                    item.PropertyChanged += Produto_PropertyChanged;
+
                     ProdutosDaCesta.Add(item);
                 }
             }
@@ -69,7 +74,16 @@ namespace CestaApp.Views
             InitializeComponent();
         }
 
-        // Modifica o texto da primeira coluna para mostrar a variação (+1, -2) quando houver ajustes
+        // 🔥 O SEGREDO: Captura a alteração de quantidade do Produto e atualiza o total geral na tela
+        private void Produto_PropertyChanged(object sender, PropertyChangedEventArgs e)
+        {
+            if (e.PropertyName == nameof(Produto.QuantidadeSelecionada) || e.PropertyName == nameof(Produto.SubtotalItem))
+            {
+                // Notifica o XAML que o preço total mudou e precisa ser redesenhado
+                OnPropertyChanged(nameof(ValorTotalCesta));
+            }
+        }
+
         private void AtualizarTextoDaVariacao(Produto produto)
         {
             string chave = produto.Nome.Trim().ToUpper();
@@ -78,7 +92,8 @@ namespace CestaApp.Views
                 int qtdOriginal = _quantidadesOriginaisFabrica[chave];
                 int diferenca = produto.QuantidadeSelecionada - qtdOriginal;
 
-                // Se o cliente alterou a quantidade, exibe o saldo com sinal. Se voltou ao padrão, mostra o valor base fixo.
+                if (diferenca > 0) produto.Preco = produto.Preco; // apenas segurança
+
                 if (diferenca > 0) produto.Peso = $"+{diferenca}";
                 else if (diferenca < 0) produto.Peso = $"{diferenca}";
                 else produto.Peso = qtdOriginal.ToString();
@@ -90,8 +105,8 @@ namespace CestaApp.Views
             if (sender is Button botao && botao.DataContext is Produto produto)
             {
                 produto.QuantidadeSelecionada++;
-                AtualizarTextoDaVariacao(produto); // Atualiza o saldo dinamicamente na tela
-                GridProdutos.Items.Refresh(); // Redesenha a linha no WPF
+                AtualizarTextoDaVariacao(produto);
+                GridProdutos.Items.Refresh();
             }
         }
 
@@ -102,8 +117,8 @@ namespace CestaApp.Views
                 if (produto.QuantidadeSelecionada > 0)
                 {
                     produto.QuantidadeSelecionada--;
-                    AtualizarTextoDaVariacao(produto); // Atualiza o saldo dinamicamente na tela
-                    GridProdutos.Items.Refresh(); // Redesenha a linha no WPF
+                    AtualizarTextoDaVariacao(produto);
+                    GridProdutos.Items.Refresh();
                 }
             }
         }
@@ -116,7 +131,6 @@ namespace CestaApp.Views
 
             foreach (var p in ProdutosDaCesta)
             {
-                // Monta a lista final baseado na quantidade acumulada no seletor da direita
                 for (int i = 0; i < p.QuantidadeSelecionada; i++)
                 {
                     listaFinalParaCarrinho.Add(new Produto
@@ -129,11 +143,11 @@ namespace CestaApp.Views
                 }
             }
 
-            // Clona a cesta de forma segura para não bagunçar referências na RAM global
             Cesta cestaClonadaParaCarrinho = new Cesta(CestaAtual.Id)
             {
                 Nome = CestaAtual.Nome,
-                Preco = CestaAtual.Preco,
+                // 🔥 Atualiza o preço da cesta clonada com o total dinâmico que o usuário montou
+                Preco = this.ValorTotalCesta,
                 ImagemPath = CestaAtual.ImagemPath,
                 Itens = listaFinalParaCarrinho
             };
@@ -156,5 +170,10 @@ namespace CestaApp.Views
             this.DataContext = null;
             this.DataContext = this;
         }
+
+        // 🔥 Implementação da interface INotifyPropertyChanged para a View
+        public event PropertyChangedEventHandler PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string name = null)
+            => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 }

@@ -24,19 +24,14 @@ namespace Teste.View
         {
             InitializeComponent();
 
-            // Configura o contexto de dados geral da janela (Data, Recebedor, Total, Observações)
-            DataContext = pedido;
-
             var dicionarioPadrao = new Dictionary<string, int>();
             var dicionarioCliente = new Dictionary<string, int>();
 
             var itensAdicionados = new List<object>();
             var itensRemovidos = new List<object>();
-
-            // Esta lista vai alimentar a tabela da esquerda apenas com os produtos reais
             var linesTabelaEsquerda = new List<object>();
 
-            // 1. DESCOBRE A CESTA ORIGINAL PARA FAZER A COMPARAÇÃO DEPOIS
+            // 1. DESCOBRE A CESTA ORIGINAL
             Cesta receitaOriginal = null;
 
             if (pedido.Observacoes != null)
@@ -63,7 +58,9 @@ namespace Teste.View
                 receitaOriginal = MemoriaCestas.Lista.FirstOrDefault();
             }
 
-            // 2. MONTA A TABELA DA ESQUERDA (APENAS OS PRODUTOS QUE VÃO NA CESTA)
+            // 2. MONTA A TABELA DA ESQUERDA (COM RECALCULO DE TOTAL DINÂMICO)
+            decimal acumuladorTotalMapeado = 0;
+
             if (pedido.Itens != null && pedido.Itens.Any())
             {
                 foreach (var item in pedido.Itens)
@@ -80,21 +77,60 @@ namespace Teste.View
 
                 foreach (var kvp in dicionarioCliente)
                 {
-                    string nomeFormatado = pedido.Itens.FirstOrDefault(i => i.Nome?.Trim().ToUpper() == kvp.Key)?.Nome ?? kvp.Key;
+                    var itemOriginal = pedido.Itens.FirstOrDefault(i => i.Nome?.Trim().ToUpper() == kvp.Key);
+                    string nomeFormatado = itemOriginal?.Nome ?? kvp.Key;
+
+                    decimal precoUnitario = 0;
+
+                    // 1ª Tentativa: Busca o preço do produto dentro da receita padrão associada
+                    if (receitaOriginal != null && receitaOriginal.Itens != null)
+                    {
+                        var produtoCadastrado = receitaOriginal.Itens.FirstOrDefault(p => p != null && p.Nome.Trim().ToUpper() == kvp.Key);
+                        if (produtoCadastrado != null)
+                        {
+                            precoUnitario = produtoCadastrado.Preco;
+                        }
+                    }
+
+                    // 2ª Tentativa (Garantia): Se o produto foi adicionado como extra e não existe na receita original,
+                    // varre todas as cestas cadastradas no sistema em busca do preço de mercado do produto
+                    if (precoUnitario == 0)
+                    {
+                        var produtoGlobal = MemoriaCestas.Lista
+                            .Where(c => c.Itens != null)
+                            .SelectMany(c => c.Itens)
+                            .FirstOrDefault(p => p != null && p.Nome.Trim().ToUpper() == kvp.Key);
+
+                        if (produtoGlobal != null)
+                        {
+                            precoUnitario = produtoGlobal.Preco;
+                        }
+                    }
+
+                    decimal subtotal = precoUnitario * kvp.Value;
+                    acumuladorTotalMapeado += subtotal;
 
                     linesTabelaEsquerda.Add(new
                     {
                         Quantidade = kvp.Value,
                         Nome = nomeFormatado,
-                        Subtotal = 0.00
+                        Subtotal = subtotal
                     });
                 }
             }
 
-            // Define a lista de produtos limpa na tabela da Esquerda
+            // 🔥 ATUALIZAÇÃO CRÍTICA: Se a soma dos produtos mapeados for maior que zero,
+            // força o objeto pedido a assumir o valor recalculado com base nos preços reais do banco
+            if (acumuladorTotalMapeado > 0)
+            {
+                pedido.Total = acumuladorTotalMapeado;
+            }
+
+            // Vincula o DataContext após aplicar as correções de preço e totais
+            DataContext = pedido;
             GridCestas.ItemsSource = linesTabelaEsquerda;
 
-            // 3. FAZ O CÁLCULO DE COMPARAÇÃO (DIFFING) PARA AS TABELAS DA DIREITA
+            // 3. FAZ O CÁLCULO DE COMPARAÇÃO (DIFFING)
             if (receitaOriginal != null && receitaOriginal.Itens != null)
             {
                 foreach (var itemOriginal in receitaOriginal.Itens)
@@ -115,8 +151,6 @@ namespace Teste.View
                     dicionarioPadrao.TryGetValue(chaveProduto, out int qtdPadrao);
                     dicionarioCliente.TryGetValue(chaveProduto, out int qtdCliente);
 
-                    // 🔥 MODIFICADO APENAS AQUI: Se o cliente comprou e alterou itens, mas um produto original
-                    // de fábrica não veio listado no TXT do pedido, indica que a quantidade dele foi zerada (Removido).
                     if (dicionarioCliente.Any() && !dicionarioCliente.ContainsKey(chaveProduto) && dicionarioPadrao.ContainsKey(chaveProduto))
                     {
                         qtdCliente = 0;
@@ -142,7 +176,6 @@ namespace Teste.View
                 }
             }
 
-            // Atualiza as tabelas da direita com as modificações realizadas
             GridAdicionados.ItemsSource = itensAdicionados;
             GridRemovidos.ItemsSource = itensRemovidos;
         }
@@ -156,12 +189,7 @@ namespace Teste.View
         {
             if (!(this.DataContext is Model.Pedido pedido))
             {
-                MessageBox.Show(
-                    "Erro ao recuperar os dados do pedido.",
-                    "Erro",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageBox.Show("Erro ao recuperar os dados do pedido.", "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                 return;
             }
 
@@ -177,7 +205,6 @@ namespace Teste.View
 
             try
             {
-                // FONTES UNICODE
                 string fontNormalPath = @"C:\Windows\Fonts\arial.ttf";
                 string fontBoldPath = @"C:\Windows\Fonts\arialbd.ttf";
                 string fontItalicPath = @"C:\Windows\Fonts\ariali.ttf";
@@ -186,222 +213,81 @@ namespace Teste.View
                 using (PdfDocument pdf = new PdfDocument(writer))
                 using (Document document = new Document(pdf))
                 {
-                    // CORES
                     Color azulTema = new DeviceRgb(43, 108, 176);
                     Color cinzaEscuro = new DeviceRgb(45, 55, 72);
                     Color cinzaClaro = new DeviceRgb(247, 250, 252);
 
-                    // FONTES
-                    PdfFont fonteNormal = PdfFontFactory.CreateFont(
-                        fontNormalPath,
-                        PdfEncodings.IDENTITY_H
-                    );
-
-                    PdfFont fonteNegrito = PdfFontFactory.CreateFont(
-                        fontBoldPath,
-                        PdfEncodings.IDENTITY_H
-                    );
-
-                    PdfFont fonteItalico = PdfFontFactory.CreateFont(
-                        fontItalicPath,
-                        PdfEncodings.IDENTITY_H
-                    );
+                    PdfFont fonteNormal = PdfFontFactory.CreateFont(fontNormalPath, PdfEncodings.IDENTITY_H);
+                    PdfFont fonteNegrito = PdfFontFactory.CreateFont(fontBoldPath, PdfEncodings.IDENTITY_H);
+                    PdfFont fonteItalico = PdfFontFactory.CreateFont(fontItalicPath, PdfEncodings.IDENTITY_H);
 
                     document.SetFont(fonteNormal);
 
-                    // =====================================================
                     // TÍTULO
-                    // =====================================================
-
-                    Paragraph titulo = new Paragraph("COMPROVANTE DE PEDIDO")
-                        .SetFontSize(20)
-                        .SetFont(fonteNegrito)
-                        .SetFontColor(azulTema);
-
+                    Paragraph titulo = new Paragraph("COMPROVANTE DE PEDIDO").SetFontSize(20).SetFont(fonteNegrito).SetFontColor(azulTema);
                     document.Add(titulo);
 
-                    Paragraph subTitulo = new Paragraph(
-                        $"Pedido: {Safe(pedido.NomePedido)} | Status: {Safe(pedido.Status)}"
-                    )
-                    .SetFontSize(11)
-                    .SetFontColor(cinzaEscuro)
-                    .SetMarginBottom(20);
-
+                    Paragraph subTitulo = new Paragraph($"Pedido: {Safe(pedido.NomePedido)} | Status: {Safe(pedido.Status)}").SetFontSize(11).SetFontColor(cinzaEscuro).SetMarginBottom(20);
                     document.Add(subTitulo);
 
-                    // =====================================================
-                    // INFORMAÇÕES
-                    // =====================================================
-
-                    Paragraph infoTitulo = new Paragraph("Informações Gerais")
-                        .SetFontSize(13)
-                        .SetFont(fonteNegrito)
-                        .SetFontColor(azulTema);
-
+                    // INFORMAÇÕES GERAIS
+                    Paragraph infoTitulo = new Paragraph("Informações Gerais").SetFontSize(13).SetFont(fonteNegrito).SetFontColor(azulTema);
                     document.Add(infoTitulo);
 
-                    Table tabelaInfo = new Table(
-                        UnitValue.CreatePercentArray(new float[] { 25, 75 })
-                    ).UseAllAvailableWidth();
+                    Table tabelaInfo = new Table(UnitValue.CreatePercentArray(new float[] { 25, 75 })).UseAllAvailableWidth();
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Cliente").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(pedido.Recebedor))));
 
-                    // Cliente
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph("Cliente").SetFont(fonteNegrito))
-                            .SetBackgroundColor(cinzaClaro)
-                    );
-
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph(Safe(pedido.Recebedor)))
-                    );
-
-                    // Data
                     string dataPedido;
-
                     try
                     {
-                        if (pedido.DataDoPedido != null)
-                            dataPedido = Convert
-                                .ToDateTime(pedido.DataDoPedido)
-                                .ToString("dd/MM/yyyy");
-                        else
-                            dataPedido = DateTime.Now.ToString("dd/MM/yyyy");
+                        dataPedido = pedido.DataDoPedido != null ? Convert.ToDateTime(pedido.DataDoPedido).ToString("dd/MM/yyyy") : DateTime.Now.ToString("dd/MM/yyyy");
                     }
                     catch
                     {
                         dataPedido = DateTime.Now.ToString("dd/MM/yyyy");
                     }
 
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph("Data").SetFont(fonteNegrito))
-                            .SetBackgroundColor(cinzaClaro)
-                    );
-
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph(dataPedido))
-                    );
-
-                    // Endereço
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph("Endereço").SetFont(fonteNegrito))
-                            .SetBackgroundColor(cinzaClaro)
-                    );
-
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph(Safe(pedido.Endereco)))
-                    );
-
-                    // Pagamento
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph("Pagamento").SetFont(fonteNegrito))
-                            .SetBackgroundColor(cinzaClaro)
-                    );
-
-                    tabelaInfo.AddCell(
-                        new Cell()
-                            .Add(new Paragraph(Safe(pedido.FormaPagamento)))
-                    );
-
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Data").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(dataPedido)));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Endereço").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(pedido.Endereco))));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Pagamento").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(pedido.FormaPagamento))));
                     tabelaInfo.SetMarginBottom(20);
-
                     document.Add(tabelaInfo);
 
-                    // =====================================================
                     // TABELA DE ITENS
-                    // =====================================================
-
-                    Paragraph itensTitulo = new Paragraph("Itens do Pedido")
-                        .SetFontSize(13)
-                        .SetFont(fonteNegrito)
-                        .SetFontColor(azulTema);
-
+                    Paragraph itensTitulo = new Paragraph("Itens do Pedido").SetFontSize(13).SetFont(fonteNegrito).SetFontColor(azulTema);
                     document.Add(itensTitulo);
 
-                    Table tabelaItens = new Table(
-                        UnitValue.CreatePercentArray(new float[] { 15, 60, 25 })
-                    ).UseAllAvailableWidth();
+                    Table tabelaItens = new Table(UnitValue.CreatePercentArray(new float[] { 15, 60, 25 })).UseAllAvailableWidth();
 
-                    // HEADER QTD
-                    tabelaItens.AddHeaderCell(
-                        new Cell()
-                            .Add(
-                                new Paragraph("Qtd")
-                                    .SetFont(fonteNegrito)
-                                    .SetFontColor(ColorConstants.WHITE)
-                            )
-                            .SetBackgroundColor(azulTema)
-                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                    );
+                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Qtd").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Descrição").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema));
+                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Subtotal").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
 
-                    // HEADER DESCRIÇÃO
-                    tabelaItens.AddHeaderCell(
-                        new Cell()
-                            .Add(
-                                new Paragraph("Descrição")
-                                    .SetFont(fonteNegrito)
-                                    .SetFontColor(ColorConstants.WHITE)
-                            )
-                            .SetBackgroundColor(azulTema)
-                    );
-
-                    // HEADER SUBTOTAL
-                    tabelaItens.AddHeaderCell(
-                        new Cell()
-                            .Add(
-                                new Paragraph("Subtotal")
-                                    .SetFont(fonteNegrito)
-                                    .SetFontColor(ColorConstants.WHITE)
-                            )
-                            .SetBackgroundColor(azulTema)
-                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                    );
-
-                    // ITENS
                     if (GridCestas.ItemsSource != null)
                     {
                         foreach (var row in GridCestas.ItemsSource.Cast<object>().Where(x => x != null))
                         {
                             try
                             {
-                                var propQtd = row.GetType()
-                                    .GetProperty("Quantidade")
-                                    ?.GetValue(row);
-
-                                var propNome = row.GetType()
-                                    .GetProperty("Nome")
-                                    ?.GetValue(row);
+                                var propQtd = row.GetType().GetProperty("Quantidade")?.GetValue(row);
+                                var propNome = row.GetType().GetProperty("Nome")?.GetValue(row);
+                                var propSubtotal = row.GetType().GetProperty("Subtotal")?.GetValue(row);
 
                                 string qtd = Safe(propQtd);
                                 string nome = Safe(propNome);
 
-                                if (string.IsNullOrWhiteSpace(qtd))
-                                    qtd = "1";
+                                decimal subtotalDecimal = propSubtotal is decimal value ? value : 0;
 
-                                if (string.IsNullOrWhiteSpace(nome))
-                                    nome = "Produto";
+                                if (string.IsNullOrWhiteSpace(qtd)) qtd = "1";
+                                if (string.IsNullOrWhiteSpace(nome)) nome = "Produto";
 
-                                tabelaItens.AddCell(
-                                    new Cell()
-                                        .Add(new Paragraph(qtd))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER)
-                                );
-
-                                tabelaItens.AddCell(
-                                    new Cell()
-                                        .Add(new Paragraph(nome))
-                                );
-
-                                tabelaItens.AddCell(
-                                    new Cell()
-                                        .Add(new Paragraph("R$ 0,00"))
-                                        .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                                );
+                                tabelaItens.AddCell(new Cell().Add(new Paragraph(qtd)).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                                tabelaItens.AddCell(new Cell().Add(new Paragraph(nome)));
+                                tabelaItens.AddCell(new Cell().Add(new Paragraph($"R$ {subtotalDecimal:N2}")).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
                             }
                             catch
                             {
@@ -409,69 +295,28 @@ namespace Teste.View
                         }
                     }
 
-                    // TOTAL
-                    tabelaItens.AddCell(
-                        new Cell(1, 2)
-                            .Add(
-                                new Paragraph("Valor Total:")
-                                    .SetFont(fonteNegrito)
-                            )
-                            .SetBackgroundColor(cinzaClaro)
-                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                    );
-
-                    tabelaItens.AddCell(
-                        new Cell()
-                            .Add(
-                                new Paragraph($"R$ {pedido.Total:N2}")
-                                    .SetFont(fonteNegrito)
-                            )
-                            .SetBackgroundColor(cinzaClaro)
-                            .SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT)
-                    );
-
+                    // TOTAL DO PEDIDO
+                    tabelaItens.AddCell(new Cell(1, 2).Add(new Paragraph("Valor Total:").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
+                    tabelaItens.AddCell(new Cell().Add(new Paragraph($"R$ {pedido.Total:N2}").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
                     tabelaItens.SetMarginBottom(20);
-
                     document.Add(tabelaItens);
 
-                    // =====================================================
                     // OBSERVAÇÕES
-                    // =====================================================
-
                     if (!string.IsNullOrWhiteSpace(Safe(pedido.Observacoes)))
                     {
-                        Paragraph tituloObs = new Paragraph("Observações")
-                            .SetFontSize(13)
-                            .SetFont(fonteNegrito)
-                            .SetFontColor(azulTema);
-
+                        Paragraph tituloObs = new Paragraph("Observações").SetFontSize(13).SetFont(fonteNegrito).SetFontColor(azulTema);
                         document.Add(tituloObs);
 
-                        Paragraph obs = new Paragraph(Safe(pedido.Observacoes))
-                            .SetFont(fonteItalico)
-                            .SetFontSize(10)
-                            .SetPadding(8)
-                            .SetBackgroundColor(new DeviceRgb(255, 250, 240));
-
+                        Paragraph obs = new Paragraph(Safe(pedido.Observacoes)).SetFont(fonteItalico).SetFontSize(10).SetPadding(8).SetBackgroundColor(new DeviceRgb(255, 250, 240));
                         document.Add(obs);
                     }
                 }
 
-                MessageBox.Show(
-                    "PDF gerado com sucesso!",
-                    "Sucesso",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Information
-                );
+                MessageBox.Show("PDF gerado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
-                MessageBox.Show(
-                    ex.ToString(),
-                    "Erro Completo",
-                    MessageBoxButton.OK,
-                    MessageBoxImage.Error
-                );
+                MessageBox.Show(ex.ToString(), "Erro Completo", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
 

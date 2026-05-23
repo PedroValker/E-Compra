@@ -81,6 +81,7 @@
                         <RowDefinition Height="Auto"/>
                         <RowDefinition Height="*"/>
                     </Grid.RowDefinitions>
+
                     <TextBlock Grid.Row="0" Text="Cestas no Pedido" FontSize="18" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,0,16"/>
 
                     <DataGrid x:Name="GridCestas" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
@@ -89,7 +90,7 @@
                         <DataGrid.Columns>
                             <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60" FontWeight="Bold"/>
                             <DataGridTextColumn Header="Itens" Binding="{Binding Nome}" Width="*"/>
-                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='R$ {0:N2}'}" Width="110" FontWeight="Bold"/>
+                            <DataGridTextColumn Header="Subtotal" Binding="{Binding Subtotal, StringFormat='R$ \{0:N2\}'}" Width="110" FontWeight="Bold"/>
                         </DataGrid.Columns>
                     </DataGrid>
                 </Grid>
