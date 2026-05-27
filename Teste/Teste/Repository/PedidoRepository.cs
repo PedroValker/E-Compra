@@ -92,18 +92,21 @@ namespace Teste.Repository
             return string.Join(",", itensFormatados);
         }
 
-        // 🔥 CORREÇÃO: Adicionado o campo "|IdUsuario:{p.IdUsuario}" na montagem da linha texto
+        // 🛠️ ATUALIZAÇÃO: Incluído o campo |DataEntrega no padrão string de salvamento
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
-            return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens}";
+
+            // Converte a data de entrega para string (formato ISO seguro para ler depois) se ela existir
+            string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
+
+            return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr}";
         }
 
         public void AdicionarNovoPedidoNoTxt(Pedido p)
         {
             try
             {
-                // Antes de salvar, certifique-se de injetar o ID do usuário logado no pedido que veio da UI
                 if (Sessao.UsuarioLogado != null)
                 {
                     p.IdUsuario = Sessao.UsuarioLogado.Id;
@@ -152,7 +155,7 @@ namespace Teste.Repository
             }
         }
 
-        // 🔥 CORREÇÃO NA LEITURA: Mapeamento de índices alterado para capturar a nova coluna sem quebrar
+        // 🛠️ ATUALIZAÇÃO: Interpretando a nova coluna |DataEntrega ao subir os dados na inicialização
         public void CarregarDoArquivo()
         {
             try
@@ -179,16 +182,15 @@ namespace Teste.Repository
                     }
 
                     var partes = linhaProcessada.Split('|');
-                    // Como adicionamos 1 campo, a linha processada agora precisa ter no mínimo 10 partes
+
+                    // Como adicionamos o campo DataEntrega, a linha processada agora deve conter 11 partes
                     if (partes.Length < 10) continue;
 
                     string dataPedido = partes[0].Replace("Data:", "").Trim();
 
-                    // Lendo o IdUsuario recém-criado
                     string idUsuarioStr = partes[1].Replace("IdUsuario:", "").Trim();
                     int.TryParse(idUsuarioStr, out int idUsuarioConvertido);
 
-                    // Deslocamos o índice das demais variáveis em +1
                     string nomePedido = partes[2].Replace("NomePedido:", "").Trim();
                     string recebedor = partes[3].Replace("Recebedor:", "").Trim();
                     string endereco = partes[4].Replace("Endereco:", "").Trim();
@@ -198,13 +200,24 @@ namespace Teste.Repository
                     string obs = partes[8].Replace("Obs:", "").Trim();
                     string itensStr = partes[9].Replace("Itens:", "").Trim();
 
+                    // Mapeia de forma segura a nova coluna (Evita quebrar se houver registros antigos salvos sem essa coluna)
+                    DateTime? dataEntregaConvertida = null;
+                    if (partes.Length >= 11)
+                    {
+                        string dataEntregaStr = partes[10].Replace("DataEntrega:", "").Trim();
+                        if (!string.IsNullOrEmpty(dataEntregaStr) && dataEntregaStr != "NULL" && DateTime.TryParse(dataEntregaStr, out DateTime dt))
+                        {
+                            dataEntregaConvertida = dt;
+                        }
+                    }
+
                     totalStr = totalStr.Replace(",", ".");
                     decimal.TryParse(totalStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal totalConvertido);
 
                     Pedido p = new Pedido
                     {
                         DataDoPedido = dataPedido,
-                        IdUsuario = idUsuarioConvertido, // Atribuído ao objeto carregado na memória
+                        IdUsuario = idUsuarioConvertido,
                         NomePedido = nomePedido,
                         Recebedor = recebedor,
                         Endereco = endereco,
@@ -212,6 +225,7 @@ namespace Teste.Repository
                         Status = status,
                         Total = totalConvertido,
                         Observacoes = obs,
+                        DataEntrega = dataEntregaConvertida, // 📅 Aqui a propriedade recebe o valor recuperado!
                         Itens = new List<ItemPedido>()
                     };
 

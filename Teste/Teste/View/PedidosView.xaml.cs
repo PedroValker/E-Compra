@@ -1,8 +1,9 @@
-﻿using System.Windows.Controls;
+﻿using System;
+using System.Linq;
+using System.Windows;
+using System.Windows.Controls;
 using System.Windows.Input;
 using System.Windows.Media;
-using System.Linq;
-using Teste;
 using Teste.Model;
 using Teste.ViewModel;
 
@@ -14,54 +15,66 @@ namespace Teste.View
         {
             InitializeComponent();
 
-            // 🚀 VÍNCULO POR ID: Envia o ID numérico único do usuário logado para a ViewModel de forma isolada
+            // 🚀 VÍNCULO POR ID: Envia o ID numérico único do usuário logado para a ViewModel
             if (Sessao.UsuarioLogado != null)
             {
-                DataContext = new PedidosViewModel(Sessao.UsuarioLogado.Id);
+                this.DataContext = new PedidosViewModel(Sessao.UsuarioLogado.Id);
             }
         }
 
-        private void AbaHistorico_Click(object sender, MouseButtonEventArgs e)
-        {
-            if (DataContext is PedidosViewModel vm)
-            {
-                // Alimenta a tabela com a lista que a ViewModel já buscou e filtrou por ID
-                TabelaDePedidos.ItemsSource = vm.ListaPedidosEntregues;
-
-                // Seleciona automaticamente o primeiro item do histórico se houver algum
-                vm.PedidoSelecionado = vm.ListaPedidosEntregues?.FirstOrDefault();
-            }
-
-            // Feedback visual da aba selecionada (Histórico ativa)
-            AbaHistoricoTexto.FontWeight = System.Windows.FontWeights.Bold;
-            AbaHistoricoTexto.Foreground = new SolidColorBrush(Colors.Black);
-
-            AbaPendentesTexto.FontWeight = System.Windows.FontWeights.Normal;
-            AbaPendentesTexto.Foreground = new SolidColorBrush(Colors.Gray);
-        }
-
+        // 🟢 ABA 1: PEDIDOS PENDENTES
         private void AbaPendentes_Click(object sender, MouseButtonEventArgs e)
         {
             if (DataContext is PedidosViewModel vm)
             {
-                // Alimenta a tabela com a lista de pendentes filtrada por ID na ViewModel
                 TabelaDePedidos.ItemsSource = vm.ListaPedidosPendentes;
-
-                // Seleciona automaticamente o primeiro item dos pendentes se houver algum
                 vm.PedidoSelecionado = vm.ListaPedidosPendentes?.FirstOrDefault();
             }
 
-            // Feedback visual da aba selecionada (Pendentes ativa)
-            AbaPendentesTexto.FontWeight = System.Windows.FontWeights.Bold;
-            AbaPendentesTexto.Foreground = new SolidColorBrush(Colors.Black);
-
-            AbaHistoricoTexto.FontWeight = System.Windows.FontWeights.Normal;
-            AbaHistoricoTexto.Foreground = new SolidColorBrush(Colors.Gray);
+            AlternarVisualAbas(AbaPendentesTexto, AbaCaminhoTexto, AbaHistoricoTexto);
         }
 
-        private void VerDetalhes_Click(object sender, System.Windows.RoutedEventArgs e)
+        // 🔵 ABA 2: PEDIDOS A CAMINHO (Nova Rota Logística)
+        private void AbaCaminho_Click(object sender, MouseButtonEventArgs e)
         {
-            // Extrai de forma segura o pedido amarrado à linha clicada na tabela
+            if (DataContext is PedidosViewModel vm)
+            {
+                TabelaDePedidos.ItemsSource = vm.ListaPedidosACaminho;
+                vm.PedidoSelecionado = vm.ListaPedidosACaminho?.FirstOrDefault();
+            }
+
+            AlternarVisualAbas(AbaCaminhoTexto, AbaPendentesTexto, AbaHistoricoTexto);
+        }
+
+        // 🔴 ABA 3: HISTÓRICO / ENTREGUES
+        private void AbaHistorico_Click(object sender, MouseButtonEventArgs e)
+        {
+            if (DataContext is PedidosViewModel vm)
+            {
+                TabelaDePedidos.ItemsSource = vm.ListaPedidosEntregues;
+                vm.PedidoSelecionado = vm.ListaPedidosEntregues?.FirstOrDefault();
+            }
+
+            AlternarVisualAbas(AbaHistoricoTexto, AbaPendentesTexto, AbaCaminhoTexto);
+        }
+
+        // 🎨 GERENCIADOR VISUAL DE ABAS (Padrão SaaS Moderno)
+        private void AlternarVisualAbas(TextBlock ativa, TextBlock inativa1, TextBlock inativa2)
+        {
+            // Aba ativa ganha destaque em negrito e cor escura (#0F172A)
+            ativa.FontWeight = FontWeights.Bold;
+            ativa.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#0F172A"));
+
+            // Abas inativas ficam com fonte normal e cor cinza suave (#94A3B8)
+            inativa1.FontWeight = FontWeights.Normal;
+            inativa1.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
+
+            inativa2.FontWeight = FontWeights.Normal;
+            inativa2.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
+        }
+
+        private void VerDetalhes_Click(object sender, RoutedEventArgs e)
+        {
             if (sender is Button botao && botao.DataContext is Pedido pedidoClicado)
             {
                 var janelaDetalhes = new DetalhesPedidoCliente(pedidoClicado);

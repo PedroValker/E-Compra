@@ -9,7 +9,6 @@ namespace Teste.Model
         public string Marca { get; set; } = "";
         public string Categoria { get; set; } = "";
         public decimal Preco { get; set; }
-
         public int QuantidadeFixa { get; set; }
 
         private int _quantidadeSelecionada = 1;
@@ -28,7 +27,20 @@ namespace Teste.Model
             }
         }
 
-        public string Peso { get; set; } = "";
+        // 🛠️ ALTERAÇÃO AQUI: Propriedade Peso corrigida com suporte ao PropertyChanged
+        private string _peso = "";
+        public string Peso
+        {
+            get => _peso;
+            set
+            {
+                if (_peso != value)
+                {
+                    _peso = value;
+                    OnPropertyChanged(); // 🔥 Avisa o WPF para atualizar o texto do peso na tela
+                }
+            }
+        }
 
         // 🔥 Propriedade calculada do item (Preço x Qtd Selecionada)
         public decimal SubtotalItem => Preco * QuantidadeSelecionada;

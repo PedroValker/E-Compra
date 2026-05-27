@@ -106,7 +106,7 @@ namespace CestaApp.Views
             {
                 produto.QuantidadeSelecionada++;
                 AtualizarTextoDaVariacao(produto);
-                GridProdutos.Items.Refresh();
+              
             }
         }
 
@@ -118,7 +118,7 @@ namespace CestaApp.Views
                 {
                     produto.QuantidadeSelecionada--;
                     AtualizarTextoDaVariacao(produto);
-                    GridProdutos.Items.Refresh();
+                  
                 }
             }
         }

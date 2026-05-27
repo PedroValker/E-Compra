@@ -1,4 +1,5 @@
-﻿using System.Collections.ObjectModel;
+﻿using System;
+using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
@@ -11,16 +12,18 @@ namespace Teste.ViewModel
     public class PedidosViewModel : INotifyPropertyChanged
     {
         private PedidoRepository _repository;
-
-        // 🚀 ALTERAÇÃO: Mudou de string para int para armazenar o ID fixo do usuário
         private int _idUsuarioLogado;
 
         public ObservableCollection<Pedido> Pedidos { get; set; }
         public ObservableCollection<Pedido> ListaPedidosEntregues { get; set; } = new ObservableCollection<Pedido>();
         public ObservableCollection<Pedido> ListaPedidosPendentes { get; set; } = new ObservableCollection<Pedido>();
 
-        private Pedido _pedidoSelecionado;
-        public Pedido PedidoSelecionado
+        // 🚀 NOVO: Lista para o cliente acompanhar o que já está na rua
+        public ObservableCollection<Pedido> ListaPedidosACaminho { get; set; } = new ObservableCollection<Pedido>();
+
+        // 🛠️ CORREÇÃO: Declarado como anulável (?) para evitar aviso no construtor
+        private Pedido? _pedidoSelecionado;
+        public Pedido? PedidoSelecionado
         {
             get => _pedidoSelecionado;
             set
@@ -32,24 +35,22 @@ namespace Teste.ViewModel
 
         public ICommand VerMaisCommand { get; }
 
-        // 🚀 ALTERAÇÃO: O construtor agora aceita formalmente o 'int idUsuario' vindo da View
         public PedidosViewModel(int idUsuario)
         {
             _idUsuarioLogado = idUsuario;
             _repository = new PedidoRepository();
             Pedidos = new ObservableCollection<Pedido>();
 
-            VerMaisCommand = new RelayCommand<Pedido>(pedido => PedidoSelecionado = pedido);
+            // 🛠️ CORREÇÃO: Cast preventivo para evitar quebras se o comando receber algo inesperado
+            VerMaisCommand = new RelayCommand<Pedido>(pedido => { if (pedido != null) PedidoSelecionado = pedido; });
 
             CarregarPedidosDoCliente();
         }
 
         private void CarregarPedidosDoCliente()
         {
-            // Força o repositório a ler as linhas atualizadas do arquivo pedidos.txt
             _repository.CarregarDoArquivo();
 
-            // 🚀 ALTERAÇÃO CRÍTICA: Agora filtramos diretamente pelo ID numérico amarrado ao pedido
             var pedidosFiltrados = MemoriaPedidos.Lista
                 .Where(p => p.IdUsuario == _idUsuarioLogado)
                 .ToList();
@@ -57,15 +58,20 @@ namespace Teste.ViewModel
             Pedidos.Clear();
             ListaPedidosEntregues.Clear();
             ListaPedidosPendentes.Clear();
+            ListaPedidosACaminho.Clear(); // Limpa a nova lista
 
             foreach (var pedido in pedidosFiltrados)
             {
                 Pedidos.Add(pedido);
 
-                // Separação por Status de forma segura
-                if (pedido.Status != null && pedido.Status.Trim().Equals("Entregue", System.StringComparison.OrdinalIgnoreCase))
+                // 🛠️ CORREÇÃO: Nova estrutura de árvore para mapear os 3 status perfeitamente na visão do cliente
+                if (pedido.Status != null && pedido.Status.Trim().Equals("Entregue", StringComparison.OrdinalIgnoreCase))
                 {
                     ListaPedidosEntregues.Add(pedido);
+                }
+                else if (pedido.Status != null && pedido.Status.Trim().Equals("A Caminho", StringComparison.OrdinalIgnoreCase))
+                {
+                    ListaPedidosACaminho.Add(pedido);
                 }
                 else
                 {
@@ -79,17 +85,28 @@ namespace Teste.ViewModel
             }
         }
 
-        public event PropertyChangedEventHandler PropertyChanged;
-        protected void OnPropertyChanged([CallerMemberName] string name = null)
+        // 🛠️ CORREÇÃO: Evento alterado para aceitar nulo (bater com a assinatura do .NET Core)
+        public event PropertyChangedEventHandler? PropertyChanged;
+        protected void OnPropertyChanged([CallerMemberName] string? name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
+    // 🛠️ CORREÇÃO: Implementação limpa do RelayCommand sem warnings de Nullable
     public class RelayCommand<T> : ICommand
     {
-        private readonly System.Action<T> _execute;
-        public RelayCommand(System.Action<T> execute) => _execute = execute;
-        public bool CanExecute(object parameter) => true;
-        public void Execute(object parameter) => _execute((T)parameter);
-        public event System.EventHandler CanExecuteChanged { add { } remove { } }
+        private readonly Action<T> _execute;
+        public RelayCommand(Action<T> execute) => _execute = execute;
+
+        public bool CanExecute(object? parameter) => true;
+
+        public void Execute(object? parameter)
+        {
+            if (parameter is T valorValido)
+            {
+                _execute(valorValido);
+            }
+        }
+
+        public event EventHandler? CanExecuteChanged { add { } remove { } }
     }
 }
