@@ -25,8 +25,8 @@ namespace Teste.View
 
         private void CarregarPedidos()
         {
-            PedidoRepository repo = new PedidoRepository();
-            repo.CarregarDoArquivo();
+            // 🚨 REMOVIDO: repo.CarregarDoArquivo() saiu daqui.
+            // Os pedidos já foram carregados uma única vez na inicialização global do App.xaml.cs
 
             ListaPedidosPendentes.Clear();
             ListaPedidosACaminho.Clear();
@@ -61,29 +61,24 @@ namespace Teste.View
         {
             GridPedidos.ItemsSource = ListaPedidosPendentes;
             AlternarEstiloAbas(AbaPendentesTexto, AbaCaminhoTexto, AbaHistoricoTexto);
-
-            // Oculta o filtro de data nas outras abas
             PainelFiltroData.Visibility = Visibility.Collapsed;
         }
+
         private void AbaCaminho_Click(object sender, MouseButtonEventArgs e)
         {
             GridPedidos.ItemsSource = ListaPedidosACaminho;
             AlternarEstiloAbas(AbaCaminhoTexto, AbaPendentesTexto, AbaHistoricoTexto);
-
-            // 🛠️ Torna o painel de filtro visível exclusivamente na aba A Caminho
             PainelFiltroData.Visibility = Visibility.Visible;
-
-            // Reseta o calendário para vir limpo ao trocar de aba
             FiltroCalendario.SelectedDate = null;
         }
+
         private void AbaHistorico_Click(object sender, MouseButtonEventArgs e)
         {
             GridPedidos.ItemsSource = ListaPedidosEntregues;
             AlternarEstiloAbas(AbaHistoricoTexto, AbaPendentesTexto, AbaCaminhoTexto);
-
-            // Oculta o filtro de data nas outras abas
             PainelFiltroData.Visibility = Visibility.Collapsed;
         }
+
         private void AlternarEstiloAbas(TextBlock ativa, TextBlock inativa1, TextBlock inativa2)
         {
             ativa.FontWeight = FontWeights.Bold;
@@ -95,29 +90,27 @@ namespace Teste.View
             inativa2.FontWeight = FontWeights.Normal;
             inativa2.Foreground = new SolidColorBrush((Color)ColorConverter.ConvertFromString("#94A3B8"));
         }
-        // 🛠️ FILTRO EM TEMPO REAL: Disparado automaticamente ao selecionar uma data
+
         private void FiltroCalendario_SelectedDateChanged(object sender, SelectionChangedEventArgs e)
         {
             if (FiltroCalendario.SelectedDate.HasValue)
             {
                 DateTime dataFiltrada = FiltroCalendario.SelectedDate.Value.Date;
 
-                // Filtra a lista da memória buscando apenas correspondências exatas de dia/mês/ano
                 var pedidosFiltrados = ListaPedidosACaminho
                     .Where(p => p.DataEntrega.HasValue && p.DataEntrega.Value.Date == dataFiltrada)
                     .ToList();
 
-                // Atualiza a tabela na hora com os registros filtrados
                 GridPedidos.ItemsSource = pedidosFiltrados;
             }
         }
 
-        // 🛠️ LIMPAR FILTRO: Volta a exibir a lista completa de "A Caminho"
         private void LimparFiltro_Click(object sender, RoutedEventArgs e)
         {
             FiltroCalendario.SelectedDate = null;
             GridPedidos.ItemsSource = ListaPedidosACaminho;
         }
+
         // --- 📅 AÇÃO: ENVIAR PARA ROTA E VALIDAR LIMITE DE 8 ---
         private void AgendarRota_Click(object sender, RoutedEventArgs e)
         {
@@ -172,7 +165,7 @@ namespace Teste.View
 
                     DateTime dataEscolhida = seletorData.SelectedDate.Value;
 
-                    //  selection of baskets in the queue
+                    // Validação baseada na lista unificada em memória
                     int totalNoDia = MemoriaPedidos.Lista.Count(p => p.DataEntrega.HasValue && p.DataEntrega.Value.Date == dataEscolhida.Date);
 
                     if (totalNoDia >= 8)
@@ -182,17 +175,18 @@ namespace Teste.View
                         return;
                     }
 
+                    // 🛠️ ALTERADO: Modifica o objeto na memória global diretamente
                     pedidoClicado.DataEntrega = dataEscolhida;
                     pedidoClicado.Status = "A Caminho";
 
-                    PedidoRepository repo = new PedidoRepository();
-                    repo.AtualizarArquivoTxt();
+                    // 🔴 REMOVIDO: PedidoRepository.AtualizarArquivoTxt() não é mais chamado aqui.
 
+                    // Atualiza as listas locais da interface
                     ListaPedidosPendentes.Remove(pedidoClicado);
                     ListaPedidosACaminho.Add(pedidoClicado);
 
                     janelaData.Close();
-                    MessageBox.Show($"Pedido enviado para a rota do dia {dataEscolhida:dd/MM/yyyy}!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show($"Pedido enviado para a rota do dia {dataEscolhida:dd/MM/yyyy}! Alteração salva em memória.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 };
 
                 janelaData.ShowDialog();
@@ -209,15 +203,16 @@ namespace Teste.View
 
                 if (resp == MessageBoxResult.Yes)
                 {
+                    // 🛠️ ALTERADO: Modifica na memória global
                     pedidoClicado.Status = "Entregue";
 
-                    PedidoRepository repo = new PedidoRepository();
-                    repo.AtualizarArquivoTxt();
+                    // 🔴 REMOVIDO: PedidoRepository.AtualizarArquivoTxt() não é mais chamado aqui.
 
+                    // Atualiza as listas locais da interface
                     ListaPedidosACaminho.Remove(pedidoClicado);
                     ListaPedidosEntregues.Add(pedidoClicado);
 
-                    MessageBox.Show("Pedido concluído e arquivado no histórico!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    MessageBox.Show("Pedido concluído na memória! Ele será arquivado permanentemente ao fechar o sistema.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
                 }
             }
         }

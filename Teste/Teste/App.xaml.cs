@@ -17,16 +17,21 @@ namespace Teste
             UserRepository repoUsers = new UserRepository();
             repoUsers.CarregarDoArquivo();
 
-            // 2. Carrega produtos (⚠️ TEM QUE SER ANTES DAS CESTAS)
+            // 2. Carrega produtos
             ProdutoRepository repoProdutos = new ProdutoRepository();
             repoProdutos.CarregarDoArquivo();
 
-            // 3. 🔥 Carrega Cestas
+            // 3. Carrega Cestas
             CestaRepository repoCestas = new CestaRepository();
             repoCestas.CarregarDoArquivo();
-            //4. 🔥 Carrega Carrinhos
+
+            // 4. Carrega Carrinhos
             CarrinhoRepository repoCarrinho = new CarrinhoRepository();
             repoCarrinho.CarregarDoArquivo();
+
+            // 🚀 O QUE FALTAVA: Carrega os pedidos existentes do TXT para a memória ao iniciar
+            PedidoRepository repoPedidos = new PedidoRepository();
+            repoPedidos.CarregarDoArquivo();
         }
         protected override void OnExit(ExitEventArgs e)
         {
@@ -36,7 +41,8 @@ namespace Teste
                 // Ele vai usar o formato idêntico ao que ele mesmo lê.
                 UserRepository repoUsers = new UserRepository();
                 repoUsers.SalvarArquivo();
-
+                PedidoRepository repoPedido = new PedidoRepository();
+                repoPedido.AtualizarArquivoTxt();
                 ProdutoRepository repoProdutos = new ProdutoRepository();
                 repoProdutos.AtualizarArquivoTxt();
 

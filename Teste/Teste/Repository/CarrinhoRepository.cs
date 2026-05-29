@@ -39,8 +39,10 @@ namespace Teste.Repository
 
                 foreach (var item in MemoriaCarrinho.Itens)
                 {
-                    // Salvamos o ID da cesta, a quantidade e as observações
-                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{item.Observacoes}";
+                    // 🛠️ SEGURANÇA: Se a obs estiver vazia, salva como "NENHUMA" para não quebrar o Split('|')
+                    string obsSalvar = string.IsNullOrWhiteSpace(item.Observacoes) ? "NENHUMA" : item.Observacoes.Trim();
+
+                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{obsSalvar}";
                     linhasParaSalvar.Add(linha);
                 }
 
@@ -55,7 +57,6 @@ namespace Teste.Repository
         // 🔥 CARREGA DO TXT DO USUÁRIO PARA A MEMÓRIA
         public void CarregarDoArquivo()
         {
-            // Sempre limpa o carrinho atual antes de carregar o de outro usuário
             MemoriaCarrinho.Itens.Clear();
             string caminho = ObterCaminhoArquivo();
 
@@ -69,18 +70,15 @@ namespace Teste.Repository
 
                 var partes = linha.Split('|');
 
-                // Prevenção de erro caso a linha esteja corrompida
                 if (partes.Length < 3) continue;
 
-                // Limpa as tags para pegar só os valores
                 string idLimpo = partes[0].Replace("CestaID:", "").Trim();
                 string qtdLimpa = partes[1].Replace("Qtd:", "").Trim();
                 string obsLimpa = partes[2].Replace("Obs:", "").Trim();
 
                 if (!int.TryParse(idLimpo, out int idCesta)) continue;
-                if (!int.TryParse(qtdLimpa, out int quantidade)) continue; // Adicionado TryParse por segurança
+                if (!int.TryParse(qtdLimpa, out int quantidade)) continue;
 
-                // Vai na memória de cestas e acha a cesta original pelo ID
                 Cesta cestaEncontrada = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == idCesta);
 
                 if (cestaEncontrada != null)
@@ -89,7 +87,8 @@ namespace Teste.Repository
                     {
                         CestaSelecionada = cestaEncontrada,
                         Quantidade = quantidade,
-                        Observacoes = obsLimpa
+                        // 🛠️ RECUPERAÇÃO: Se for "NENHUMA", volta a ser string vazia na memória
+                        Observacoes = obsLimpa == "NENHUMA" ? "" : obsLimpa
                     };
 
                     MemoriaCarrinho.Itens.Add(itemSalvo);

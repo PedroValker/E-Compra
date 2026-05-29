@@ -1,6 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
+using System.Collections.Generic;
 using System.Linq;
 using Teste.Model;
 
@@ -92,17 +92,16 @@ namespace Teste.Repository
             return string.Join(",", itensFormatados);
         }
 
-        // 🛠️ ATUALIZAÇÃO: Incluído o campo |DataEntrega no padrão string de salvamento
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
-
-            // Converte a data de entrega para string (formato ISO seguro para ler depois) se ela existir
             string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
 
             return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr}";
         }
 
+        // 🛠️ MODIFICADO: Agora este método manipula APENAS a lista em memória.
+        // O arquivo físico não é tocado aqui.
         public void AdicionarNovoPedidoNoTxt(Pedido p)
         {
             try
@@ -112,23 +111,17 @@ namespace Teste.Repository
                     p.IdUsuario = Sessao.UsuarioLogado.Id;
                 }
 
-                string caminho = ObterCaminhoArquivo();
-                Directory.CreateDirectory(Path.GetDirectoryName(caminho));
-
-                int proximoId = MemoriaPedidos.Lista.Count + 1;
-
-                string stringDosItens = GerarStringDosItens(p);
-                string linha = MontarLinhaTexto(p, stringDosItens, proximoId);
-
-                File.AppendAllText(caminho, linha + Environment.NewLine);
+                // Apenas insere na lista global de memória
                 MemoriaPedidos.Lista.Add(p);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao adicionar novo pedido: " + ex.Message);
+                Console.WriteLine("Erro ao adicionar novo pedido na memória: " + ex.Message);
             }
         }
 
+        // 🌟 GARANTIDO: Este método reescreve o arquivo inteiro com tudo o que está na memória 
+        // (registros que já vieram do arquivo + novos pedidos adicionados nesta execução).
         public void AtualizarArquivoTxt()
         {
             try
@@ -147,15 +140,15 @@ namespace Teste.Repository
                     contadorId++;
                 }
 
+                // File.WriteAllLines substitui o arquivo antigo completamente pela lista atualizada da memória
                 File.WriteAllLines(caminho, linesParaSalvar);
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao salvar pedidos: " + ex.Message);
+                Console.WriteLine("Erro ao salvar arquivo de pedidos: " + ex.Message);
             }
         }
 
-        // 🛠️ ATUALIZAÇÃO: Interpretando a nova coluna |DataEntrega ao subir os dados na inicialização
         public void CarregarDoArquivo()
         {
             try
@@ -183,11 +176,9 @@ namespace Teste.Repository
 
                     var partes = linhaProcessada.Split('|');
 
-                    // Como adicionamos o campo DataEntrega, a linha processada agora deve conter 11 partes
                     if (partes.Length < 10) continue;
 
                     string dataPedido = partes[0].Replace("Data:", "").Trim();
-
                     string idUsuarioStr = partes[1].Replace("IdUsuario:", "").Trim();
                     int.TryParse(idUsuarioStr, out int idUsuarioConvertido);
 
@@ -200,7 +191,6 @@ namespace Teste.Repository
                     string obs = partes[8].Replace("Obs:", "").Trim();
                     string itensStr = partes[9].Replace("Itens:", "").Trim();
 
-                    // Mapeia de forma segura a nova coluna (Evita quebrar se houver registros antigos salvos sem essa coluna)
                     DateTime? dataEntregaConvertida = null;
                     if (partes.Length >= 11)
                     {
@@ -225,7 +215,7 @@ namespace Teste.Repository
                         Status = status,
                         Total = totalConvertido,
                         Observacoes = obs,
-                        DataEntrega = dataEntregaConvertida, // 📅 Aqui a propriedade recebe o valor recuperado!
+                        DataEntrega = dataEntregaConvertida,
                         Itens = new List<ItemPedido>()
                     };
 

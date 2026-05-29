@@ -49,8 +49,9 @@ namespace Teste.ViewModel
 
         private void CarregarPedidosDoCliente()
         {
-            _repository.CarregarDoArquivo();
+            // APAGADO: _repository.CarregarDoArquivo(); (Isso agora é feito uma vez no App.xaml.cs)
 
+            // Puxa direto da memória atualizada em tempo de execução
             var pedidosFiltrados = MemoriaPedidos.Lista
                 .Where(p => p.IdUsuario == _idUsuarioLogado)
                 .ToList();
@@ -58,13 +59,12 @@ namespace Teste.ViewModel
             Pedidos.Clear();
             ListaPedidosEntregues.Clear();
             ListaPedidosPendentes.Clear();
-            ListaPedidosACaminho.Clear(); // Limpa a nova lista
+            ListaPedidosACaminho.Clear();
 
             foreach (var pedido in pedidosFiltrados)
             {
                 Pedidos.Add(pedido);
 
-                // 🛠️ CORREÇÃO: Nova estrutura de árvore para mapear os 3 status perfeitamente na visão do cliente
                 if (pedido.Status != null && pedido.Status.Trim().Equals("Entregue", StringComparison.OrdinalIgnoreCase))
                 {
                     ListaPedidosEntregues.Add(pedido);

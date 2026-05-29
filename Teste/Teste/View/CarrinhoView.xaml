@@ -74,12 +74,20 @@
                                         </Border>
 
                                         <StackPanel Grid.Column="1" VerticalAlignment="Center" Margin="0,0,16,0">
-                                            <TextBlock Text="{Binding CestaSelecionada.Nome}" FontWeight="Bold" FontSize="18" Foreground="#1E293B"/>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Quantidade, StringFormat='{}{0}x '}" FontWeight="Bold" FontSize="18" Foreground="#FFD700"/>
+                                                <TextBlock Text="{Binding CestaSelecionada.Nome}" FontWeight="Bold" FontSize="18" Foreground="#1E293B"/>
+                                            </StackPanel>
+
                                             <TextBlock Foreground="#475569" FontSize="13" TextWrapping="Wrap" Margin="0,6,0,0">
-                                                <Run Text="Contém: " FontWeight="SemiBold"/>
-                                                <Run Text="{Binding CestaSelecionada.ResumoItens, Mode=OneWay}"/>
+                                                <Run Text="Produtos inclusos: " FontWeight="SemiBold"/>
+                                                <Run Text="{Binding ProdutosDetalhado, Mode=OneWay}"/>
                                             </TextBlock>
-                                            <TextBlock Text="{Binding Observacoes}" Foreground="#94A3B8" FontStyle="Italic" Margin="0,4,0,0" FontSize="13" TextWrapping="Wrap"/>
+
+                                            <StackPanel Orientation="Horizontal" Margin="0,6,0,0">
+                                                <TextBlock Text="Obs: " FontWeight="Bold" Foreground="#B91C1C" FontSize="13"/>
+                                                <TextBlock Text="{Binding Observacoes}" Foreground="#B91C1C" FontStyle="Italic" FontSize="13" TextWrapping="Wrap"/>
+                                            </StackPanel>
                                         </StackPanel>
 
                                         <Grid Grid.Column="2" VerticalAlignment="Stretch">
