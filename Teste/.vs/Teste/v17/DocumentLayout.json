@@ -236,7 +236,7 @@
               "RelativeDocumentMoniker": "Teste\\View\\DetalhesPedidoCliente.xaml.cs",
               "ToolTip": "C:\\Users\\aluno\\Documents\\Acelera\\Teste\\Teste\\View\\DetalhesPedidoCliente.xaml.cs",
               "RelativeToolTip": "Teste\\View\\DetalhesPedidoCliente.xaml.cs",
-              "ViewState": "AgIAAMkBAAAAAAAAAAAQwNMBAAALAAAAAAAAAA==",
+              "ViewState": "AgIAABEBAAAAAAAAAAAAABEBAAABAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
               "WhenOpened": "2026-05-13T14:11:54.342Z",
               "EditorCaption": ""
@@ -251,8 +251,7 @@
               "RelativeToolTip": "Teste\\View\\EditarPerfilCliente.xaml.cs",
               "ViewState": "AgIAABsAAAAAAAAAAAAswBsAAAAkAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",
-              "WhenOpened": "2026-05-13T14:00:17.467Z",
-              "EditorCaption": ""
+              "WhenOpened": "2026-05-13T14:00:17.467Z"
             },
             {
               "$type": "Document",
