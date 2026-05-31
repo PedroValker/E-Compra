@@ -18,21 +18,31 @@ namespace Teste.Model
 
         public decimal Subtotal => (CestaSelecionada?.Preco ?? 0) * Quantidade;
 
-        // 🚀 NOVO: Retorna a lista de produtos da cesta formatada para exibir na interface
+        // 🚀 Retorna a lista de produtos da cesta formatada para exibir na interface de forma agrupada
         public string ProdutosDetalhado
         {
             get
             {
                 if (CestaSelecionada == null || CestaSelecionada.Itens == null || !CestaSelecionada.Itens.Any())
-                    return "Nenhum produto nesta cesta.";
+                    return "Nenhum produto incluso";
 
-                // Junta os produtos em formato de texto: "2x Arroz, 1x Feijão"
-                return string.Join(", ", CestaSelecionada.Itens.Select(p => $"{p.QuantidadeSelecionada}x {p.Nome}"));
+                // 🔥 AGRUPAMENTO INTELIGENTE: Junta os produtos com nomes iguais e soma suas quantidades
+                var itensAgrupados = CestaSelecionada.Itens
+                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                    .GroupBy(p => p.Nome.Trim())
+                    .Select(g =>
+                    {
+                        int qtdTotal = g.Sum(p => p.QuantidadeSelecionada > 0 ? p.QuantidadeSelecionada : 1);
+                        return $"{qtdTotal}x {g.Key}";
+                    });
+
+                return string.Join(", ", itensAgrupados);
             }
         }
     }
 
-    // Guarda os itens enquanto o cliente navega no sistema
+    // 🔥 CORREÇÃO: Classe movida para fora da 'ItemCarrinho'. 
+    // Agora ela está no escopo correto do namespace e ficará visível globalmente para todo o projeto!
     public static class MemoriaCarrinho
     {
         public static List<ItemCarrinho> Itens { get; set; } = new List<ItemCarrinho>();

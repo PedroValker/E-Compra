@@ -68,7 +68,14 @@
                             <Image x:Name="PreviewImagem" Stretch="Uniform" Margin="10"/>
                         </Border>
 
-                        <TextBlock Text="Preço Final da Cesta (R$)" Foreground="#4B5563" FontWeight="Bold" FontSize="13"/>
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="0" Text="Preço Final da Cesta (R$)" Foreground="#4B5563" FontWeight="Bold" FontSize="13"/>
+                            <TextBlock x:Name="TxtPrecoSugerido" Grid.Column="1" Text="Soma dos Itens: R$ 0,00" Foreground="#6B7280" FontSize="12" FontStyle="Italic" VerticalAlignment="Bottom"/>
+                        </Grid>
                         <Border Style="{StaticResource InputCard}">
                             <TextBox x:Name="PrecoCestaBox" BorderThickness="0" Background="Transparent" FontSize="16" FontWeight="Bold" Foreground="#10B981" VerticalAlignment="Center"/>
                         </Border>

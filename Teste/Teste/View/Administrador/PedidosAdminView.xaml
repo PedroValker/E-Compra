@@ -170,7 +170,31 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Cliente" Binding="{Binding Recebedor}" Width="140"/>
+                    <DataGridTextColumn Header="Cliente" Binding="{Binding Recebedor}" Width="130"/>
+
+                    <DataGridTemplateColumn Header="Composição" Width="120">
+                        <DataGridTemplateColumn.CellTemplate>
+                            <DataTemplate>
+                                <Border x:Name="BadgeBorder" CornerRadius="12" Padding="10,4" HorizontalAlignment="Left" VerticalAlignment="Center">
+                                    <TextBlock x:Name="BadgeText" Text="{Binding TipoComposicao}" FontSize="11" FontWeight="Bold"/>
+                                </Border>
+                                <DataTemplate.Triggers>
+                                    <DataTrigger Binding="{Binding TipoComposicao}" Value="Completa">
+                                        <Setter TargetName="BadgeBorder" Property="Background" Value="#E0F2FE"/>
+                                        <Setter TargetName="BadgeText" Property="Foreground" Value="#0369A1"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TipoComposicao}" Value="Modificada">
+                                        <Setter TargetName="BadgeBorder" Property="Background" Value="#FFEDD5"/>
+                                        <Setter TargetName="BadgeText" Property="Foreground" Value="#C2410C"/>
+                                    </DataTrigger>
+                                    <DataTrigger Binding="{Binding TipoComposicao}" Value="Padrão">
+                                        <Setter TargetName="BadgeBorder" Property="Background" Value="#F1F5F9"/>
+                                        <Setter TargetName="BadgeText" Property="Foreground" Value="#475569"/>
+                                    </DataTrigger>
+                                </DataTemplate.Triggers>
+                            </DataTemplate>
+                        </DataGridTemplateColumn.CellTemplate>
+                    </DataGridTemplateColumn>
 
                     <DataGridTemplateColumn Header="Detalhes" Width="*">
                         <DataGridTemplateColumn.CellTemplate>
@@ -191,7 +215,7 @@
                         </DataGridTextColumn.ElementStyle>
                     </DataGridTextColumn>
 
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="100"/>
 
                     <DataGridTemplateColumn Header="Ações" Width="260">
                         <DataGridTemplateColumn.CellTemplate>

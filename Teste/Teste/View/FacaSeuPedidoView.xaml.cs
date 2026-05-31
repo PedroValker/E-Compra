@@ -10,9 +10,8 @@ namespace Teste.View
 {
     public partial class FacaSeuPedidoView : UserControl
     {
-        // 🔥 EVENTO CORRETO (TEM QUE FICAR DENTRO DA CLASSE)
+        // Retorna ao evento simples passando o objeto Cesta diretamente
         public event Action<Cesta> CestaSelecionada;
-
         public ObservableCollection<Cesta> ListaCestas { get; set; }
 
         public FacaSeuPedidoView()
@@ -23,15 +22,13 @@ namespace Teste.View
             this.DataContext = this;
 
             CarregarCestasDoBanco();
-
         }
 
-        // 🔥 BOTÃO COMPRAR
         private void ComprarCesta_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button botao && botao.DataContext is Cesta cesta)
             {
-                // dispara evento para a tela principal
+                // Dispara o evento apenas enviando a cesta que foi clicada
                 CestaSelecionada?.Invoke(cesta);
             }
         }

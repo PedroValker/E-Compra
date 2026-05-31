@@ -1,3 +1,5 @@
 ID:1 |Nome:Ricardo Premium |Preco:340,00 |Imagem:C:\Users\pedro\OneDrive\Documentos\Acelera\Teste\Teste\Dados\imagem\CestaC.png |Produtos:2x Creme Dental,6x Goiabada,8x Óleo de Soja
 ID:2 |Nome:Pedro Premiun |Preco:1222,00 |Imagem:Dados\imagem\22f47613-6508-4caf-809b-cf47241b678a.jpg |Produtos:1x Pão,1x Farinha de Trigo,1x Fubá Mimoso,1x Sabonete em Barra,12x Leite em Pó Integral
 ID:3 |Nome:teste |Preco:100,00 |Imagem:Dados\imagem\654ec910-21e3-420b-ae03-ed10d36cc6f5.jpg |Produtos:10x Pão,2x Arroz Agulhinha
+ID:4 |Nome:Cesta Café da Manhã Corporativa |Preco:76,50 |Imagem:null |Produtos:2x Café Torrado e Moído,4x Biscoito Recheado Chocolate,3x Achocolatado em Pó,2x Mistura para Bolo,5x Pão
+ID:5 |Nome:Kit Limpeza e Higiene Mensal |Preco:55,50 |Imagem:null |Produtos:5x Sabonete em Barra,4x Creme Dental,2x Papel Higiênico 4 Rolos,5x Detergente Líquido

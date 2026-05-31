@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel; // Necessário para a lista automática
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Windows;
@@ -17,48 +17,53 @@ namespace Teste.View
         private Cesta _cestaEmEdicao = null;
         private string caminhoImagemSelecionada = "";
 
-        // 🔥 Mudamos para ObservableCollection para a tela atualizar sozinha e 
-        // usamos uma classe que suporte Quantidade (ItemCestaDisplay)
         public ObservableCollection<ItemCestaDisplay> ItensDaCestaAtual { get; set; } = new ObservableCollection<ItemCestaDisplay>();
 
         public CadastroCesta()
         {
             InitializeComponent();
 
-            // Vincula a lista da tela à nossa coleção inteligente
             ListaItensAtuais.ItemsSource = ItensDaCestaAtual;
-
-            // Carrega os produtos disponíveis no estoque
             ProdutosComboBox.ItemsSource = MemoriaProdutos.Lista;
 
             AtualizarListaCestas();
         }
 
-        // 🔥 LÓGICA PROFISSIONAL: Adicionar e Agrupar
+        // 🔥 MÉTODO ADICIONADO: Calcula em tempo real o preço com base na composição da lista
+        private void RecalcularPrecoSugerido()
+        {
+            decimal totalSoma = ItensDaCestaAtual.Sum(item => item.Preco * item.Quantidade);
+
+            // Atualiza a label explicativa com a soma real de mercado
+            TxtPrecoSugerido.Text = $"Soma dos Itens: R$ {totalSoma:N2}";
+
+            // Facilita a criação: autofill no TextBox de preço caso esteja criando do zero
+            if (_cestaEmEdicao == null || string.IsNullOrWhiteSpace(PrecoCestaBox.Text))
+            {
+                PrecoCestaBox.Text = totalSoma.ToString("F2");
+            }
+        }
+
         private void AdicionarItem_Click(object sender, RoutedEventArgs e)
         {
             Produto produtoSelecionado = ProdutosComboBox.SelectedItem as Produto;
 
             if (produtoSelecionado != null)
             {
-                // 1. Tenta ler a quantidade digitada
                 if (!int.TryParse(QuantidadeBox.Text, out int qtd) || qtd <= 0)
                 {
-                    qtd = 1; // Padrão caso o usuário apague ou digite errado
+                    qtd = 1;
                 }
 
-                // 2. Verifica se o produto JÁ EXISTE na cesta que estamos montando
                 var itemExistente = ItensDaCestaAtual.FirstOrDefault(i => i.Nome == produtoSelecionado.Nome);
 
                 if (itemExistente != null)
                 {
-                    // Se já existe, apenas SOMA a quantidade na mesma linha
                     itemExistente.Quantidade += qtd;
-                    ListaItensAtuais.Items.Refresh(); // Força o WPF a mostrar o novo número
+                    ListaItensAtuais.Items.Refresh();
                 }
                 else
                 {
-                    // Se é novo, adiciona uma nova linha
                     ItensDaCestaAtual.Add(new ItemCestaDisplay
                     {
                         Nome = produtoSelecionado.Nome,
@@ -68,8 +73,8 @@ namespace Teste.View
                     });
                 }
 
-                // Reseta o campo de quantidade para 1 para facilitar a próxima inserção
                 QuantidadeBox.Text = "1";
+                RecalcularPrecoSugerido(); // 🔥 Dispara recalculação ao inserir
             }
             else
             {
@@ -82,6 +87,7 @@ namespace Teste.View
             if (sender is Button btn && btn.DataContext is ItemCestaDisplay itemClicado)
             {
                 ItensDaCestaAtual.Remove(itemClicado);
+                RecalcularPrecoSugerido(); // 🔥 Dispara recalculação ao remover
             }
         }
 
@@ -123,8 +129,6 @@ namespace Teste.View
             decimal.TryParse(PrecoCestaBox.Text, out decimal preco);
             CestaRepository repo = new CestaRepository();
 
-            // Converter nossos itens de "Display" de volta para a lista de Produtos (repetindo conforme a Qtd)
-            // se o seu repositório esperar uma lista simples de objetos Produto.
             List<Produto> listaFinalProdutos = new List<Produto>();
             foreach (var item in ItensDaCestaAtual)
             {
@@ -173,10 +177,9 @@ namespace Teste.View
             {
                 _cestaEmEdicao = cestaClicada;
                 NomeCestaBox.Text = cestaClicada.Nome;
-                PrecoCestaBox.Text = cestaClicada.Preco.ToString();
+                PrecoCestaBox.Text = cestaClicada.Preco.ToString("F2");
 
                 ItensDaCestaAtual.Clear();
-                // 🔥 Ao editar, agrupamos os produtos que vêm do TXT para a lista da tela
                 var grupos = cestaClicada.Itens.GroupBy(p => p.Nome);
                 foreach (var g in grupos)
                 {
@@ -198,6 +201,8 @@ namespace Teste.View
                         PreviewImagem.Source = new BitmapImage(new Uri(Path.GetFullPath(cestaClicada.ImagemPath)));
                 }
                 catch { PreviewImagem.Source = null; }
+
+                RecalcularPrecoSugerido(); // 🔥 Atualiza o valor dinâmico ao carregar para edição
             }
         }
 
@@ -239,10 +244,10 @@ namespace Teste.View
             ImagemPathBox.Clear();
             PreviewImagem.Source = null;
             QuantidadeBox.Text = "1";
+            TxtPrecoSugerido.Text = "Soma dos Itens: R$ 0,00"; // 🔥 Limpa a contagem informativa
         }
     }
 
-    // 🔥 Classe auxiliar para exibir na lista com coluna de Quantidade
     public class ItemCestaDisplay
     {
         public string Nome { get; set; }

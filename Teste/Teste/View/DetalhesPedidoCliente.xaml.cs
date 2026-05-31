@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
+using System.Windows.Media;
 using Teste.Model;
 using Teste.Repository;
 
@@ -19,24 +20,17 @@ namespace Teste.View
     public partial class DetalhesPedidoCliente : Window
     {
         private Pedido _pedidoAtual;
-        private List<CestaInfoExibicao> _cestasMapeadas;
 
-        // Classe auxiliar interna para organizar a tabela da esquerda de forma limpa
-        public class CestaInfoExibicao
-        {
-            public int Quantidade { get; set; }
-            public string Nome { get; set; }
-            public decimal Subtotal { get; set; }
-            public Cesta ReceitaOriginal { get; set; }
-            public List<ItemPedido> ItensModificados { get; set; }
-        }
+        // 🔥 CORREÇÃO: Transformadas em variáveis globais da classe para o PDF e a UI enxergarem os mesmos dados
+        private Dictionary<string, int> _dicionarioPadrao = new Dictionary<string, int>();
+        private Dictionary<string, int> _dicionarioCliente = new Dictionary<string, int>();
 
         public DetalhesPedidoCliente(Pedido pedido)
         {
             InitializeComponent();
             _pedidoAtual = pedido;
 
-            // 🚀 CORREÇÃO DO ENDEREÇO EM MEMÓRIA
+            // Ajuste automático de endereço em memória
             if (string.IsNullOrWhiteSpace(_pedidoAtual.Endereco) || _pedidoAtual.Endereco.Equals("A combinar", StringComparison.OrdinalIgnoreCase))
             {
                 if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
@@ -48,136 +42,101 @@ namespace Teste.View
 
             this.DataContext = _pedidoAtual;
 
-            // Vincular o evento de clique na tabela da esquerda
-            GridCestas.SelectionChanged += GridCestas_SelectionChanged;
-
-            ProcessarEAgruparCestas();
+            SystematizarEGradeLogica();
         }
 
-        private void ProcessarEAgruparCestas()
+        private void SystematizarEGradeLogica()
         {
-            _cestasMapeadas = new List<CestaInfoExibicao>();
-
-            if (_pedidoAtual.Itens == null || !_pedidoAtual.Itens.Any()) return;
-
-            // 🚀 O SEGREDO DO AGRUPAMENTO:
-            // Vamos identificar o que é Cesta Principal. Se o seu sistema salva os produtos modificados 
-            // logo abaixo da cesta ou se agrupa por nome, vamos separar o que é a Cesta Mãe.
-            var agrupamentoCestas = _pedidoAtual.Itens
-                .Where(i => MemoriaCestas.Lista.Any(c => c.Nome.Trim().ToUpper() == i.Nome.Trim().ToUpper()))
-                .ToList();
-
-            // Se o arquivo antigo não tiver a estrutura separada, tratamos o primeiro item como a cesta principal
-            if (!agrupamentoCestas.Any())
+            // 1. Estiliza a Tag do Cabeçalho com base no Modelo Inteligente
+            if (_pedidoAtual.IsModificada)
             {
-                var primeiro = _pedidoAtual.Itens.First();
-                var cestaFallback = MemoriaCestas.Lista.FirstOrDefault(c => c.Nome.Trim().ToUpper() == primeiro.Nome.Trim().ToUpper())
-                                    ?? MemoriaCestas.Lista.FirstOrDefault();
-
-                if (cestaFallback != null)
-                {
-                    _cestasMapeadas.Add(new CestaInfoExibicao
-                    {
-                        Quantidade = primeiro.Quantidade,
-                        Nome = cestaFallback.Nome,
-                        Subtotal = cestaFallback.Preco * primeiro.Quantidade,
-                        ReceitaOriginal = cestaFallback,
-                        ItensModificados = _pedidoAtual.Itens.ToList()
-                    });
-                }
+                BadgeComposicao.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFEDD5"));
+                TxtBadge.Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#C2410C"));
             }
             else
             {
-                foreach (var itemCesta in agrupamentoCestas)
+                BadgeComposicao.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E0F2FE"));
+                TxtBadge.Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0369A1"));
+            }
+
+            _dicionarioPadrao.Clear();
+            _dicionarioCliente.Clear();
+
+            var itensFinalTabela = new List<ItemPedido>();
+            var itensAdicionados = new List<object>();
+            var itensRemovidos = new List<object>();
+
+            // 2. MAPEA A RECEITA PADRÃO DE FÁBRICA
+            if (_pedidoAtual.ProdutosOriginaisCesta != null)
+            {
+                foreach (var itemOrig in _pedidoAtual.ProdutosOriginaisCesta)
                 {
-                    var cestaOriginal = MemoriaCestas.Lista.First(c => c.Nome.Trim().ToUpper() == itemCesta.Nome.Trim().ToUpper());
+                    if (itemOrig == null || string.IsNullOrEmpty(itemOrig.Nome)) continue;
+                    string chave = itemOrig.Nome.Trim().ToUpper();
 
-                    // Captura os itens modificados pertencentes a esta cesta específica (ou os produtos do próprio pedido)
-                    var produtosDestaCesta = _pedidoAtual.Itens
-                        .Where(i => !MemoriaCestas.Lista.Any(c => c.Nome.Trim().ToUpper() == i.Nome.Trim().ToUpper()))
-                        .ToList();
+                    int qtdDefasagem = itemOrig.QuantidadeSelecionada > 0 ? itemOrig.QuantidadeSelecionada : 1;
 
-                    // Se não houver sub-produtos modificados no pedido, usamos a receita padrão da fábrica
-                    if (!produtosDestaCesta.Any())
-                    {
-                        produtosDestaCesta = cestaOriginal.Itens.Select(p => new ItemPedido
-                        {
-                            Nome = p.Nome,
-                            Quantidade = p.QuantidadeSelecionada > 0 ? p.QuantidadeSelecionada : 1
-                        }).ToList();
-                    }
-
-                    _cestasMapeadas.Add(new CestaInfoExibicao
-                    {
-                        Quantidade = itemCesta.Quantidade,
-                        Nome = itemCesta.Nome,
-                        Subtotal = cestaOriginal.Preco * itemCesta.Quantidade,
-                        ReceitaOriginal = cestaOriginal,
-                        ItensModificados = produtosDestaCesta
-                    }
-                    );
+                    if (_dicionarioPadrao.ContainsKey(chave))
+                        _dicionarioPadrao[chave] += qtdDefasagem;
+                    else
+                        _dicionarioPadrao[chave] = qtdDefasagem;
                 }
             }
 
-            // Atualiza o total se houver divergência (Apenas em memória)
-            decimal totalRecalculado = _cestasMapeadas.Sum(c => c.Subtotal);
-            if (totalRecalculado > 0)
+            // 3. MAPEA A COMPOSIÇÃO REAL RECUPERADA DO PEDIDO DO CLIENTE
+            if (_pedidoAtual.Itens != null)
             {
-                _pedidoAtual.Total = totalRecalculado;
+                foreach (var itemCli in _pedidoAtual.Itens)
+                {
+                    if (itemCli == null || string.IsNullOrEmpty(itemCli.Nome)) continue;
+
+                    if (_pedidoAtual.CestaComprada != null && itemCli.Nome.Trim().ToUpper() == _pedidoAtual.CestaComprada.Nome.Trim().ToUpper())
+                        continue;
+
+                    string chave = itemCli.Nome.Trim().ToUpper();
+
+                    if (_dicionarioCliente.ContainsKey(chave))
+                        _dicionarioCliente[chave] += itemCli.Quantidade;
+                    else
+                        _dicionarioCliente[chave] = itemCli.Quantidade;
+                }
             }
 
-            GridCestas.ItemsSource = _cestasMapeadas;
-
-            // Seleciona automaticamente a primeira cesta da lista para não abrir o lado direito em branco
-            if (_cestasMapeadas.Any())
+            if (!_dicionarioCliente.Any())
             {
-                GridCestas.SelectedIndex = 0;
+                foreach (var kvp in _dicionarioPadrao)
+                {
+                    _dicionarioCliente[kvp.Key] = kvp.Value;
+                }
             }
-        }
 
-        // 🔄 EVENTO DE SELEÇÃO: Roda o Diffing (Comparação) dinamicamente para a cesta que o Admin clicar
-        private void GridCestas_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (GridCestas.SelectedItem is CestaInfoExibicao cestaSelecionada)
+            // 4. CONSTRÓI A LISTA DA ESQUERDA
+            foreach (var kvp in _dicionarioCliente)
             {
-                var dicionarioPadrao = new Dictionary<string, int>();
-                var dicionarioCliente = new Dictionary<string, int>();
-                var itensAdicionados = new List<object>();
-                var itensRemovidos = new List<object>();
+                string nomeFormatado = _pedidoAtual.ProdutosOriginaisCesta?
+                    .FirstOrDefault(p => p != null && p.Nome.Trim().ToUpper() == kvp.Key)?.Nome
+                    ?? _pedidoAtual.Itens.FirstOrDefault(i => i.Nome.Trim().ToUpper() == kvp.Key)?.Nome
+                    ?? kvp.Key;
 
-                // Mapeia a receita original da fábrica
-                if (cestaSelecionada.ReceitaOriginal != null && cestaSelecionada.ReceitaOriginal.Itens != null)
-                {
-                    foreach (var itemOrig in cestaSelecionada.ReceitaOriginal.Itens)
-                    {
-                        if (itemOrig == null || string.IsNullOrEmpty(itemOrig.Nome)) continue;
-                        string chave = itemOrig.Nome.Trim().ToUpper();
-                        dicionarioPadrao[chave] = itemOrig.QuantidadeSelecionada > 0 ? itemOrig.QuantidadeSelecionada : 1;
-                    }
-                }
+                itensFinalTabela.Add(new ItemPedido { Nome = nomeFormatado, Quantidade = kvp.Value });
+            }
 
-                // Mapeia o que o cliente de fato levou nessa execução
-                if (cestaSelecionada.ItensModificados != null)
-                {
-                    foreach (var itemCli in cestaSelecionada.ItensModificados)
-                    {
-                        if (itemCli == null || string.IsNullOrEmpty(itemCli.Nome)) continue;
-                        string chave = itemCli.Nome.Trim().ToUpper();
-                        dicionarioCliente[chave] = itemCli.Quantidade;
-                    }
-                }
-
-                var todosOsProdutos = dicionarioPadrao.Keys.Union(dicionarioCliente.Keys).Distinct();
+            // 5. CALCULA O DIFFING LOGÍSTICO
+            if (_pedidoAtual.IsModificada)
+            {
+                var todosOsProdutos = _dicionarioPadrao.Keys.Union(_dicionarioCliente.Keys).Distinct();
 
                 foreach (var chaveProduto in todosOsProdutos)
                 {
-                    dicionarioPadrao.TryGetValue(chaveProduto, out int qtdPadrao);
-                    dicionarioCliente.TryGetValue(chaveProduto, out int qtdCliente);
+                    _dicionarioPadrao.TryGetValue(chaveProduto, out int qtdPadrao);
+                    _dicionarioCliente.TryGetValue(chaveProduto, out int qtdCliente);
 
                     int delta = qtdCliente - qtdPadrao;
 
-                    string nomeProdutoUI = cestaSelecionada.ReceitaOriginal?.Itens?
-                        .FirstOrDefault(p => p != null && p.Nome.Trim().ToUpper() == chaveProduto)?.Nome ?? chaveProduto;
+                    string nomeProdutoUI = _pedidoAtual.ProdutosOriginaisCesta?
+                        .FirstOrDefault(p => p != null && p.Nome.Trim().ToUpper() == chaveProduto)?.Nome
+                        ?? _pedidoAtual.Itens.FirstOrDefault(i => i.Nome.Trim().ToUpper() == chaveProduto)?.Nome
+                        ?? chaveProduto;
 
                     if (delta > 0)
                     {
@@ -188,10 +147,11 @@ namespace Teste.View
                         itensRemovidos.Add(new { Produto = nomeProdutoUI, Qtd = $"-{Math.Abs(delta)}" });
                     }
                 }
-
-                GridAdicionados.ItemsSource = itensAdicionados;
-                GridRemovidos.ItemsSource = itensRemovidos;
             }
+
+            GridItensFinais.ItemsSource = itensFinalTabela.OrderBy(i => i.Nome).ToList();
+            GridAdicionados.ItemsSource = itensAdicionados;
+            GridRemovidos.ItemsSource = itensRemovidos;
         }
 
         private void Fechar_Click(object sender, RoutedEventArgs e)
@@ -220,55 +180,112 @@ namespace Teste.View
                 using (PdfDocument pdf = new PdfDocument(writer))
                 using (Document document = new Document(pdf))
                 {
-                    Color azulTema = new DeviceRgb(43, 108, 176);
-                    Color cinzaEscuro = new DeviceRgb(45, 55, 72);
-                    Color cinzaClaro = new DeviceRgb(247, 250, 252);
+                    iText.Kernel.Colors.Color azulTema = new DeviceRgb(30, 34, 216);
+                    iText.Kernel.Colors.Color cinzaEscuro = new DeviceRgb(15, 23, 42);
+                    iText.Kernel.Colors.Color cinzaTexto = new DeviceRgb(71, 85, 105);
+                    iText.Kernel.Colors.Color cinzaClaro = new DeviceRgb(241, 245, 249);
+                    iText.Kernel.Colors.Color verdeSucesso = new DeviceRgb(21, 128, 61);
+                    iText.Kernel.Colors.Color vermelhoErro = new DeviceRgb(185, 28, 28);
 
                     PdfFont fonteNormal = PdfFontFactory.CreateFont(fontNormalPath, PdfEncodings.IDENTITY_H);
                     PdfFont fonteNegrito = PdfFontFactory.CreateFont(fontBoldPath, PdfEncodings.IDENTITY_H);
                     PdfFont fonteItalico = PdfFontFactory.CreateFont(fontItalicPath, PdfEncodings.IDENTITY_H);
 
                     document.SetFont(fonteNormal);
+                    document.SetFontColor(cinzaTexto);
 
-                    document.Add(new Paragraph("COMPROVANTE DE PEDIDO").SetFontSize(20).SetFont(fonteNegrito).SetFontColor(azulTema));
-                    document.Add(new Paragraph($"Pedido: {Safe(_pedidoAtual.NomePedido)} | Status: {Safe(_pedidoAtual.Status)}").SetFontSize(11).SetFontColor(cinzaEscuro).SetMarginBottom(20));
+                    document.Add(new Paragraph("COMPROVANTE DE PEDIDO")
+                        .SetFontSize(22)
+                        .SetFont(fonteNegrito)
+                        .SetFontColor(azulTema)
+                        .SetMarginBottom(2));
+
+                    document.Add(new Paragraph($"Pedido: {Safe(_pedidoAtual.NomePedido)} | Status: {Safe(_pedidoAtual.Status)} | Composição: {_pedidoAtual.TipoComposicao}")
+                        .SetFontSize(11)
+                        .SetFontColor(cinzaTexto)
+                        .SetMarginBottom(20));
 
                     Table tabelaInfo = new Table(UnitValue.CreatePercentArray(new float[] { 25, 75 })).UseAllAvailableWidth();
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Cliente").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Recebedor))));
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Endereço").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Endereco))));
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Previsão de Entrega").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro));
-                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(_pedidoAtual.DataEntrega.HasValue ? _pedidoAtual.DataEntrega.Value.ToString("dd/MM/yyyy") : "Não Agendada")));
-                    tabelaInfo.SetMarginBottom(20);
+
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Cliente").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Recebedor))).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Endereço").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Endereco))).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Forma de Pagamento").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.FormaPagamento))).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph("Previsão de Entrega").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+                    tabelaInfo.AddCell(new Cell().Add(new Paragraph(_pedidoAtual.DataEntrega.HasValue ? _pedidoAtual.DataEntrega.Value.ToString("dd/MM/yyyy") : "Não Agendada")).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
+
+                    tabelaInfo.SetMarginBottom(25);
                     document.Add(tabelaInfo);
 
-                    document.Add(new Paragraph("Resumo das Cestas").SetFontSize(13).SetFont(fonteNegrito).SetFontColor(azulTema));
-                    Table tabelaItens = new Table(UnitValue.CreatePercentArray(new float[] { 15, 60, 25 })).UseAllAvailableWidth();
-                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Qtd").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema));
-                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Cesta").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema));
-                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Subtotal").SetFont(fonteNegrito).SetFontColor(ColorConstants.WHITE)).SetBackgroundColor(azulTema));
+                    document.Add(new Paragraph("Composição Física Final para Montagem")
+                        .SetFontSize(14)
+                        .SetFont(fonteNegrito)
+                        .SetFontColor(cinzaEscuro)
+                        .SetMarginBottom(10));
 
-                    foreach (var cesta in _cestasMapeadas)
+                    Table tabelaItens = new Table(UnitValue.CreatePercentArray(new float[] { 15, 85 })).UseAllAvailableWidth();
+                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Qtd Final").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(azulTema));
+                    tabelaItens.AddHeaderCell(new Cell().Add(new Paragraph("Produto a Inserir na Caixa").SetFont(fonteNegrito).SetFontColor(iText.Kernel.Colors.ColorConstants.WHITE)).SetBackgroundColor(azulTema));
+
+                    var itensFinaisSeguros = GridItensFinais.ItemsSource as List<ItemPedido>;
+                    if (itensFinaisSeguros != null)
                     {
-                        tabelaItens.AddCell(new Cell().Add(new Paragraph(cesta.Quantidade.ToString())).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
-                        tabelaItens.AddCell(new Cell().Add(new Paragraph(cesta.Nome)));
-                        tabelaItens.AddCell(new Cell().Add(new Paragraph($"R$ {cesta.Subtotal:N2}")).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
+                        foreach (var item in itensFinaisSeguros)
+                        {
+                            tabelaItens.AddCell(new Cell().Add(new Paragraph(item.Quantidade.ToString()).SetFont(fonteNegrito)).SetTextAlignment(iText.Layout.Properties.TextAlignment.CENTER));
+                            tabelaItens.AddCell(new Cell().Add(new Paragraph(item.Nome)));
+                        }
                     }
 
-                    tabelaItens.AddCell(new Cell(1, 2).Add(new Paragraph("Valor Total:").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
-                    tabelaItens.AddCell(new Cell().Add(new Paragraph($"R$ {_pedidoAtual.Total:N2}").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT));
                     document.Add(tabelaItens);
+
+                    // 🔥 CORRIGIDO: Agora o PDF lê as variáveis globais _dicionarioPadrao e _dicionarioCliente com segurança
+                    if (_pedidoAtual.IsModificada)
+                    {
+                        document.Add(new Paragraph("\nHistórico de Customizações (Opcionais):")
+                            .SetFont(fonteNegrito).SetFontSize(11).SetFontColor(cinzaEscuro));
+
+                        var todosOsProdutos = _dicionarioPadrao.Keys.Union(_dicionarioCliente.Keys).Distinct();
+                        Paragraph pMods = new Paragraph().SetFontSize(10);
+
+                        foreach (var ch in todosOsProdutos)
+                        {
+                            _dicionarioPadrao.TryGetValue(ch, out int pD);
+                            _dicionarioCliente.TryGetValue(ch, out int cD);
+                            int diff = cD - pD;
+
+                            string nUI = _pedidoAtual.ProdutosOriginaisCesta?.FirstOrDefault(x => x.Nome.Trim().ToUpper() == ch)?.Nome ?? ch;
+
+                            if (diff > 0) pMods.Add(new Text($"  [+] {nUI} (+{diff})\n").SetFontColor(verdeSucesso).SetFont(fonteItalico));
+                            if (diff < 0) pMods.Add(new Text($"  [-] {nUI} (-{Math.Abs(diff)})\n").SetFontColor(vermelhoErro).SetFont(fonteItalico));
+                        }
+                        document.Add(pMods);
+                    }
+
+                    Paragraph pTotal = new Paragraph($"\nVALOR TOTAL DO PEDIDO CONSOLIDADO: R$ {_pedidoAtual.Total:N2}")
+                        .SetFont(fonteNegrito).SetFontSize(12).SetFontColor(azulTema).SetTextAlignment(iText.Layout.Properties.TextAlignment.RIGHT);
+                    document.Add(pTotal);
+
+                    if (!string.IsNullOrWhiteSpace(_pedidoAtual.Observacoes))
+                    {
+                        document.Add(new Paragraph("\nObservações do Pedido:")
+                            .SetFont(fonteNegrito).SetFontSize(11).SetMarginTop(10).SetFontColor(cinzaEscuro));
+                        document.Add(new Paragraph(Safe(_pedidoAtual.Observacoes)).SetFont(fonteItalico).SetFontSize(10));
+                    }
                 }
 
-                MessageBox.Show("PDF gerado com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                MessageBox.Show("PDF gerado com sucesso com a lista de separação e conferência!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
             catch (Exception ex)
             {
                 MessageBox.Show(ex.Message, "Erro ao gerar PDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
-
         private string Safe(object value) => value?.ToString() ?? "";
     }
 }

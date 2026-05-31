@@ -1,5 +1,6 @@
 ﻿using System;
 using System.IO;
+using System.Text;
 using System.Collections.Generic;
 using System.Linq;
 using Teste.Model;
@@ -16,63 +17,22 @@ namespace Teste.Repository
 
         private string GerarStringDosItens(Pedido p)
         {
+            var itensFormatados = new List<string>();
+
+            if (p.CestaComprada != null && !string.IsNullOrEmpty(p.CestaComprada.Nome))
+            {
+                itensFormatados.Add($"CESTA={p.CestaComprada.Nome.Trim()}");
+            }
+
             var dicionarioAgrupado = new Dictionary<string, int>();
 
-            if (p.Itens != null && p.Itens.Count > 1)
+            if (p.Itens != null && p.Itens.Any())
             {
                 foreach (var item in p.Itens)
                 {
                     if (string.IsNullOrEmpty(item.Nome)) continue;
-                    string nome = item.Nome.Trim();
-                    int qtd = item.Quantidade > 0 ? item.Quantidade : 1;
+                    if (p.CestaComprada != null && item.Nome.Trim().ToUpper() == p.CestaComprada.Nome.Trim().ToUpper()) continue;
 
-                    if (dicionarioAgrupado.ContainsKey(nome))
-                        dicionarioAgrupado[nome] += qtd;
-                    else
-                        dicionarioAgrupado[nome] = qtd;
-                }
-            }
-            else if (p.CestaComprada != null)
-            {
-                var itemNoCarrinho = MemoriaCarrinho.Itens.FirstOrDefault(c =>
-                    c.CestaSelecionada != null &&
-                    c.CestaSelecionada.Nome.Trim().ToUpper() == p.CestaComprada.Nome.Trim().ToUpper());
-
-                if (itemNoCarrinho != null && itemNoCarrinho.CestaSelecionada.Itens != null && itemNoCarrinho.CestaSelecionada.Itens.Any())
-                {
-                    foreach (var prod in itemNoCarrinho.CestaSelecionada.Itens)
-                    {
-                        if (string.IsNullOrEmpty(prod.Nome)) continue;
-                        string nome = prod.Nome.Trim();
-                        int qtdReal = prod.QuantidadeSelecionada > 0 ? prod.QuantidadeSelecionada : 1;
-
-                        if (dicionarioAgrupado.ContainsKey(nome))
-                            dicionarioAgrupado[nome] += qtdReal;
-                        else
-                            dicionarioAgrupado[nome] = qtdReal;
-                    }
-                }
-                else if (p.CestaComprada.Itens != null && p.CestaComprada.Itens.Any())
-                {
-                    foreach (var prod in p.CestaComprada.Itens)
-                    {
-                        if (string.IsNullOrEmpty(prod.Nome)) continue;
-                        string nome = prod.Nome.Trim();
-                        int qtdReal = prod.QuantidadeSelecionada > 0 ? prod.QuantidadeSelecionada : 1;
-
-                        if (dicionarioAgrupado.ContainsKey(nome))
-                            dicionarioAgrupado[nome] += qtdReal;
-                        else
-                            dicionarioAgrupado[nome] = qtdReal;
-                    }
-                }
-            }
-
-            if (!dicionarioAgrupado.Any() && p.Itens != null && p.Itens.Any())
-            {
-                foreach (var item in p.Itens)
-                {
-                    if (string.IsNullOrEmpty(item.Nome)) continue;
                     string nome = item.Nome.Trim();
                     int qtd = item.Quantidade > 0 ? item.Quantidade : 1;
 
@@ -83,25 +43,23 @@ namespace Teste.Repository
                 }
             }
 
-            if (!dicionarioAgrupado.Any() && p.CestaComprada != null)
+            foreach (var kvp in dicionarioAgrupado)
             {
-                dicionarioAgrupado[p.CestaComprada.Nome ?? "Cesta"] = 1;
+                itensFormatados.Add($"{kvp.Value}x {kvp.Key}");
             }
 
-            var itensFormatados = dicionarioAgrupado.Select(kvp => $"{kvp.Value}x {kvp.Key}");
-            return string.Join(",", itensFormatados);
+            return string.Join(";", itensFormatados);
         }
 
+        // 🚀 ATUALIZADO: Inclui a propriedade p.TipoComposicao no final da linha de texto
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
             string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
 
-            return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr}";
+            return $"{numeroLinha}- Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao}";
         }
 
-        // 🛠️ MODIFICADO: Agora este método manipula APENAS a lista em memória.
-        // O arquivo físico não é tocado aqui.
         public void AdicionarNovoPedidoNoTxt(Pedido p)
         {
             try
@@ -111,17 +69,15 @@ namespace Teste.Repository
                     p.IdUsuario = Sessao.UsuarioLogado.Id;
                 }
 
-                // Apenas insere na lista global de memória
                 MemoriaPedidos.Lista.Add(p);
+                AtualizarArquivoTxt();
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao adicionar novo pedido na memória: " + ex.Message);
+                Console.WriteLine("Erro ao adicionar novo pedido: " + ex.Message);
             }
         }
 
-        // 🌟 GARANTIDO: Este método reescreve o arquivo inteiro com tudo o que está na memória 
-        // (registros que já vieram do arquivo + novos pedidos adicionados nesta execução).
         public void AtualizarArquivoTxt()
         {
             try
@@ -140,8 +96,7 @@ namespace Teste.Repository
                     contadorId++;
                 }
 
-                // File.WriteAllLines substitui o arquivo antigo completamente pela lista atualizada da memória
-                File.WriteAllLines(caminho, linesParaSalvar);
+                File.WriteAllLines(caminho, linesParaSalvar, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -158,14 +113,13 @@ namespace Teste.Repository
 
                 if (!File.Exists(caminho)) return;
 
-                var linhas = File.ReadAllLines(caminho);
+                var linhas = File.ReadAllLines(caminho, Encoding.UTF8);
 
                 foreach (var linhaBruta in linhas)
                 {
                     if (string.IsNullOrWhiteSpace(linhaBruta)) continue;
 
                     string linhaProcessada = linhaBruta;
-
                     int indexTraco = linhaProcessada.IndexOf('-');
                     int indexPipe = linhaProcessada.IndexOf('|');
 
@@ -175,7 +129,6 @@ namespace Teste.Repository
                     }
 
                     var partes = linhaProcessada.Split('|');
-
                     if (partes.Length < 10) continue;
 
                     string dataPedido = partes[0].Replace("Data:", "").Trim();
@@ -201,8 +154,15 @@ namespace Teste.Repository
                         }
                     }
 
+                    // 🚀 ATUALIZADO: Recupera a string da composição salva se houver no arquivo (Retrocompatível)
+                    string composicaoSalva = "Completa";
+                    if (partes.Length >= 12)
+                    {
+                        composicaoSalva = partes[11].Replace("Composicao:", "").Trim();
+                    }
+
                     totalStr = totalStr.Replace(",", ".");
-                    decimal.TryParse(totalStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal totalConvertido);
+                    decimal.TryParse(totalStr, System.Globalization.NumberStyles.Any, System.Globalization.CultureInfo.InvariantCulture, out decimal totalConvertConvertido);
 
                     Pedido p = new Pedido
                     {
@@ -213,7 +173,7 @@ namespace Teste.Repository
                         Endereco = endereco,
                         FormaPagamento = pagamento,
                         Status = status,
-                        Total = totalConvertido,
+                        Total = totalConvertConvertido,
                         Observacoes = obs,
                         DataEntrega = dataEntregaConvertida,
                         Itens = new List<ItemPedido>()
@@ -221,15 +181,25 @@ namespace Teste.Repository
 
                     if (!string.IsNullOrEmpty(itensStr))
                     {
-                        var itensSeparados = itensStr.Split(',');
+                        var itensSeparados = itensStr.Split(new char[] { ';', ',' }, StringSplitOptions.RemoveEmptyEntries);
+
                         foreach (var itemRaw in itensSeparados)
                         {
+                            if (itemRaw.StartsWith("CESTA="))
+                            {
+                                string nomeCestaExtraida = itemRaw.Replace("CESTA=", "").Trim();
+                                p.CestaComprada = MemoriaCestas.Lista.FirstOrDefault(c =>
+                                    c.Nome.Trim().ToUpper() == nomeCestaExtraida.ToUpper()) ?? new Cesta { Nome = nomeCestaExtraida };
+
+                                p.Itens.Add(new ItemPedido { Nome = nomeCestaExtraida, Quantidade = 1 });
+                                continue;
+                            }
+
                             var indexX = itemRaw.IndexOf('x');
                             if (indexX > 0)
                             {
                                 string qtdStr = itemRaw.Substring(0, indexX).Trim();
                                 string nomeItem = itemRaw.Substring(indexX + 1).Trim();
-
                                 int.TryParse(qtdStr, out int qtdItem);
 
                                 p.Itens.Add(new ItemPedido
@@ -238,17 +208,12 @@ namespace Teste.Repository
                                     Quantidade = qtdItem > 0 ? qtdItem : 1
                                 });
                             }
-                            else if (itemRaw.Contains('='))
-                            {
-                                var dadosItem = itemRaw.Split('=');
-                                if (dadosItem.Length == 2)
-                                {
-                                    int.TryParse(dadosItem[1].Trim(), out int qtdItem);
-                                    p.Itens.Add(new ItemPedido { Nome = dadosItem[0].Trim(), Quantidade = qtdItem });
-                                }
-                            }
                         }
                     }
+
+                    // Se a sua propriedade "TipoComposicao" for estritamente um get-only dinâmico, 
+                    // o próprio motor do C# vai calculá-la em tempo de execução ao ler os 'Itens' processados acima. 
+                    // Mas salvando-a na linha, garantimos a integridade do histórico estático no arquivo txt.
 
                     MemoriaPedidos.Lista.Add(p);
                 }

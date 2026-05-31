@@ -8,9 +8,6 @@
     <Compile Update="View\ContatoNovo.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
-    <Compile Update="View\Administrador\DetalhesCesta.xaml.cs">
-      <SubType>Code</SubType>
-    </Compile>
     <Compile Update="View\Administrador\HomeAdministrador.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

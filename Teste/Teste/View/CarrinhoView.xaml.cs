@@ -64,14 +64,9 @@ namespace CestaApp.Views
 
             if (itemParaRemover != null)
             {
-                // Remove da memória global e da lista observada da tela
                 MemoriaCarrinho.Itens.Remove(itemParaRemover);
                 ItensNoCarrinho.Remove(itemParaRemover);
 
-                // 🔴 REMOVIDO: CarrinhoRepository e AtualizarArquivoTxt() saíram daqui.
-                // A alteração fica guardada apenas na lista estática na memória.
-
-                // Força o WPF a recalcular as propriedades e o Valor Total
                 this.DataContext = null;
                 this.DataContext = this;
 
@@ -79,56 +74,116 @@ namespace CestaApp.Views
             }
         }
 
+        // 🔥 MÉTODO CORRIGIDO: Protege o banco de dados contra duplicidade e falsas modificações
         private void FinalizarPedido_Click(object sender, RoutedEventArgs e)
         {
-            if (ItensNoCarrinho.Count == 0)
-            {
-                MessageBox.Show("Seu carrinho está vazio!", "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
-                return;
-            }
+            var itemCarrinho = MemoriaCarrinho.Itens.FirstOrDefault();
+            if (itemCarrinho == null) return;
 
-            List<ItemPedido> itensDoPedido = new List<ItemPedido>();
-            foreach (var item in ItensNoCarrinho)
+            string enderecoCliente = "A combinar";
+            if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
             {
-                itensDoPedido.Add(new ItemPedido
-                {
-                    Nome = item.CestaSelecionada.Nome,
-                    Quantidade = item.Quantidade
-                });
+                var end = Sessao.UsuarioLogado.Endereco;
+                enderecoCliente = $"{end.Rua}, nº {end.Numero} - {end.Bairro}";
             }
-
-            string obsGeral = string.Join(" | ", ItensNoCarrinho
-                .Where(i => !string.IsNullOrWhiteSpace(i.Observacoes))
-                .Select(i => $"{i.CestaSelecionada.Nome}: {i.Observacoes}"));
 
             Pedido novoPedido = new Pedido
             {
-                NomePedido = $"PED-{DateTime.Now:yyyyMMddHHmmss}",
-                Recebedor = Sessao.UsuarioLogado.Nome,
-                IdUsuario = Sessao.UsuarioLogado.Id,
-                Endereco = "A combinar",
+                NomePedido = "PED-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
+                Recebedor = Sessao.UsuarioLogado?.Nome ?? "Cliente",
+                Endereco = enderecoCliente,
                 FormaPagamento = "A combinar",
                 Status = "Pendente",
-                Total = this.ValorTotal,
-                Itens = itensDoPedido,
-                Observacoes = string.IsNullOrEmpty(obsGeral) ? "Sem observações" : obsGeral
+                Total = itemCarrinho.CestaSelecionada.Preco,
+                DataDoPedido = DateTime.Now.ToString("dd/MM/yyyy"),
+                CestaComprada = itemCarrinho.CestaSelecionada,
+                Itens = new List<ItemPedido>()
             };
 
-            // 🛠️ MODIFICADO: Adiciona apenas na memória em vez de escrever direto no arquivo TXT.
-            // Certifique-se de que a sua classe global armazena a lista de pedidos em algo como MemoriaPedidos.Lista.
-            MemoriaPedidos.Lista.Add(novoPedido);
+            // 1. Registra a linha obrigatória identificando a Cesta no arquivo de texto
+            novoPedido.Itens.Add(new ItemPedido
+            {
+                Nome = itemCarrinho.CestaSelecionada.Nome,
+                Quantidade = 1
+            });
 
-            MessageBox.Show("Pedido finalizado com sucesso! O administrador já foi notificado.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            // 2. Mapeia a receita fixa de fábrica cadastrada no sistema
+            var cestaOriginalDoBanco = MemoriaCestas.Lista.FirstOrDefault(c =>
+                c.Nome.Trim().ToUpper() == itemCarrinho.CestaSelecionada.Nome.Trim().ToUpper());
 
-            // Limpa o carrinho por completo na memória interna e na interface
+            var mapaOriginalFabrica = new Dictionary<string, int>();
+            if (cestaOriginalDoBanco != null && cestaOriginalDoBanco.Itens != null)
+            {
+                var agrupadoFabrica = cestaOriginalDoBanco.Itens
+                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                    .GroupBy(p => p.Nome.Trim().ToUpper());
+
+                foreach (var g in agrupadoFabrica)
+                {
+                    mapaOriginalFabrica[g.Key] = g.Sum(p => p.QuantidadeSelecionada > 0 ? p.QuantidadeSelecionada : 1);
+                }
+            }
+
+            // 3. Mapeia a sacola de compras modificada pelo cliente (Agrupamento sem repetição de palavras)
+            var mapaCarrinhoCliente = new Dictionary<string, int>();
+            if (itemCarrinho.CestaSelecionada.Itens != null)
+            {
+                var agrupadoCliente = itemCarrinho.CestaSelecionada.Itens
+                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                    .GroupBy(p => p.Nome.Trim().ToUpper());
+
+                foreach (var g in agrupadoCliente)
+                {
+                    mapaCarrinhoCliente[g.Key] = g.Sum(p => p.QuantidadeSelecionada > 0 ? p.QuantidadeSelecionada : 1);
+                }
+            }
+
+            // 4. ANALISADOR CRÍTICO DE MODIFICAÇÕES:
+            bool temModificacao = false;
+            var todosOsProdutos = mapaOriginalFabrica.Keys.Union(mapaCarrinhoCliente.Keys).Distinct();
+
+            foreach (var produtoChave in todosOsProdutos)
+            {
+                mapaOriginalFabrica.TryGetValue(produtoChave, out int qtdF);
+                mapaCarrinhoCliente.TryGetValue(produtoChave, out int qtdC);
+
+                if (qtdF != qtdC)
+                {
+                    temModificacao = true;
+                    break;
+                }
+            }
+
+            // Se o carrinho foi modificado, grava as alterações detalhadas
+            // Se NÃO foi modificado, deixa os itens limpos para o painel admin ler como "Completa"
+            if (temModificacao && itemCarrinho.CestaSelecionada.Itens != null)
+            {
+                var produtosParaGravar = itemCarrinho.CestaSelecionada.Itens
+                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
+                    .GroupBy(p => p.Nome.Trim())
+                    .Select(g => new ItemPedido
+                    {
+                        Nome = g.Key,
+                        Quantidade = g.Sum(p => p.QuantidadeSelecionada > 0 ? p.QuantidadeSelecionada : 1)
+                    }).ToList();
+
+                foreach (var prod in produtosParaGravar)
+                {
+                    if (prod.Nome.ToUpper() != itemCarrinho.CestaSelecionada.Nome.ToUpper())
+                    {
+                        novoPedido.Itens.Add(prod);
+                    }
+                }
+            }
+
+            // 5. Salva de forma permanente e atualiza a interface limpa
+            PedidoRepository repo = new PedidoRepository();
+            repo.AdicionarNovoPedidoNoTxt(novoPedido);
+
             MemoriaCarrinho.Itens.Clear();
             ItensNoCarrinho.Clear();
 
-            // 🔴 REMOVIDO: As chamadas ao CarrinhoRepository para atualizar o arquivo sumiram daqui.
-
-            // Reseta o contexto de renderização
-            this.DataContext = null;
-            this.DataContext = this;
+            MessageBox.Show("Pedido finalizado e salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
             VerificarSeCarrinhoEstaVazio();
         }

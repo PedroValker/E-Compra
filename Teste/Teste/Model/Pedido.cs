@@ -50,7 +50,6 @@ namespace Teste.Model
         {
             get
             {
-                // 🛠️ CORREÇÃO: Uso de ?.Trim() para evitar quebras caso o nome do fallback seja nulo
                 string? nomeCesta = CestaComprada?.Nome?.Trim().ToUpper();
                 if (string.IsNullOrEmpty(nomeCesta)) return new List<Produto>();
 
@@ -87,6 +86,40 @@ namespace Teste.Model
             }
         }
 
+        // 🔥 PROPRIEDADE COMPUTADA (No lugar correto): Identifica se a cesta mantém a receita original ou foi alterada
+        public string TipoComposicao
+        {
+            get
+            {
+                var originais = ProdutosOriginaisCesta;
+                if (originais == null || !originais.Any())
+                    return "Padrão";
+
+                var mapaOriginal = originais.GroupBy(p => p.Nome?.Trim().ToUpper())
+                                            .ToDictionary(g => g.Key ?? "", g => g.Count());
+
+                var modificados = ProdutosModificadosCliente;
+                var mapaCliente = modificados.GroupBy(i => i.Nome?.Trim().ToUpper())
+                                             .ToDictionary(g => g.Key ?? "", g => g.Sum(i => i.Quantidade));
+
+                if (mapaOriginal.Count != mapaCliente.Count)
+                    return "Modificada";
+
+                foreach (var par in mapaOriginal)
+                {
+                    if (!mapaCliente.TryGetValue(par.Key, out int qtdCliente) || par.Value != qtdCliente)
+                    {
+                        return "Modificada";
+                    }
+                }
+
+                return "Completa";
+            }
+        }
+
+        // 🔥 PROPRIEDADE BOOLEANA AUXILIAR: Facilita filtros ou uso de cores/triggers no WPF
+        public bool IsModificada => TipoComposicao == "Modificada";
+
         private DateTime? _dataEntrega;
         public DateTime? DataEntrega
         {
@@ -94,13 +127,13 @@ namespace Teste.Model
             set { _dataEntrega = value; OnPropertyChanged(); }
         }
 
-        // Propriedades nativas de Persistência e Controle Cadastral com strings inicializadas
+        // Propriedades nativas de Persistência e Controle Cadastral
         public int IdUsuario { get; set; }
         public string NomePedido { get; set; } = "";
         public string Recebedor { get; set; } = "";
         public string Endereco { get; set; } = "";
         public string FormaPagamento { get; set; } = "";
-        public string Status { get; set; } = "Pendente"; // Valor padrão seguro
+        public string Status { get; set; } = "Pendente";
         public decimal Total { get; set; }
         public DateTime Dia { get; set; } = DateTime.Now;
         public string DataDoPedido { get; set; } = DateTime.Now.ToString("dd/MM/yyyy");
@@ -108,11 +141,9 @@ namespace Teste.Model
         public int Quantidade { get; set; }
         public decimal Valor { get; set; }
 
-        // 🛠️ CORREÇÃO: Garantindo que a lista nasça instanciada para evitar NullReferenceException externos
         public List<ItemPedido> Itens { get; set; } = new List<ItemPedido>();
         public string Observacoes { get; set; } = "";
 
-        // 🛠️ CORREÇÃO: Assinatura do Evento PropertyChanged adequada ao .NET Core / Core 6+
         public event PropertyChangedEventHandler? PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string? propertyName = null)
         {

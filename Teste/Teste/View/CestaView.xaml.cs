@@ -2,9 +2,9 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.ComponentModel; // 🔥 Importante para o INotifyPropertyChanged
+using System.ComponentModel;
 using System.Linq;
-using System.Runtime.CompilerServices; // 🔥 Importante para o CallerMemberName
+using System.Runtime.CompilerServices;
 using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
@@ -12,14 +12,12 @@ using Teste.Repository;
 
 namespace CestaApp.Views
 {
-    // 🔥 Adicionado INotifyPropertyChanged à classe para que a tela mude o preço na hora
     public partial class CestaView : UserControl, INotifyPropertyChanged
     {
         public Cesta CestaAtual { get; set; }
         public ObservableCollection<Produto> ProdutosDaCesta { get; set; }
         public string Observacoes { get; set; }
 
-        // 🔥 Propriedade calculada dinâmica: varre os produtos e soma (Preço * QuantidadeSelecionada)
         public decimal ValorTotalCesta => ProdutosDaCesta != null ? ProdutosDaCesta.Sum(p => p.Preco * p.QuantidadeSelecionada) : 0;
 
         private Dictionary<string, int> _quantidadesOriginaisFabrica = new Dictionary<string, int>();
@@ -58,7 +56,6 @@ namespace CestaApp.Views
 
                 foreach (var item in itensAgrupados)
                 {
-                    // 🔥 AMARRAÇÃO CRÍTICA: Faz a tela escutar se as propriedades deste produto mudaram
                     item.PropertyChanged -= Produto_PropertyChanged;
                     item.PropertyChanged += Produto_PropertyChanged;
 
@@ -74,12 +71,10 @@ namespace CestaApp.Views
             InitializeComponent();
         }
 
-        // 🔥 O SEGREDO: Captura a alteração de quantidade do Produto e atualiza o total geral na tela
         private void Produto_PropertyChanged(object sender, PropertyChangedEventArgs e)
         {
             if (e.PropertyName == nameof(Produto.QuantidadeSelecionada) || e.PropertyName == nameof(Produto.SubtotalItem))
             {
-                // Notifica o XAML que o preço total mudou e precisa ser redesenhado
                 OnPropertyChanged(nameof(ValorTotalCesta));
             }
         }
@@ -92,7 +87,7 @@ namespace CestaApp.Views
                 int qtdOriginal = _quantidadesOriginaisFabrica[chave];
                 int diferenca = produto.QuantidadeSelecionada - qtdOriginal;
 
-                if (diferenca > 0) produto.Preco = produto.Preco; // apenas segurança
+                if (diferenca > 0) produto.Preco = produto.Preco;
 
                 if (diferenca > 0) produto.Peso = $"+{diferenca}";
                 else if (diferenca < 0) produto.Peso = $"{diferenca}";
@@ -106,7 +101,6 @@ namespace CestaApp.Views
             {
                 produto.QuantidadeSelecionada++;
                 AtualizarTextoDaVariacao(produto);
-              
             }
         }
 
@@ -118,7 +112,6 @@ namespace CestaApp.Views
                 {
                     produto.QuantidadeSelecionada--;
                     AtualizarTextoDaVariacao(produto);
-                  
                 }
             }
         }
@@ -128,9 +121,19 @@ namespace CestaApp.Views
             if (CestaAtual == null) return;
 
             List<Produto> listaFinalParaCarrinho = new List<Produto>();
+            bool foiModificada = false;
 
+            // 1. Desfaz o agrupamento da interface para salvar os itens individuais no padrão do seu app
             foreach (var p in ProdutosDaCesta)
             {
+                string chave = p.Nome.Trim().ToUpper();
+
+                // 🔥 VERIFICAÇÃO DE MUDANÇA: Verifica se a quantidade atual é diferente da receita original de fábrica
+                if (_quantidadesOriginaisFabrica.ContainsKey(chave) && _quantidadesOriginaisFabrica[chave] != p.QuantidadeSelecionada)
+                {
+                    foiModificada = true;
+                }
+
                 for (int i = 0; i < p.QuantidadeSelecionada; i++)
                 {
                     listaFinalParaCarrinho.Add(new Produto
@@ -143,11 +146,19 @@ namespace CestaApp.Views
                 }
             }
 
+            var cestaOriginalDoBanco = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == CestaAtual.Id);
+            string nomeVerdadeiroDaCesta = cestaOriginalDoBanco?.Nome ?? CestaAtual.Nome;
+            decimal precoOriginalDeTabela = cestaOriginalDoBanco?.Preco ?? CestaAtual.Preco;
+
+            // 🔥 REGRA DE PREÇO DO COMBO: 
+            // Se a cesta não foi modificada (continua com a receita de fábrica), usamos o preço fixo de tabela (ex: R$ 76,50).
+            // Se o cliente alterou alguma quantidade, ela assume o valor recalculado dinamicamente (ex: R$ 87,60).
+            decimal precoFinalCesta = foiModificada ? this.ValorTotalCesta : precoOriginalDeTabela;
+
             Cesta cestaClonadaParaCarrinho = new Cesta(CestaAtual.Id)
             {
-                Nome = CestaAtual.Nome,
-                // 🔥 Atualiza o preço da cesta clonada com o total dinâmico que o usuário montou
-                Preco = this.ValorTotalCesta,
+                Nome = nomeVerdadeiroDaCesta,
+                Preco = precoFinalCesta,
                 ImagemPath = CestaAtual.ImagemPath,
                 Itens = listaFinalParaCarrinho
             };
@@ -161,7 +172,7 @@ namespace CestaApp.Views
 
             MemoriaCarrinho.Itens.Add(novoItem);
 
-            MessageBox.Show($"'{CestaAtual.Nome}' foi adicionada ao seu carrinho com sucesso!",
+            MessageBox.Show($"'{nomeVerdadeiroDaCesta}' foi adicionada ao seu carrinho com sucesso!",
                             "Carrinho",
                             MessageBoxButton.OK,
                             MessageBoxImage.Information);
@@ -171,7 +182,6 @@ namespace CestaApp.Views
             this.DataContext = this;
         }
 
-        // 🔥 Implementação da interface INotifyPropertyChanged para a View
         public event PropertyChangedEventHandler PropertyChanged;
         protected void OnPropertyChanged([CallerMemberName] string name = null)
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
