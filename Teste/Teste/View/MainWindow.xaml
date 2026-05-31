@@ -4,168 +4,191 @@
         Title="Cadastro"
         WindowState="Maximized"
         ResizeMode="CanResize"
-        Background="#F2F2F2">
+        Background="#F8FAFC"
+        FontFamily="Segoe UI">
 
     <Window.Resources>
-        <Style x:Key="InputStyle" TargetType="Border">
-            <Setter Property="CornerRadius" Value="20"/>
-            <Setter Property="Background" Value="#EDEDED"/>
-            <Setter Property="Padding" Value="15"/>
-            <Setter Property="Margin" Value="0,0,0,15"/>
+        <SolidColorBrush x:Key="BgInput" Color="#FFFFFF"/>
+        <SolidColorBrush x:Key="BordaInputPadrao" Color="#CBD5E1"/>
+        <SolidColorBrush x:Key="BordaInputFoco" Color="#1E22D8"/>
+        <SolidColorBrush x:Key="TextoPrimario" Color="#0F172A"/>
+        <SolidColorBrush x:Key="TextoSecundario" Color="#64748B"/>
+        <SolidColorBrush x:Key="BotaoAcao" Color="#FFD700"/>
+        <SolidColorBrush x:Key="BotaoAcaoHover" Color="#F2CC00"/>
+
+        <Style x:Key="ModernInputStyle" TargetType="Control">
+            <Setter Property="Background" Value="{StaticResource BgInput}"/>
+            <Setter Property="BorderBrush" Value="{StaticResource BordaInputPadrao}"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Foreground" Value="{StaticResource TextoPrimario}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="Height" Value="45"/>
             <Setter Property="Width" Value="400"/>
+            <Setter Property="Margin" Value="0,0,0,16"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Control">
+                        <Border x:Name="TemplateBorder"
+                                Background="{TemplateBinding Background}"
+                                BorderBrush="{TemplateBinding BorderBrush}"
+                                BorderThickness="{TemplateBinding BorderThickness}"
+                                CornerRadius="8">
+                            <ScrollViewer x:Name="PART_ContentHost" 
+                                          Focusable="False" 
+                                          HorizontalScrollBarVisibility="Hidden" 
+                                          VerticalScrollBarVisibility="Hidden"
+                                          VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="TemplateBorder" Property="BorderBrush" Value="#94A3B8"/>
+                            </Trigger>
+                            <Trigger Property="IsFocused" Value="True">
+                                <Setter TargetName="TemplateBorder" Property="BorderBrush" Value="{StaticResource BordaInputFoco}"/>
+                                <Setter TargetName="TemplateBorder" Property="BorderThickness" Value="1.5"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="TextBox" BasedOn="{StaticResource ModernInputStyle}"/>
+        <Style TargetType="PasswordBox" BasedOn="{StaticResource ModernInputStyle}"/>
+
+        <Style x:Key="PrimaryButtonStyle" TargetType="Button">
+            <Setter Property="Background" Value="{StaticResource BotaoAcao}"/>
+            <Setter Property="Foreground" Value="{StaticResource TextoPrimario}"/>
+            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Height" Value="48"/>
+            <Setter Property="Width" Value="400"/>
+            <Setter Property="Margin" Value="0,12,0,16"/>
+            <Setter Property="Cursor" Value="Hand"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <Border x:Name="ButtonBorder" 
+                                Background="{TemplateBinding Background}" 
+                                CornerRadius="8">
+                            <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="ButtonBorder" Property="Background" Value="{StaticResource BotaoAcaoHover}"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
         </Style>
     </Window.Resources>
 
     <Grid>
-
         <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*" />
+            <ColumnDefinition Width="1.2*" />
             <ColumnDefinition Width="1*" />
         </Grid.ColumnDefinitions>
 
-        <!-- ================= FORMULÁRIO ================= -->
+        <Grid Grid.Column="0" 
+              Background="White" 
+              HorizontalAlignment="Stretch" 
+              VerticalAlignment="Stretch">
 
-        <Grid Grid.Column="0"
-              VerticalAlignment="Center"
-              HorizontalAlignment="Center"
-              Width="600">
+            <StackPanel VerticalAlignment="Center" 
+                        HorizontalAlignment="Center" 
+                        Width="400">
 
-            <StackPanel HorizontalAlignment="Center">
-
-                <TextBlock Text="Cadastro"
-                           FontSize="42"
+                <TextBlock Text="Crie sua conta"
+                           FontSize="32"
                            FontWeight="Bold"
-                           Margin="0,0,0,25"
-                           TextAlignment="Center"/>
+                           Foreground="{StaticResource TextoPrimario}"
+                           Margin="0,0,0,8"/>
 
-                <!-- Nome -->
-                <Border Style="{StaticResource InputStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Nome Completo" Foreground="Gray"/>
-                        <TextBox x:Name="NomeBox"
-                                 Height="35"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 FontSize="18"/>
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="Preencha os campos abaixo para começar."
+                           FontSize="14"
+                           Foreground="{StaticResource TextoSecundario}"
+                           Margin="0,0,0,28"/>
 
-                <!-- Email -->
-                <Border Style="{StaticResource InputStyle}">
-                    <StackPanel>
-                        <TextBlock Text="E-mail" Foreground="Gray"/>
-                        <TextBox x:Name="EmailBox"
-                                 Height="35"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 FontSize="18"/>
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="Nome Completo" 
+                           FontSize="13" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TextoSecundario}" 
+                           Margin="0,0,0,6"/>
+                <TextBox x:Name="NomeBox"/>
 
-                <!-- Telefone -->
-                <Border Style="{StaticResource InputStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Número de Telefone" Foreground="Gray"/>
-                        <TextBox x:Name="TelefoneBox"
-                                 PreviewTextInput="TelefoneBox_PreviewTextInput"
-                                 Height="35"
-                                 BorderThickness="0"
-                                 Background="Transparent"
-                                 FontSize="18"/>
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="E-mail" 
+                           FontSize="13" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TextoSecundario}" 
+                           Margin="0,0,0,6"/>
+                <TextBox x:Name="EmailBox"/>
 
-                <!-- Senha -->
-                <Border Style="{StaticResource InputStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Senha" Foreground="Gray"/>
-                        <PasswordBox x:Name="SenhaBox"
-                                     Height="35"
-                                     BorderThickness="0"
-                                     Background="Transparent"
-                                     FontSize="18"/>
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="Número de Telefone" 
+                           FontSize="13" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TextoSecundario}" 
+                           Margin="0,0,0,6"/>
+                <TextBox x:Name="TelefoneBox" PreviewTextInput="TelefoneBox_PreviewTextInput"/>
 
-                <!-- Confirmar -->
-                <Border Style="{StaticResource InputStyle}">
-                    <StackPanel>
-                        <TextBlock Text="Confirmar senha" Foreground="Gray"/>
-                        <PasswordBox x:Name="ConfirmarSenhaBox"
-                                     Height="35"
-                                     BorderThickness="0"
-                                     Background="Transparent"
-                                     FontSize="18"/>
-                    </StackPanel>
-                </Border>
+                <TextBlock Text="Senha" 
+                           FontSize="13" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TextoSecundario}" 
+                           Margin="0,0,0,6"/>
+                <PasswordBox x:Name="SenhaBox"/>
 
-                <!-- Botão -->
-                <Button Content="Criar Conta"
-                        Height="50"
-                        Width="400"
-                        Background="#F4D000"
-                        FontSize="18"
-                        FontWeight="Bold"
-                        BorderThickness="0"
-                        Cursor="Hand"
-                        Click="CriarConta_Click"
-                        Margin="0,20,0,10">
+                <TextBlock Text="Confirmar Senha" 
+                           FontSize="13" 
+                           FontWeight="SemiBold" 
+                           Foreground="{StaticResource TextoSecundario}" 
+                           Margin="0,0,0,6"/>
+                <PasswordBox x:Name="ConfirmarSenhaBox"/>
 
-                    <Button.Template>
-                        <ControlTemplate TargetType="Button">
-                            <Border Background="{TemplateBinding Background}"
-                                    CornerRadius="25">
-                                <ContentPresenter HorizontalAlignment="Center"
-                                                  VerticalAlignment="Center"/>
-                            </Border>
-                        </ControlTemplate>
-                    </Button.Template>
+                <Button Content="Criar Conta" 
+                        Style="{StaticResource PrimaryButtonStyle}" 
+                        Click="CriarConta_Click"/>
 
-                </Button>
-
-                <TextBlock HorizontalAlignment="Center" FontSize="14">
+                <TextBlock HorizontalAlignment="Center" FontSize="14" Foreground="{StaticResource TextoSecundario}">
                     Já tem uma conta?
-                    <Hyperlink Foreground="Blue" Cursor="Hand" Click="Entrar_Click">
+                    <Hyperlink Foreground="{StaticResource BordaInputFoco}" 
+                               FontWeight="SemiBold"
+                               Command="{Binding Path=IrParaLoginCommand}" 
+                               Click="Entrar_Click" 
+                               TextDecorations="None">
                         Entrar
                     </Hyperlink>
                 </TextBlock>
 
             </StackPanel>
-
         </Grid>
-
-        <!-- ================= BANNER ================= -->
 
         <Border Grid.Column="1"
                 Background="#1E22D8"
-                CornerRadius="80,0,0,80"
-                Padding="40">
+                Padding="60">
 
             <Grid>
+                <StackPanel HorizontalAlignment="Center" VerticalAlignment="Center" MaxWidth="400">
 
-                <StackPanel HorizontalAlignment="Center"
-                            VerticalAlignment="Center"
-                            MaxWidth="500">
-
-                    <TextBlock Text="🛒 Basic"
-                               FontSize="36"
+                    <TextBlock
+                               FontSize="28"
+                               FontWeight="Black"
                                Foreground="White"
+                               Opacity="0.9"
                                HorizontalAlignment="Center"
-                               Margin="0,0,0,30"/>
+                               Margin="0,0,0,24" Text="🛒 E-Compra"/>
 
-                    <TextBlock Text="Seja bem vindo!"
-                               FontSize="44"
+                    <TextBlock Text="Seja bem-vindo ao ecossistema de compras E-Compra."
+                               FontSize="36"
                                FontWeight="Bold"
                                Foreground="White"
                                TextAlignment="Center"
                                TextWrapping="Wrap"
-                               LineHeight="50"/>
+                               LineHeight="46"/>
 
                 </StackPanel>
-
             </Grid>
-
         </Border>
-
     </Grid>
 </Window>

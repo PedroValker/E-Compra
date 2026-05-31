@@ -13,10 +13,16 @@ namespace Teste.Repository
             // Busca a pasta "Dados" na raiz do projeto
             string pastaProjeto = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
 
-            // 🔥 ARQUIVO DINÂMICO: Cria um TXT separado para cada usuário
-            // Se Sessao.UsuarioLogado estiver vazio, ele usa "Visitante" por segurança
-            string nomeUsuario = string.IsNullOrWhiteSpace(Sessao.UsuarioLogado) ? "Visitante" : Sessao.UsuarioLogado;
-            string nomeArquivo = $"carrinho_{nomeUsuario}.txt";
+            // 🔥 CORREÇÃO E MELHORIA: Proteção contra nulo e uso do ID como chave única
+            string sufixoArquivo = "Visitante";
+
+            if (Sessao.UsuarioLogado != null)
+            {
+                // Usar o ID garante que, mesmo se existirem dois usuários com o mesmo nome, os carrinhos não se misturem
+                sufixoArquivo = Sessao.UsuarioLogado.Id.ToString();
+            }
+
+            string nomeArquivo = $"carrinho_{sufixoArquivo}.txt";
 
             return Path.Combine(pastaProjeto, "Dados", nomeArquivo);
         }
@@ -33,8 +39,10 @@ namespace Teste.Repository
 
                 foreach (var item in MemoriaCarrinho.Itens)
                 {
-                    // Salvamos o ID da cesta, a quantidade e as observações
-                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{item.Observacoes}";
+                    // 🛠️ SEGURANÇA: Se a obs estiver vazia, salva como "NENHUMA" para não quebrar o Split('|')
+                    string obsSalvar = string.IsNullOrWhiteSpace(item.Observacoes) ? "NENHUMA" : item.Observacoes.Trim();
+
+                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{obsSalvar}";
                     linhasParaSalvar.Add(linha);
                 }
 
@@ -49,7 +57,6 @@ namespace Teste.Repository
         // 🔥 CARREGA DO TXT DO USUÁRIO PARA A MEMÓRIA
         public void CarregarDoArquivo()
         {
-            // Sempre limpa o carrinho atual antes de carregar o de outro usuário
             MemoriaCarrinho.Itens.Clear();
             string caminho = ObterCaminhoArquivo();
 
@@ -59,19 +66,19 @@ namespace Teste.Repository
 
             foreach (var linha in linhas)
             {
+                if (string.IsNullOrWhiteSpace(linha)) continue;
+
                 var partes = linha.Split('|');
 
-                // Prevenção de erro caso a linha esteja corrompida
                 if (partes.Length < 3) continue;
 
-                // Limpa as tags para pegar só os valores
                 string idLimpo = partes[0].Replace("CestaID:", "").Trim();
                 string qtdLimpa = partes[1].Replace("Qtd:", "").Trim();
                 string obsLimpa = partes[2].Replace("Obs:", "").Trim();
 
                 if (!int.TryParse(idLimpo, out int idCesta)) continue;
+                if (!int.TryParse(qtdLimpa, out int quantidade)) continue;
 
-                // Vai na memória de cestas e acha a cesta original pelo ID
                 Cesta cestaEncontrada = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == idCesta);
 
                 if (cestaEncontrada != null)
@@ -79,8 +86,9 @@ namespace Teste.Repository
                     ItemCarrinho itemSalvo = new ItemCarrinho
                     {
                         CestaSelecionada = cestaEncontrada,
-                        Quantidade = int.Parse(qtdLimpa),
-                        Observacoes = obsLimpa
+                        Quantidade = quantidade,
+                        // 🛠️ RECUPERAÇÃO: Se for "NENHUMA", volta a ser string vazia na memória
+                        Observacoes = obsLimpa == "NENHUMA" ? "" : obsLimpa
                     };
 
                     MemoriaCarrinho.Itens.Add(itemSalvo);

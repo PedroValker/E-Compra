@@ -23,6 +23,9 @@
     <Compile Update="View\DetalhesPedidoCliente.xaml.cs">
       <SubType>Code</SubType>
     </Compile>
+    <Compile Update="View\EditarPerfilCliente.xaml.cs">
+      <SubType>Code</SubType>
+    </Compile>
     <Compile Update="View\FacaSeuPedidoView.xaml.cs">
       <SubType>Code</SubType>
     </Compile>

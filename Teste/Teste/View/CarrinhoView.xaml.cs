@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CestaApp.Views;
+using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
@@ -11,11 +12,9 @@ namespace CestaApp.Views
 {
     public partial class CarrinhoView : UserControl
     {
-        // Variável que o XAML vai ler
         public ObservableCollection<ItemCarrinho> ItensNoCarrinho { get; set; }
 
-        // Calcula a soma de tudo
-        public decimal ValorTotal => ItensNoCarrinho.Sum(item => item.Subtotal);
+        public decimal ValorTotal => ItensNoCarrinho != null ? ItensNoCarrinho.Sum(item => item.Subtotal) : 0;
 
         public CarrinhoView()
         {
@@ -25,30 +24,61 @@ namespace CestaApp.Views
 
         private void CarregarCarrinho()
         {
-            // Pega o que está salvo na memória e joga pra tela
             ItensNoCarrinho = new ObservableCollection<ItemCarrinho>(MemoriaCarrinho.Itens);
             this.DataContext = this;
+
+            VerificarSeCarrinhoEstaVazio();
+        }
+
+        private void VerificarSeCarrinhoEstaVazio()
+        {
+            if (ItensNoCarrinho == null || ItensNoCarrinho.Count == 0)
+            {
+                PainelCarrinhoAtivo.Visibility = Visibility.Collapsed;
+                PainelCarrinhoVazio.Visibility = Visibility.Visible;
+                BtnFinalizar.IsEnabled = false;
+            }
+            else
+            {
+                PainelCarrinhoAtivo.Visibility = Visibility.Visible;
+                PainelCarrinhoVazio.Visibility = Visibility.Collapsed;
+                BtnFinalizar.IsEnabled = true;
+            }
+        }
+
+        private void VoltarParaLoja_Click(object sender, RoutedEventArgs e)
+        {
+            var SkinnerPrincipal = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
+            if (SkinnerPrincipal != null)
+            {
+                SkinnerPrincipal.VoltarInicio_Click(sender, e);
+            }
         }
 
         private void RemoverItem_Click(object sender, RoutedEventArgs e)
         {
-            // Descobre qual botão remover foi clicado
             Button botaoRemover = sender as Button;
+            if (botaoRemover == null) return;
+
             ItemCarrinho itemParaRemover = botaoRemover.DataContext as ItemCarrinho;
 
             if (itemParaRemover != null)
             {
-                // Remove da memória e da tela
+                // Remove da memória global e da lista observada da tela
                 MemoriaCarrinho.Itens.Remove(itemParaRemover);
                 ItensNoCarrinho.Remove(itemParaRemover);
 
-                // Atualiza a tela e força a recalcular o Valor Total
+                // 🔴 REMOVIDO: CarrinhoRepository e AtualizarArquivoTxt() saíram daqui.
+                // A alteração fica guardada apenas na lista estática na memória.
+
+                // Força o WPF a recalcular as propriedades e o Valor Total
                 this.DataContext = null;
                 this.DataContext = this;
+
+                VerificarSeCarrinhoEstaVazio();
             }
         }
 
-        // 🔥 APENAS UM FINALIZAR PEDIDO AGORA!
         private void FinalizarPedido_Click(object sender, RoutedEventArgs e)
         {
             if (ItensNoCarrinho.Count == 0)
@@ -57,7 +87,6 @@ namespace CestaApp.Views
                 return;
             }
 
-            // 1. Transforma os itens do carrinho no seu ItemPedido
             List<ItemPedido> itensDoPedido = new List<ItemPedido>();
             foreach (var item in ItensNoCarrinho)
             {
@@ -68,16 +97,15 @@ namespace CestaApp.Views
                 });
             }
 
-            // 2. Junta todas as observações
             string obsGeral = string.Join(" | ", ItensNoCarrinho
                 .Where(i => !string.IsNullOrWhiteSpace(i.Observacoes))
                 .Select(i => $"{i.CestaSelecionada.Nome}: {i.Observacoes}"));
 
-            // 3. Monta o objeto do Pedido
             Pedido novoPedido = new Pedido
             {
                 NomePedido = $"PED-{DateTime.Now:yyyyMMddHHmmss}",
-                Recebedor = Sessao.UsuarioLogado,
+                Recebedor = Sessao.UsuarioLogado.Nome,
+                IdUsuario = Sessao.UsuarioLogado.Id,
                 Endereco = "A combinar",
                 FormaPagamento = "A combinar",
                 Status = "Pendente",
@@ -86,24 +114,23 @@ namespace CestaApp.Views
                 Observacoes = string.IsNullOrEmpty(obsGeral) ? "Sem observações" : obsGeral
             };
 
-            // 4. SALVAMENTO CORRIGIDO ✅
-            PedidoRepository repoPedido = new PedidoRepository();
-
-            // 🔥 TROCADO: Em vez de AtualizarArquivoTxt, usamos AdicionarNovoPedidoNoTxt
-            // Isso garante que o pedido seja ANEXADO ao arquivo, sem apagar os anteriores.
-            repoPedido.AdicionarNovoPedidoNoTxt(novoPedido);
+            // 🛠️ MODIFICADO: Adiciona apenas na memória em vez de escrever direto no arquivo TXT.
+            // Certifique-se de que a sua classe global armazena a lista de pedidos em algo como MemoriaPedidos.Lista.
+            MemoriaPedidos.Lista.Add(novoPedido);
 
             MessageBox.Show("Pedido finalizado com sucesso! O administrador já foi notificado.", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
 
-            // 5. Limpa o carrinho
+            // Limpa o carrinho por completo na memória interna e na interface
             MemoriaCarrinho.Itens.Clear();
             ItensNoCarrinho.Clear();
 
-            CarrinhoRepository repoCarrinho = new CarrinhoRepository();
-            repoCarrinho.AtualizarArquivoTxt();
+            // 🔴 REMOVIDO: As chamadas ao CarrinhoRepository para atualizar o arquivo sumiram daqui.
 
+            // Reseta o contexto de renderização
             this.DataContext = null;
             this.DataContext = this;
+
+            VerificarSeCarrinhoEstaVazio();
         }
     }
 }
