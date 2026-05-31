@@ -1,4 +1,5 @@
-﻿using CestaApp.Views;
+﻿using Microsoft.Win32;
+using CestaApp.Views;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -34,6 +35,20 @@ namespace Teste.View
             // 2. Carrega o HomeAdministrador passando o nome pra lá também
             ConteudoPrincipal.Content = new HomeAdministrador(_nomeDoAdmin);
         }
+            private void AlterarFoto_Click(object sender, MouseButtonEventArgs e)
+            { 
+            OpenFileDialog abrir = new OpenFileDialog();
+
+            abrir.Title = "Escolha uma foto de perfil";
+            abrir.Filter = "Arquivos de Imagem|*.png;*.jpg;*.jpeg";
+
+            if (abrir.ShowDialog() == true)
+            {
+                ImagemPerfilBrush.ImageSource =
+                    new BitmapImage(new Uri(abrir.FileName));
+            }
+            }
+           
 
         private void Inicio_Click(object sender, RoutedEventArgs e)
         {
