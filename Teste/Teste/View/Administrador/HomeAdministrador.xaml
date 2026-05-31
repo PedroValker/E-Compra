@@ -120,7 +120,7 @@
                                FontWeight="Bold"
                                Foreground="#1F2937"
                                Margin="0,0,0,20"/>
-
+                    
                     <ListBox x:Name="ListaVendas">
                         <ListBox.ItemTemplate>
                             <DataTemplate>
