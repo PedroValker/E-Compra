@@ -1,35 +1,9 @@
-# Publicação
-publish/
+﻿################################################################################
+# Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
+################################################################################
 
-.vs/
-bin/
-obj/
-
-
-# Build
-bin/
-obj/
-
-# Visual Studio
-.vs/
-*.user
-*.suo
-*.userosscache
-*.sln.docstates
-
-# Logs e temporários
-*.log
-*.tmp
-*.cache
-
-# Binários
-*.dll
-*.exe
-*.pdb
-
-# Testes
-TestResults/
-*.coverage
-
-# NuGet
-packages/
+/Teste/.vs/Teste
+/Teste/Teste/bin/Debug/net8.0-windows
+/Teste/Teste/obj
+/.gitignore
+/.gitignore
