@@ -182,10 +182,7 @@ namespace Teste.View
             usuario.Email = TxtEmail.Text;
             usuario.Telefone = TxtTelefone.Text;
 
-            if (!string.IsNullOrWhiteSpace(TxtSenha.Password))
-            {
-                usuario.Senha = TxtSenha.Password;
-            }
+        
 
             usuario.FotoPerfil = caminhoFoto;
 

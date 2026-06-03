@@ -13,14 +13,14 @@
             <Setter Property="AutoGenerateColumns" Value="False"/>
             <Setter Property="CanUserAddRows" Value="False"/>
             <Setter Property="IsReadOnly" Value="True"/>
-            <Setter Property="RowHeight" Value="58"/>
+            <Setter Property="RowHeight" Value="64"/>
             <Setter Property="SelectionMode" Value="Single"/>
             <Setter Property="ColumnHeaderStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#F1F5F9"/>
-                        <Setter Property="Foreground" Value="#64748B"/>
-                        <Setter Property="Padding" Value="16,12"/>
+                        <Setter Property="Foreground" Value="#475569"/>
+                        <Setter Property="Padding" Value="20,16"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="FontSize" Value="13"/>
                         <Setter Property="BorderThickness" Value="0,0,0,1"/>
@@ -31,7 +31,7 @@
             <Setter Property="CellStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridCell">
-                        <Setter Property="Padding" Value="16,0"/>
+                        <Setter Property="Padding" Value="20,0"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="DataGridCell">
@@ -43,6 +43,12 @@
                         </Setter>
                         <Setter Property="BorderThickness" Value="0"/>
                         <Setter Property="Foreground" Value="#334155"/>
+                        <Style.Triggers>
+                            <Trigger Property="IsSelected" Value="True">
+                                <Setter Property="Background" Value="Transparent"/>
+                                <Setter Property="Foreground" Value="#334155"/>
+                            </Trigger>
+                        </Style.Triggers>
                     </Style>
                 </Setter.Value>
             </Setter>
@@ -51,57 +57,94 @@
         <Style x:Key="BtnVisualizarStyle" TargetType="Button">
             <Setter Property="Background" Value="#EFF6FF"/>
             <Setter Property="Foreground" Value="#2563EB"/>
-            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Padding" Value="12,6"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
-            <Setter Property="FontWeight" Value="Medium"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
             <Setter Property="FontSize" Value="12"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6">
+                        <Border x:Name="border" Background="{TemplateBinding Background}" CornerRadius="6" SnapsToDevicePixels="True">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center" Margin="{TemplateBinding Padding}"/>
                         </Border>
+                        <ControlTemplate.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter TargetName="border" Property="Background" Value="#DBEAFE"/>
+                                <Setter Property="Foreground" Value="#1D4ED8"/>
+                            </Trigger>
+                        </ControlTemplate.Triggers>
                     </ControlTemplate>
                 </Setter.Value>
             </Setter>
         </Style>
     </UserControl.Resources>
 
-    <Grid Margin="30">
+    <Grid Margin="40,30">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <StackPanel Grid.Row="0" Margin="0,0,0,25">
-            <TextBlock Text="Meus Pedidos" FontSize="26" FontWeight="Bold" Foreground="#0F172A"/>
-            <TextBlock Text="Acompanhe o status e histórico das suas compras." FontSize="14" Foreground="#64748B" Margin="0,5,0,0"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,20">
+            <TextBlock Text="Meus Pedidos" FontSize="28" FontWeight="Bold" Foreground="#0F172A"/>
+            <TextBlock Text="Acompanhe o status e histórico das suas compras de forma simplificada." FontSize="14" Foreground="#64748B" Margin="0,6,0,0"/>
 
-            <StackPanel Orientation="Horizontal" Margin="0,20,0,0">
-                <TextBlock x:Name="AbaPendentesTexto" Text="Pendentes" MouseLeftButtonDown="AbaPendentes_Click" Cursor="Hand" FontWeight="Bold" Foreground="#0F172A" Margin="0,0,24,0"/>
-                <TextBlock x:Name="AbaCaminhoTexto" Text="A Caminho" MouseLeftButtonDown="AbaCaminho_Click" Cursor="Hand" FontWeight="Normal" Foreground="#94A3B8" Margin="0,0,24,0"/>
-                <TextBlock x:Name="AbaHistoricoTexto" Text="Histórico" MouseLeftButtonDown="AbaHistorico_Click" Cursor="Hand" FontWeight="Normal" Foreground="#94A3B8"/>
+            <StackPanel Orientation="Horizontal" Margin="0,25,0,0">
+                <StackPanel Margin="0,0,24,0" Cursor="Hand" MouseLeftButtonDown="AbaPendentes_Click">
+                    <TextBlock x:Name="AbaPendentesTexto" Text="Pendentes" FontWeight="Bold" Foreground="#2563EB" Margin="0,0,0,8"/>
+                    <Border Height="2" Background="#2563EB" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+
+                <StackPanel Margin="0,0,24,0" Cursor="Hand" MouseLeftButtonDown="AbaCaminho_Click">
+                    <TextBlock x:Name="AbaCaminhoTexto" Text="A Caminho" FontWeight="Medium" Foreground="#64748B" Margin="0,0,0,8"/>
+                    <Border Height="2" Background="Transparent" HorizontalAlignment="Stretch"/>
+                </StackPanel>
+
+                <StackPanel Cursor="Hand" MouseLeftButtonDown="AbaHistorico_Click">
+                    <TextBlock x:Name="AbaHistoricoTexto" Text="Histórico" FontWeight="Medium" Foreground="#64748B" Margin="0,0,0,8"/>
+                    <Border Height="2" Background="Transparent" HorizontalAlignment="Stretch"/>
+                </StackPanel>
             </StackPanel>
+
+            <Border BorderBrush="#E2E8F0" BorderThickness="0,0,0,1" Margin="0,-2,0,0"/>
         </StackPanel>
 
-        <Border Grid.Row="1" Background="White" CornerRadius="12" Padding="6" BorderBrush="#E2E8F0" BorderThickness="1">
-            <DataGrid x:Name="TabelaDePedidos" ItemsSource="{Binding ListaPedidosPendentes}">
-                <DataGrid.Columns>
-                    <DataGridTextColumn Header="Código" Binding="{Binding NomePedido}" Width="130"/>
-                    <DataGridTextColumn Header="Data Entrega" Binding="{Binding DataEntrega, StringFormat={}{0:dd/MM/yyyy}}" Width="120"/>
-                    <DataGridTextColumn Header="Total" Binding="{Binding Total, StringFormat='R$ {0:N2}'}" Width="110"/>
-                    <DataGridTextColumn Header="Status" Binding="{Binding Status}" Width="110"/>
+        <Border Grid.Row="1" Background="White" CornerRadius="12" BorderBrush="#E2E8F0" BorderThickness="1" VerticalAlignment="Top">
+            <Grid>
+                <DataGrid x:Name="TabelaDePedidos" ItemsSource="{Binding ListaPedidosPendentes}" Margin="1">
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Código do Pedido" Binding="{Binding NomePedido}" Width="*"/>
+                        <DataGridTextColumn Header="Data de Entrega" Binding="{Binding DataEntrega, StringFormat={}{0:dd/MM/yyyy}}" Width="180"/>
 
-                    <DataGridTemplateColumn Header="Ações" Width="120">
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-                                <Button Content="Ver Detalhes" Style="{StaticResource BtnVisualizarStyle}" Click="VerDetalhes_Click"/>
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-                    </DataGridTemplateColumn>
-                </DataGrid.Columns>
-            </DataGrid>
+                        <DataGridTemplateColumn Header="Total" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <TextBlock Text="{Binding Total, StringFormat='R$ {0:N2}'}" FontWeight="SemiBold" Foreground="#0F172A" VerticalAlignment="Center"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Status" Width="150">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Border Background="#FEF3C7" CornerRadius="12" HorizontalAlignment="Left" Padding="10,4" VerticalAlignment="Center">
+                                        <TextBlock Text="{Binding Status}" Foreground="#D97706" FontSize="12" FontWeight="SemiBold"/>
+                                    </Border>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+
+                        <DataGridTemplateColumn Header="Ações" Width="140">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Ver Detalhes" Style="{StaticResource BtnVisualizarStyle}" Click="VerDetalhes_Click" HorizontalAlignment="Left"/>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Border>
     </Grid>
 </UserControl>

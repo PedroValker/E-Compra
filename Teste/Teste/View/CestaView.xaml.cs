@@ -18,7 +18,41 @@ namespace CestaApp.Views
         public ObservableCollection<Produto> ProdutosDaCesta { get; set; }
         public string Observacoes { get; set; }
 
-        public decimal ValorTotalCesta => ProdutosDaCesta != null ? ProdutosDaCesta.Sum(p => p.Preco * p.QuantidadeSelecionada) : 0;
+        // 🚀 NOVA LÓGICA: Calcula baseado no preço cadastrado da Cesta + ou - as alterações
+        public decimal ValorTotalCesta
+        {
+            get
+            {
+                if (CestaAtual == null) return 0;
+
+                // Começa estritamente com o valor definido no cadastro (Ex: R$ 76.50)
+                decimal valorBase = CestaAtual.Preco;
+                decimal variacaoPreco = 0;
+
+                if (ProdutosDaCesta != null)
+                {
+                    foreach (var produto in ProdutosDaCesta)
+                    {
+                        string chave = produto.Nome.Trim().ToUpper();
+                        if (_quantidadesOriginaisFabrica.ContainsKey(chave))
+                        {
+                            int qtdOriginal = _quantidadesOriginaisFabrica[chave];
+                            // Se der positivo: adicionou itens. Se der negativo: retirou itens.
+                            int diferencaQtd = produto.QuantidadeSelecionada - qtdOriginal;
+
+                            // Multiplica a diferença unitária pelo preço do produto
+                            variacaoPreco += (diferencaQtd * produto.Preco);
+                        }
+                    }
+                }
+
+                // Retorna o valor fixo de tabela somado algébricamente com a variação (que pode ser negativa)
+                decimal totalCalculado = valorBase + variacaoPreco;
+
+                // Garante que a cesta nunca fique com valor negativo caso removam tudo
+                return totalCalculado > 0 ? totalCalculado : 0;
+            }
+        }
 
         private Dictionary<string, int> _quantidadesOriginaisFabrica = new Dictionary<string, int>();
 
@@ -43,6 +77,7 @@ namespace CestaApp.Views
                         var primeiroItem = grupo.First();
                         int totalDeFabrica = grupo.Count();
 
+                        // Salva rigorosamente a estrutura inicial vinda do banco
                         _quantidadesOriginaisFabrica[primeiroItem.Nome.Trim().ToUpper()] = totalDeFabrica;
 
                         return new Produto
@@ -75,6 +110,7 @@ namespace CestaApp.Views
         {
             if (e.PropertyName == nameof(Produto.QuantidadeSelecionada) || e.PropertyName == nameof(Produto.SubtotalItem))
             {
+                // Notifica a interface para atualizar o textblock do valor final total
                 OnPropertyChanged(nameof(ValorTotalCesta));
             }
         }
@@ -86,8 +122,6 @@ namespace CestaApp.Views
             {
                 int qtdOriginal = _quantidadesOriginaisFabrica[chave];
                 int diferenca = produto.QuantidadeSelecionada - qtdOriginal;
-
-                if (diferenca > 0) produto.Preco = produto.Preco;
 
                 if (diferenca > 0) produto.Peso = $"+{diferenca}";
                 else if (diferenca < 0) produto.Peso = $"{diferenca}";
@@ -121,19 +155,9 @@ namespace CestaApp.Views
             if (CestaAtual == null) return;
 
             List<Produto> listaFinalParaCarrinho = new List<Produto>();
-            bool foiModificada = false;
 
-            // 1. Desfaz o agrupamento da interface para salvar os itens individuais no padrão do seu app
             foreach (var p in ProdutosDaCesta)
             {
-                string chave = p.Nome.Trim().ToUpper();
-
-                // 🔥 VERIFICAÇÃO DE MUDANÇA: Verifica se a quantidade atual é diferente da receita original de fábrica
-                if (_quantidadesOriginaisFabrica.ContainsKey(chave) && _quantidadesOriginaisFabrica[chave] != p.QuantidadeSelecionada)
-                {
-                    foiModificada = true;
-                }
-
                 for (int i = 0; i < p.QuantidadeSelecionada; i++)
                 {
                     listaFinalParaCarrinho.Add(new Produto
@@ -148,17 +172,14 @@ namespace CestaApp.Views
 
             var cestaOriginalDoBanco = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == CestaAtual.Id);
             string nomeVerdadeiroDaCesta = cestaOriginalDoBanco?.Nome ?? CestaAtual.Nome;
-            decimal precoOriginalDeTabela = cestaOriginalDoBanco?.Preco ?? CestaAtual.Preco;
 
-            // 🔥 REGRA DE PREÇO DO COMBO: 
-            // Se a cesta não foi modificada (continua com a receita de fábrica), usamos o preço fixo de tabela (ex: R$ 76,50).
-            // Se o cliente alterou alguma quantidade, ela assume o valor recalculado dinamicamente (ex: R$ 87,60).
-            decimal precoFinalCesta = foiModificada ? this.ValorTotalCesta : precoOriginalDeTabela;
+            // 🚀 ATUALIZADO: O preço final leva em conta a nossa nova propriedade inteligente
+            decimal precoFinalCesta = this.ValorTotalCesta;
 
             Cesta cestaClonadaParaCarrinho = new Cesta(CestaAtual.Id)
             {
                 Nome = nomeVerdadeiroDaCesta,
-                Preco = precoFinalCesta,
+                Preco = precoFinalCesta, // Passa o valor correto (Base + Alterações) para o carrinho
                 ImagemPath = CestaAtual.ImagemPath,
                 Itens = listaFinalParaCarrinho
             };
