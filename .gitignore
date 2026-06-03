@@ -2,8 +2,10 @@
 # Este arquivo .gitignore foi criado automaticamente pelo Microsoft(R) Visual Studio.
 ################################################################################
 
-/Teste/.vs/Teste
+/Teste/Teste/obj/Debug/net8.0-windows
+/Teste/.vs/Teste/FileContentIndex
+/Teste/.vs/Teste/DesignTimeBuild
+/Teste/.vs/Teste/v18
 /Teste/Teste/bin/Debug/net8.0-windows
+/Teste/Teste/Dados/imagem
 /Teste/Teste/obj
-/.gitignore
-/.gitignore
