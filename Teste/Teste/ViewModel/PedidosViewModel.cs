@@ -91,6 +91,7 @@ namespace Teste.ViewModel
             => PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(name));
     }
 
+
     // 🛠️ CORREÇÃO: Implementação limpa do RelayCommand sem warnings de Nullable
     public class RelayCommand<T> : ICommand
     {

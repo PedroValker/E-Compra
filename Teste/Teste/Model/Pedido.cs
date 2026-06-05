@@ -15,6 +15,15 @@ namespace Teste.Model
 
     public class Pedido : INotifyPropertyChanged
     {
+
+            private static int contador = 1;
+            public int IdPedido { get; set; }
+
+            public Pedido()
+            {
+                IdPedido = contador++;
+            }
+
         private Cesta? _cestaComprada;
 
         public Cesta CestaComprada
@@ -133,6 +142,17 @@ namespace Teste.Model
         public string Recebedor { get; set; } = "";
         public string Endereco { get; set; } = "";
         public string FormaPagamento { get; set; } = "";
+
+        private bool _pago;
+        public bool Pago
+        {
+            get => _pago;
+            set
+            {
+                _pago = value;
+                OnPropertyChanged();
+            }
+        }
         public string Status { get; set; } = "Pendente";
         public decimal Total { get; set; }
         public DateTime Dia { get; set; } = DateTime.Now;

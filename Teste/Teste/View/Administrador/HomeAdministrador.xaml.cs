@@ -49,10 +49,8 @@ namespace Teste.View
                 .ToString();
 
             // Pedidos não pagos
-            TxtPagPendentes.Text = pedidos.Count(p =>
-                p.FormaPagamento != null &&
-                p.FormaPagamento.ToLower() != "pago")
-                .ToString();
+            // Pagamentos pendentes
+            TxtPagPendentes.Text = pedidos.Count(p => !p.Pago).ToString();
 
             // Faturamento total
             decimal total = pedidos.Sum(p => p.Total);

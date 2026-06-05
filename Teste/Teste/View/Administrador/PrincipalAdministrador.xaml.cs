@@ -84,8 +84,7 @@ namespace Teste.View
         }
         private void Pendencias_Click(object sender, RoutedEventArgs e)
         {
-            // Por enquanto está abrindo CadastroProduto, mude quando criar a tela de Pendências
-           // ConteudoPrincipal.Content = new CadastroProduto();
+            ConteudoPrincipal.Content = new PendenciasView();
         }
         private void Cestas_Click(object sender, RoutedEventArgs e)
         {

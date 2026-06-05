@@ -4,25 +4,25 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Teste.Model
+public class Pagamento
 {
-    class Pagamento
+    public int IdPagamento { get; set; }
+
+    public int IdPedido { get; set; }
+
+    public DateTime DataPagamento { get; set; }
+
+    public bool Pago { get; set; }
+
+    public Pagamento()
     {
-        public int IdPagamento { get; set; }
-
-        // Data do pagamento
-        public DateTime DataPagamento { get; set; }
-
-        // Status do pagamento
-        // true = pago
-        // false = pendente
-        public bool Pago { get; set; }
-
-        // Construtor opcional
-        public Pagamento()
-        {
-            DataPagamento = DateTime.Now;
-            Pago = false;
-        }
+        DataPagamento = DateTime.Now;
+        Pago = false;
     }
+}
+
+public static class MemoriaPagamentos
+{
+    public static List<Pagamento> Lista { get; set; }
+        = new List<Pagamento>();
 }

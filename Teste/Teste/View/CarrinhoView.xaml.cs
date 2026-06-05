@@ -100,6 +100,10 @@ namespace CestaApp.Views
                 Itens = new List<ItemPedido>()
             };
 
+            novoPedido.IdPedido = MemoriaPedidos.Lista.Any()
+            ? MemoriaPedidos.Lista.Max(p => p.IdPedido) + 1
+            : 1;
+
             // 1. Registra a linha obrigatória identificando a Cesta no arquivo de texto
             novoPedido.Itens.Add(new ItemPedido
             {
