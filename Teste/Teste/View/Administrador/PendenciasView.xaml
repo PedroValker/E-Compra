@@ -1,134 +1,169 @@
 <UserControl x:Class="Teste.View.PendenciasView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             Background="#F8FAFC">
-
-    <Grid Margin="30">
-
+             Background="#F1F5F9">
+    <Grid Margin="24">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- Cabeçalho -->
-        <StackPanel Grid.Row="0" Margin="0,0,0,30">
-            <TextBlock Text="Pendências"
-                       FontSize="28"
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <TextBlock Text="Liberação de Cestas Básicas"
+                       FontSize="26"
                        FontWeight="Bold"
-                       Foreground="#1F2937"/>
-
-            <TextBlock Text="Pedidos aguardando confirmação de pagamento."
-                       FontSize="15"
-                       Foreground="#6B7280"
-                       Margin="0,5,0,0"/>
+                       Foreground="#0F172A"/>
+            <TextBlock Text="Gerencie os pagamentos pendentes para autorizar a entrega das cestas."
+                       FontSize="14"
+                       Foreground="#64748B"
+                       Margin="0,4,0,0"/>
         </StackPanel>
 
-        <!-- Cards -->
-        <Grid Grid.Row="1" Margin="0,0,0,30">
-
+        <Grid Grid.Row="1" Margin="0,0,0,24">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
-                <ColumnDefinition Width="20"/>
+                <ColumnDefinition Width="16"/>
                 <ColumnDefinition Width="*"/>
             </Grid.ColumnDefinitions>
 
             <Border Grid.Column="0"
                     Background="White"
-                    CornerRadius="10"
-                    Padding="20"
-                    BorderBrush="#E5E7EB"
+                    CornerRadius="8"
+                    Padding="20,16"
+                    BorderBrush="#E2E8F0"
                     BorderThickness="1">
-
                 <StackPanel>
-                    <TextBlock Text="Pagamentos Pendentes"
-                               Foreground="#6B7280"
-                               FontSize="14"
+                    <TextBlock Text="Cestas Aguardando Pago"
+                               Foreground="#64748B"
+                               FontSize="13"
                                FontWeight="SemiBold"/>
-
                     <TextBlock Text="{Binding TotalPendencias}"
-                               FontSize="28"
+                               FontSize="32"
                                FontWeight="Bold"
-                               Foreground="#EF4444"
-                               Margin="0,10,0,0"/>
+                               Foreground="#EF4444" 
+                               Margin="0,8,0,0"/>
                 </StackPanel>
             </Border>
 
             <Border Grid.Column="2"
                     Background="White"
-                    CornerRadius="10"
-                    Padding="20"
-                    BorderBrush="#E5E7EB"
+                    CornerRadius="8"
+                    Padding="20,16"
+                    BorderBrush="#E2E8F0"
                     BorderThickness="1">
-
                 <StackPanel>
-                    <TextBlock Text="Valor Pendente"
-                               Foreground="#6B7280"
-                               FontSize="14"
+                    <TextBlock Text="Valor Total Retido"
+                               Foreground="#64748B"
+                               FontSize="13"
                                FontWeight="SemiBold"/>
-
                     <TextBlock Text="{Binding ValorTotalPendente, StringFormat=C}"
-                               FontSize="28"
+                               FontSize="32"
                                FontWeight="Bold"
-                               Foreground="#D97706"
-                               Margin="0,10,0,0"/>
+                               Foreground="#F59E0B"
+                               Margin="0,8,0,0"/>
                 </StackPanel>
             </Border>
-
         </Grid>
 
-        <!-- Lista de Pendências -->
         <Border Grid.Row="2"
                 Background="White"
-                CornerRadius="10"
-                Padding="20"
-                BorderBrush="#E5E7EB"
-                BorderThickness="1">
+                CornerRadius="8"
+                BorderBrush="#E2E8F0"
+                BorderThickness="1"
+                Padding="0">
+            <Grid>
+                <DataGrid ItemsSource="{Binding PedidosPendentes}"
+                          AutoGenerateColumns="False"
+                          CanUserAddRows="False"
+                          IsReadOnly="True"
+                          HeadersVisibility="Column"
+                          GridLinesVisibility="Horizontal"
+                          HorizontalGridLinesBrush="#F1F5F9"
+                          Background="Transparent"
+                          BorderThickness="0"
+                          RowHeight="44"
+                          RowBackground="White"
+                          AlternatingRowBackground="#F8FAFC">
+                    <DataGrid.ColumnHeaderStyle>
+                        <Style TargetType="DataGridColumnHeader">
+                            <Setter Property="Background" Value="#F8FAFC"/>
+                            <Setter Property="Foreground" Value="#475569"/>
+                            <Setter Property="FontWeight" Value="SemiBold"/>
+                            <Setter Property="FontSize" Value="13"/>
+                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+                            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+                        </Style>
+                    </DataGrid.ColumnHeaderStyle>
 
-            <DataGrid ItemsSource="{Binding PedidosPendentes}"
-                      AutoGenerateColumns="False"
-                      CanUserAddRows="False"
-                      IsReadOnly="True">
+                    <DataGrid.CellStyle>
+                        <Style TargetType="DataGridCell">
+                            <Setter Property="Padding" Value="12,0"/>
+                            <Setter Property="Template">
+                                <Setter.Value>
+                                    <ControlTemplate TargetType="DataGridCell">
+                                        <Border Padding="{TemplateBinding Padding}" Background="{TemplateBinding Background}">
+                                            <ContentPresenter VerticalAlignment="Center"/>
+                                        </Border>
+                                    </ControlTemplate>
+                                </Setter.Value>
+                            </Setter>
+                            <Style.Triggers>
+                                <Trigger Property="IsSelected" Value="True">
+                                    <Setter Property="Background" Value="#E2E8F0"/>
+                                    <Setter Property="Foreground" Value="#0F172A"/>
+                                </Trigger>
+                            </Style.Triggers>
+                        </Style>
+                    </DataGrid.CellStyle>
 
-                <DataGrid.Columns>
+                    <DataGrid.Columns>
+                        <DataGridTextColumn Header="Nº Pedido"
+                                            Binding="{Binding IdPedido}"
+                                            Width="100"/>
 
-                    <DataGridTextColumn Header="Pedido"
-                                        Binding="{Binding IdPedido}"
-                                        Width="80"/>
+                        <DataGridTextColumn Header="Beneficiário"
+                                            Binding="{Binding Recebedor}"
+                                            Width="*"/>
 
-                    <DataGridTextColumn Header="Cliente"
-                                        Binding="{Binding Recebedor}"
-                                        Width="*"/>
+                        <DataGridTextColumn Header="Data do Pedido"
+                                            Binding="{Binding DataDoPedido, StringFormat=\{0:dd/MM/yyyy\}}"
+                                            Width="140"/>
 
-                    <DataGridTextColumn Header="Data"
-                                        Binding="{Binding DataDoPedido}"
-                                        Width="150"/>
+                        <DataGridTextColumn Header="Valor"
+                                            Binding="{Binding Total, StringFormat=C}"
+                                            Width="120"/>
 
-                    <DataGridTextColumn Header="Valor"
-                                        Binding="{Binding Total, StringFormat=C}"
-                                        Width="120"/>
+                        <DataGridTemplateColumn Header="Ações" Width="180">
+                            <DataGridTemplateColumn.CellTemplate>
+                                <DataTemplate>
+                                    <Button Content="Confirmar Pago"
+                                            Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.ConfirmarPagamentoCommand}"
+                                            CommandParameter="{Binding}"
+                                            Cursor="Hand"
+                                            Height="28"
+                                            Padding="12,0"
+                                            Background="#10B981"
+                                            Foreground="White"
+                                            FontWeight="SemiBold"
+                                            FontSize="12"
+                                            VerticalAlignment="Center"
+                                            HorizontalAlignment="Left">
 
-                    <DataGridTemplateColumn Header="Ação" Width="180">
+                                        <Button.Resources>
+                                            <Style TargetType="Border">
+                                                <Setter Property="CornerRadius" Value="4"/>
+                                            </Style>
+                                        </Button.Resources>
+                                    </Button>
+                                </DataTemplate>
+                            </DataGridTemplateColumn.CellTemplate>
+                        </DataGridTemplateColumn>
 
-                        <DataGridTemplateColumn.CellTemplate>
-                            <DataTemplate>
-
-								<Button Content="Confirmar Pagamento"
-        Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid},
-                          Path=DataContext.ConfirmarPagamentoCommand}"
-        CommandParameter="{Binding}" />
-
-                            </DataTemplate>
-                        </DataGridTemplateColumn.CellTemplate>
-
-                    </DataGridTemplateColumn>
-
-                </DataGrid.Columns>
-
-            </DataGrid>
-
+                    </DataGrid.Columns>
+                </DataGrid>
+            </Grid>
         </Border>
-
     </Grid>
-
 </UserControl>
