@@ -23,18 +23,13 @@ namespace Teste.Repository
             return Path.Combine(ObterPastaProjeto(), "Dados", "imagem");
         }
 
+        // 🔥 MODIFICADO: Salva apenas na memória RAM durante a execução
         public bool Salvar(Cesta cesta, out string mensagemErro)
         {
             mensagemErro = "";
 
             try
             {
-                string caminho = ObterCaminhoArquivo();
-                string? pasta = Path.GetDirectoryName(caminho);
-
-                if (!string.IsNullOrEmpty(pasta))
-                    Directory.CreateDirectory(pasta);
-
                 string imagemFinal = "null";
 
                 // TRATAMENTO DA IMAGEM
@@ -62,31 +57,30 @@ namespace Teste.Repository
                     imagemFinal = Path.Combine("Dados", "imagem", nomeArquivo);
                 }
 
-                // 🔥 NOVA LÓGICA DE ESCREVER (Agrupa e salva como 10x Pão)
-                var stringsProdutos = cesta.Itens
-                    .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
-                    .GroupBy(p => p.Nome.Trim())
-                    .Select(grupo => $"{grupo.Count()}x {grupo.Key}");
-
-                string nomesProdutos = string.Join(",", stringsProdutos);
-
-                string linha = $"ID:{cesta.Id} |Nome:{cesta.Nome} |Preco:{cesta.Preco} |Imagem:{imagemFinal} |Produtos:{nomesProdutos}";
-
-                File.AppendAllLines(caminho, new List<string> { linha });
-
                 cesta.ImagemPath = imagemFinal;
+
+                // Adiciona apenas na memória
                 MemoriaCestas.Lista.Add(cesta);
 
                 return true;
             }
             catch (Exception ex)
             {
-                mensagemErro = "Erro ao salvar cesta: " + ex.Message;
+                mensagemErro = "Erro ao salvar cesta na memória: " + ex.Message;
                 return false;
             }
         }
 
+        // 🔥 MODIFICADO: Atualiza apenas a instância em memória
         public void AtualizarArquivoTxt()
+        {
+            // Como a orientação agora é persistir no arquivo apenas ao fechar o app,
+            // este método deixa de gravar no disco imediatamente para evitar gargalos.
+            // A lista em memória já é atualizada por referência diretamente no seu View/Code-behind.
+        }
+
+        // 🔥 NOVO MÉTODO: Grava tudo no arquivo texto (Chamar no encerramento do programa)
+        public void SalvarTudo()
         {
             try
             {
@@ -100,14 +94,12 @@ namespace Teste.Repository
 
                 foreach (var cesta in MemoriaCestas.Lista)
                 {
-                    // 🔥 NOVA LÓGICA DE ATUALIZAR (Agrupa e salva como 10x Pão)
                     var stringsProdutos = cesta.Itens
                         .Where(p => p != null && !string.IsNullOrEmpty(p.Nome))
                         .GroupBy(p => p.Nome.Trim())
                         .Select(grupo => $"{grupo.Count()}x {grupo.Key}");
 
                     string nomesProdutos = string.Join(",", stringsProdutos);
-
                     string imagem = string.IsNullOrEmpty(cesta.ImagemPath) ? "null" : cesta.ImagemPath;
 
                     string linha = $"ID:{cesta.Id} |Nome:{cesta.Nome} |Preco:{cesta.Preco} |Imagem:{imagem} |Produtos:{nomesProdutos}";
@@ -118,7 +110,7 @@ namespace Teste.Repository
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao atualizar cestas TXT: " + ex.Message);
+                Console.WriteLine("Erro ao descarregar cestas no arquivo TXT: " + ex.Message);
             }
         }
 
@@ -155,7 +147,6 @@ namespace Teste.Repository
                     ImagemPath = imagemLimpa == "null" ? "" : imagemLimpa
                 };
 
-                // Pega cada pedaço (ex: "10x Pão" ou "Pão" puro caso venha do modelo antigo)
                 string[] itensComQuantidade = produtosLimpos.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
 
                 foreach (var itemRaw in itensComQuantidade)
@@ -164,7 +155,6 @@ namespace Teste.Repository
                     int quantidade = 1;
                     string nomeProduto = itemTratado;
 
-                    // 🔥 NOVA LÓGICA DE LEITURA: Verifica se o texto contém o multiplicador "x "
                     if (itemTratado.Contains("x "))
                     {
                         var partesQtd = itemTratado.Split(new[] { "x " }, StringSplitOptions.None);
@@ -175,18 +165,17 @@ namespace Teste.Repository
                         }
                     }
 
-                    // Busca o produto correspondente no cadastro geral de produtos
                     Produto prodEncontrado = MemoriaProdutos.Lista
-         .FirstOrDefault(p => p.Nome != null && p.Nome.Trim().ToUpper() == nomeProduto.Trim().ToUpper());
+                        .FirstOrDefault(p => p.Nome != null && p.Nome.Trim().ToUpper() == nomeProduto.Trim().ToUpper());
 
                     if (prodEncontrado != null)
                     {
-                        // Adiciona o produto na lista a quantidade de vezes que o arquivo mandou
                         for (int i = 0; i < quantidade; i++)
                         {
                             c.Itens.Add(new Produto
                             {
                                 Nome = prodEncontrado.Nome,
+                                Marca = prodEncontrado.Marca, // 🔥 CORREÇÃO CRÍTICA: Resgatando a marca da memória de produtos
                                 Preco = prodEncontrado.Preco,
                                 Peso = prodEncontrado.Peso,
                                 QuantidadeSelecionada = 1

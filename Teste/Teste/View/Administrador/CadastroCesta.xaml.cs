@@ -29,7 +29,7 @@ namespace Teste.View
             AtualizarListaCestas();
         }
 
-        // 🔥 MÉTODO ADICIONADO: Calcula em tempo real o preço com base na composição da lista
+        // 🔥 Calcula em tempo real o preço com base na composição da lista
         private void RecalcularPrecoSugerido()
         {
             decimal totalSoma = ItensDaCestaAtual.Sum(item => item.Preco * item.Quantidade);
@@ -37,7 +37,7 @@ namespace Teste.View
             // Atualiza a label explicativa com a soma real de mercado
             TxtPrecoSugerido.Text = $"Soma dos Itens: R$ {totalSoma:N2}";
 
-            // Facilita a criação: autofill no TextBox de preço caso esteja criando do zero
+            // Autofill no TextBox de preço caso esteja criando do zero
             if (_cestaEmEdicao == null || string.IsNullOrWhiteSpace(PrecoCestaBox.Text))
             {
                 PrecoCestaBox.Text = totalSoma.ToString("F2");
@@ -55,7 +55,8 @@ namespace Teste.View
                     qtd = 1;
                 }
 
-                var itemExistente = ItensDaCestaAtual.FirstOrDefault(i => i.Nome == produtoSelecionado.Nome);
+                // 🔥 CORREÇÃO: Busca combinando Nome E Marca para não misturar produtos parecidos
+                var itemExistente = ItensDaCestaAtual.FirstOrDefault(i => i.Nome == produtoSelecionado.Nome && i.Marca == produtoSelecionado.Marca);
 
                 if (itemExistente != null)
                 {
@@ -67,14 +68,15 @@ namespace Teste.View
                     ItensDaCestaAtual.Add(new ItemCestaDisplay
                     {
                         Nome = produtoSelecionado.Nome,
+                        Marca = produtoSelecionado.Marca, // Repassando a marca perfeitamente
                         Peso = produtoSelecionado.Peso,
-                        Preco = produtoSelecionado.Preco,
+                        Preco = produtoSelecionado.Preco, // Repassando o preço corretamente
                         Quantidade = qtd
                     });
                 }
 
                 QuantidadeBox.Text = "1";
-                RecalcularPrecoSugerido(); // 🔥 Dispara recalculação ao inserir
+                RecalcularPrecoSugerido();
             }
             else
             {
@@ -87,7 +89,7 @@ namespace Teste.View
             if (sender is Button btn && btn.DataContext is ItemCestaDisplay itemClicado)
             {
                 ItensDaCestaAtual.Remove(itemClicado);
-                RecalcularPrecoSugerido(); // 🔥 Dispara recalculação ao remover
+                RecalcularPrecoSugerido();
             }
         }
 
@@ -129,12 +131,19 @@ namespace Teste.View
             decimal.TryParse(PrecoCestaBox.Text, out decimal preco);
             CestaRepository repo = new CestaRepository();
 
+            // 🔥 CORREÇÃO: Mapeia a lista temporária de volta para a lista oficial de Produtos
             List<Produto> listaFinalProdutos = new List<Produto>();
             foreach (var item in ItensDaCestaAtual)
             {
                 for (int i = 0; i < item.Quantidade; i++)
                 {
-                    listaFinalProdutos.Add(new Produto { Nome = item.Nome, Peso = item.Peso, Preco = item.Preco });
+                    listaFinalProdutos.Add(new Produto
+                    {
+                        Nome = item.Nome,
+                        Marca = item.Marca, // Salvando a marca no arquivo/banco
+                        Peso = item.Peso,
+                        Preco = item.Preco // Salvando o preço no arquivo/banco
+                    });
                 }
             }
 
@@ -180,15 +189,18 @@ namespace Teste.View
                 PrecoCestaBox.Text = cestaClicada.Preco.ToString("F2");
 
                 ItensDaCestaAtual.Clear();
-                var grupos = cestaClicada.Itens.GroupBy(p => p.Nome);
+
+                // 🔥 CORREÇÃO: Agrupando por Nome E Marca para que fiquem separados na tabela corretamente
+                var grupos = cestaClicada.Itens.GroupBy(p => new { p.Nome, p.Marca });
                 foreach (var g in grupos)
                 {
                     var p = g.First();
                     ItensDaCestaAtual.Add(new ItemCestaDisplay
                     {
                         Nome = p.Nome,
+                        Marca = p.Marca, // Recuperando a marca ao editar
                         Peso = p.Peso,
-                        Preco = p.Preco,
+                        Preco = p.Preco, // Recuperando o preço ao editar (corrige o R$ 0,00)
                         Quantidade = g.Count()
                     });
                 }
@@ -202,7 +214,7 @@ namespace Teste.View
                 }
                 catch { PreviewImagem.Source = null; }
 
-                RecalcularPrecoSugerido(); // 🔥 Atualiza o valor dinâmico ao carregar para edição
+                RecalcularPrecoSugerido();
             }
         }
 
@@ -244,13 +256,14 @@ namespace Teste.View
             ImagemPathBox.Clear();
             PreviewImagem.Source = null;
             QuantidadeBox.Text = "1";
-            TxtPrecoSugerido.Text = "Soma dos Itens: R$ 0,00"; // 🔥 Limpa a contagem informativa
+            TxtPrecoSugerido.Text = "Soma dos Itens: R$ 0,00";
         }
     }
 
     public class ItemCestaDisplay
     {
         public string Nome { get; set; }
+        public string Marca { get; set; } = "";
         public string Peso { get; set; }
         public decimal Preco { get; set; }
         public int Quantidade { get; set; }

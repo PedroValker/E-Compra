@@ -91,7 +91,17 @@
                             </Grid.ColumnDefinitions>
 
                             <Border Style="{StaticResource InputCard}" Margin="0,0,10,0">
-                                <ComboBox x:Name="ProdutosComboBox" BorderThickness="0" Background="Transparent" FontSize="14" DisplayMemberPath="Nome" VerticalAlignment="Center"/>
+                                <ComboBox x:Name="ProdutosComboBox" BorderThickness="0" Background="Transparent" FontSize="14" VerticalAlignment="Center">
+                                    <ComboBox.ItemTemplate>
+                                        <DataTemplate>
+                                            <StackPanel Orientation="Horizontal">
+                                                <TextBlock Text="{Binding Nome}" FontWeight="Bold"/>
+                                                <TextBlock Text=" - " Foreground="#9CA3AF"/>
+                                                <TextBlock Text="{Binding Marca}" Foreground="#6B7280" FontStyle="Italic"/>
+                                            </StackPanel>
+                                        </DataTemplate>
+                                    </ComboBox.ItemTemplate>
+                                </ComboBox>
                             </Border>
 
                             <Border Grid.Column="1" Style="{StaticResource InputCard}" Margin="0,0,10,0" Background="White">
@@ -120,6 +130,7 @@
                                     <GridView>
                                         <GridViewColumn Header="Qtd" DisplayMemberBinding="{Binding Quantidade}" Width="45"/>
                                         <GridViewColumn Header="Produto" DisplayMemberBinding="{Binding Nome}" Width="160"/>
+                                        <GridViewColumn Header="Marca" DisplayMemberBinding="{Binding Marca}" Width="160"/>
                                         <GridViewColumn Header="Peso/Tam" DisplayMemberBinding="{Binding Peso}" Width="70"/>
                                         <GridViewColumn Header="Preço" Width="90">
                                             <GridViewColumn.CellTemplate>

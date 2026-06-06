@@ -30,6 +30,8 @@
                 </ListView.RenderTransform>
                 <ListView.View>
                     <GridView>
+                        <GridViewColumn Header="Qtd" DisplayMemberBinding="{Binding Quantidade}" Width="50"/>
+
                         <GridViewColumn Header="Produto" DisplayMemberBinding="{Binding Nome}" Width="160"/>
                         <GridViewColumn Header="Marca" DisplayMemberBinding="{Binding Marca}" Width="100"/>
                         <GridViewColumn Header="Peso" DisplayMemberBinding="{Binding Peso}" Width="80"/>
