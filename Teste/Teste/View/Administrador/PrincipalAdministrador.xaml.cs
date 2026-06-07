@@ -99,8 +99,7 @@ namespace Teste.View
 
         private void Clientes_Click(object sender, RoutedEventArgs e)
         {
-            // Por enquanto está abrindo CadastroProduto, mude quando criar a tela de Clientes
-            //ConteudoPrincipal.Content = new CadastroProduto();
+            ConteudoPrincipal.Content = new ClientesView();
         }
     }
 }
