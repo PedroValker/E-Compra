@@ -146,7 +146,7 @@
                     </Grid>
 
                     <StackPanel>
-                        <TextBlock Text="Verifique nossos produtos" FontSize="30" FontWeight="Black" Foreground="#222" Margin="0,0,0,30" HorizontalAlignment="Center"/>
+                        <TextBlock FontSize="30" FontWeight="Black" Foreground="#222" Margin="0,0,0,30" HorizontalAlignment="Center" Text="Verifique nossos produtos mais vendidos"/>
                         <ItemsControl ItemsSource="{Binding ListaCestas}" HorizontalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
@@ -173,6 +173,46 @@
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
+                        <Button Content="Explorar todas as cestas"
+        Width="260"
+        Height="50"
+        Margin="0,30,0,0"
+        HorizontalAlignment="Center"
+        Click="VerTodasCestas_Click"
+        Background="#1E22D8"
+        Foreground="White"
+        FontSize="15"
+        FontWeight="SemiBold"
+        BorderThickness="0"
+        Cursor="Hand">
+
+                            <Button.Style>
+                                <Style TargetType="Button">
+                                    <Setter Property="Background" Value="#1E22D8"/>
+
+                                    <Style.Triggers>
+                                        <Trigger Property="IsMouseOver" Value="True">
+                                            <Setter Property="Background" Value="#1518A8"/>
+                                        </Trigger>
+
+                                        <Trigger Property="IsPressed" Value="True">
+                                            <Setter Property="Background" Value="#10127D"/>
+                                        </Trigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Button.Style>
+
+                            <Button.Template>
+                                <ControlTemplate TargetType="Button">
+                                    <Border Background="{TemplateBinding Background}"
+                    CornerRadius="20">
+                                        <ContentPresenter HorizontalAlignment="Center"
+                                  VerticalAlignment="Center"/>
+                                    </Border>
+                                </ControlTemplate>
+                            </Button.Template>
+
+                        </Button>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>

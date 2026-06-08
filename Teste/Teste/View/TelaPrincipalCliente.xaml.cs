@@ -217,6 +217,11 @@ namespace Teste.View
                 this.Close();
             }
         }
+
+        private void VerTodasCestas_Click(object sender, RoutedEventArgs e)
+        {
+            ConteudoPrincipal.Content = new FacaSeuPedidoView();
+        }
         private void VoltarParaLoja_Click(object sender, RoutedEventArgs e)
         {
             var janelaPrincipal = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;

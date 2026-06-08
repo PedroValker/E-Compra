@@ -1,63 +1,109 @@
 ﻿<UserControl
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" mc:Ignorable="d" x:Class="Teste.View.ContatoNovo"
-             Background="#F2F2F2"
-             HorizontalContentAlignment="Stretch"
-             VerticalContentAlignment="Stretch" Width="1067">
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    mc:Ignorable="d"
+    x:Class="Teste.View.ContatoNovo"
+    Background="#F5F7FA"
+    HorizontalContentAlignment="Stretch"
+    VerticalContentAlignment="Stretch">
 
-    <Grid Margin="40">
+    <UserControl.Resources>
+
+        <Style x:Key="BotaoContato" TargetType="Button">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="Button">
+                        <ContentPresenter/>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+    </UserControl.Resources>
+
+    <Grid Margin="50">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
         </Grid.RowDefinitions>
 
-        <!-- TÍTULO -->
+        <!-- CABEÇALHO -->
         <StackPanel HorizontalAlignment="Center"
                     Margin="0,0,0,40">
 
-            <TextBlock Text="Sobre Nós"
-                       FontSize="30"
+            <TextBlock Text="Sobre a E-Compra"
+                       FontSize="36"
                        FontWeight="Bold"
-                       Foreground="#1E1E1E"
+                       Foreground="#1E22D8"
                        HorizontalAlignment="Center"/>
 
-            <TextBlock Text="Estamos sempre prontos para atender você da melhor forma possível."
-                       FontSize="15"
-                       Foreground="#666"
+            <TextBlock Text="Facilitando o acesso a cestas básicas com praticidade, segurança e flexibilidade."
+                       FontSize="16"
+                       Foreground="#707070"
+                       Width="650"
                        TextAlignment="Center"
-                       Width="500"
-                       Margin="0,10,0,0"/>
+                       Margin="0,12,0,0"/>
         </StackPanel>
 
         <!-- CONTEÚDO -->
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1.2*"/>
+                <ColumnDefinition Width="1*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
-            <!-- TEXTO SOBRE -->
+            <!-- CARD SOBRE -->
             <Border Grid.Column="0"
+                    Margin="0,0,15,0"
                     Background="White"
-                    CornerRadius="20"
-                    Padding="35"
-                    Margin="0,0,25,0">
+                    CornerRadius="25"
+                    Padding="35">
+
+                <Border.Effect>
+                    <DropShadowEffect BlurRadius="20"
+                                      ShadowDepth="2"
+                                      Opacity="0.15"/>
+                </Border.Effect>
 
                 <StackPanel>
 
                     <TextBlock Text="Quem Somos"
-                               FontSize="24"
+                               FontSize="28"
                                FontWeight="Bold"
                                Foreground="#1E22D8"
-                               Margin="0,0,0,20" Width="149"/>
+                               Margin="0,0,0,20"/>
 
-                    <TextBlock TextWrapping="Wrap"
-                               FontSize="15"
-                               Foreground="#444"
-                               LineHeight="26" Height="218" Width="359"><Run Text="Nossa empresa busca oferecer a melhor experiência para nossos clientes, unindo qualidade, inovação e atendimento personalizado. Trabalhamos com dedicação para entregar soluções modernas e eficientes, sempre priorizando confiança, agilidade e excelência em cada detalhe. Caso tenha dúvidas, sugestões ou precise de suporte, nossa equipe estará pronta para ajudar você."/></TextBlock>
+                    <Border Background="#EEF2FF"
+                            CornerRadius="12"
+                            Padding="12"
+                            Margin="0,0,0,20">
+
+                        <TextBlock Text="Transformando a compra de cestas básicas em uma experiência simples, acessível e confiável."
+                                   FontSize="14"
+                                   FontWeight="SemiBold"
+                                   Foreground="#1E22D8"
+                                   TextWrapping="Wrap"/>
+                    </Border>
+
+                    <TextBlock
+                        TextWrapping="Wrap"
+                        TextAlignment="Justify"
+                        FontSize="16"
+                        Foreground="#444444"
+                        LineHeight="30">
+
+                        A E-Compra é uma empresa comprometida em facilitar o acesso a cestas básicas, oferecendo uma solução prática, segura e acessível para quem busca garantir os itens essenciais do dia a dia. Entendemos que cada família possui necessidades e realidades diferentes, por isso disponibilizamos opções de pagamento flexíveis que tornam a compra mais simples e viável.
+
+                        Nosso objetivo é contribuir para o bem-estar das pessoas, reduzindo barreiras e proporcionando mais tranquilidade no momento da compra. Trabalhamos com responsabilidade, transparência e foco na satisfação dos nossos clientes, buscando oferecer uma experiência eficiente desde a escolha da cesta até a entrega.
+
+                        Mais do que comercializar produtos, queremos ser uma ponte entre as famílias e o acesso à alimentação de qualidade, promovendo praticidade, confiança e conveniência em cada etapa do processo.
+                    </TextBlock>
 
                 </StackPanel>
 
@@ -65,38 +111,62 @@
 
             <!-- CARD CONTATO -->
             <Button Grid.Column="1"
-                    Background="Transparent"
-                    BorderThickness="0"
-                    Cursor="Hand">
+                    Style="{StaticResource BotaoContato}"
+                    Cursor="Hand"
+                    Click="BtnContato_Click"
+                    Margin="15,0,0,0">
 
                 <Border Background="White"
-                        CornerRadius="20"
-                        Padding="20">
+                        CornerRadius="25"
+                        Padding="30">
 
-                    <StackPanel HorizontalAlignment="Center">
+                    <Border.Effect>
+                        <DropShadowEffect BlurRadius="20"
+                                          ShadowDepth="2"
+                                          Opacity="0.15"/>
+                    </Border.Effect>
 
-                        <!-- IMAGEM -->
-                        <Border Width="220"
-                                Height="220"
-                                CornerRadius="20"
+                    <StackPanel VerticalAlignment="Center"
+                                HorizontalAlignment="Center">
+
+                        <Border Width="300"
+                                Height="300"
+                                CornerRadius="25"
+                                BorderBrush="#EAEAEA"
+                                BorderThickness="1"
                                 ClipToBounds="True"
-                                Margin="0,0,0,20">
+                                Margin="0,0,0,25">
 
-                            <Image Source="/Images/contato.png"
+                            <Image Source="/Dados/imagem/imgcontato.png"
                                    Stretch="UniformToFill"/>
+
                         </Border>
 
                         <TextBlock Text="Entre em Contato"
-                                   FontSize="24"
+                                   FontSize="32"
                                    FontWeight="Bold"
-                                   HorizontalAlignment="Center"
-                                   Foreground="#1E1E1E"/>
-
-                        <TextBlock Text="Clique aqui para falar conosco"
-                                   FontSize="14"
-                                   Foreground="#666"
-                                   Margin="0,10,0,0"
+                                   Foreground="#1E1E1E"
                                    HorizontalAlignment="Center"/>
+
+                        <TextBlock Text="Atendimento rápido e personalizado via WhatsApp"
+                                   FontSize="16"
+                                   Foreground="#666666"
+                                   TextAlignment="Center"
+                                   Width="362"
+                                   Margin="0,12,0,0"/>
+
+                        <Border Background="#1E22D8"
+                                CornerRadius="20"
+                                Padding="14,8"
+                                Margin="0,25,0,0">
+
+                            <TextBlock Text="Falar no WhatsApp"
+                                       Foreground="White"
+                                       FontWeight="SemiBold"
+                                       FontSize="15"
+                                       HorizontalAlignment="Center"/>
+
+                        </Border>
 
                     </StackPanel>
 
