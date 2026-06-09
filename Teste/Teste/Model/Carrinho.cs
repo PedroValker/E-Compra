@@ -10,6 +10,7 @@ namespace Teste.Model
         public int Quantidade { get; set; } = 1;
 
         private string _observacoes = "";
+        public string EnderecoEntrega { get; set; } = "";
         public string Observacoes
         {
             get => _observacoes;

@@ -74,44 +74,56 @@ namespace CestaApp.Views
             }
         }
 
-        // 🔥 MÉTODO CORRIGIDO: Protege o banco de dados contra duplicidade e falsas modificações
+        // 🔥 MÉTODO ATUALIZADO: Executa toda a lógica em memória e persiste em arquivo TXT apenas no fim
+        // 🔥 MÉTODO CORRIGIDO: Vincula o IdUsuario na memória antes de persistir no arquivo TXT
         private void FinalizarPedido_Click(object sender, RoutedEventArgs e)
         {
             var itemCarrinho = MemoriaCarrinho.Itens.FirstOrDefault();
             if (itemCarrinho == null) return;
 
-            string enderecoCliente = "A combinar";
-            if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
+            // 1. Definição do endereço de entrega (prioriza o do carrinho, fallback para o do usuário logado)
+            string enderecoFinal = "A combinar";
+            if (!string.IsNullOrWhiteSpace(itemCarrinho.EnderecoEntrega))
+            {
+                enderecoFinal = itemCarrinho.EnderecoEntrega;
+            }
+            else if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
             {
                 var end = Sessao.UsuarioLogado.Endereco;
-                enderecoCliente = $"{end.Rua}, nº {end.Numero} - {end.Bairro}";
+                enderecoFinal = $"{end.Rua}, nº {end.Numero} - {end.Bairro}";
             }
 
+            // 2. Criação do objeto de Pedido com todas as propriedades necessárias
             Pedido novoPedido = new Pedido
             {
                 NomePedido = "PED-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
                 Recebedor = Sessao.UsuarioLogado?.Nome ?? "Cliente",
-                Endereco = enderecoCliente,
+                Endereco = enderecoFinal,
                 FormaPagamento = "A combinar",
                 Status = "Pendente",
                 Total = itemCarrinho.CestaSelecionada.Preco,
                 DataDoPedido = DateTime.Now.ToString("dd/MM/yyyy"),
                 CestaComprada = itemCarrinho.CestaSelecionada,
-                Itens = new List<ItemPedido>()
+                Itens = new List<ItemPedido>(),
+                Observacoes = !string.IsNullOrWhiteSpace(itemCarrinho.Observacoes) ? itemCarrinho.Observacoes.Trim() : "",
+
+                // 🚀 CORREÇÃO CRÍTICA: Associa o ID do Usuário Logado ao pedido na memória
+                IdUsuario = Sessao.UsuarioLogado != null ? Sessao.UsuarioLogado.Id : 0
             };
 
+            // Gera o ID incremental baseado nos dados atuais de memória
             novoPedido.IdPedido = MemoriaPedidos.Lista.Any()
-            ? MemoriaPedidos.Lista.Max(p => p.IdPedido) + 1
-            : 1;
+                ? MemoriaPedidos.Lista.Max(p => p.IdPedido) + 1
+                : 1;
 
-            // 1. Registra a linha obrigatória identificando a Cesta no arquivo de texto
+            // 3. Adiciona a linha de identificação da Cesta nos itens do pedido
             novoPedido.Itens.Add(new ItemPedido
             {
                 Nome = itemCarrinho.CestaSelecionada.Nome,
                 Quantidade = 1
             });
 
-            // 2. Mapeia a receita fixa de fábrica cadastrada no sistema
+            // 4. Mapeia a receita original de fábrica para comparação
             var cestaOriginalDoBanco = MemoriaCestas.Lista.FirstOrDefault(c =>
                 c.Nome.Trim().ToUpper() == itemCarrinho.CestaSelecionada.Nome.Trim().ToUpper());
 
@@ -128,7 +140,7 @@ namespace CestaApp.Views
                 }
             }
 
-            // 3. Mapeia a sacola de compras modificada pelo cliente (Agrupamento sem repetição de palavras)
+            // 5. Mapeia a composição customizada trazida pelo cliente no carrinho
             var mapaCarrinhoCliente = new Dictionary<string, int>();
             if (itemCarrinho.CestaSelecionada.Itens != null)
             {
@@ -142,7 +154,7 @@ namespace CestaApp.Views
                 }
             }
 
-            // 4. ANALISADOR CRÍTICO DE MODIFICAÇÕES:
+            // 6. Analisa se houveram modificações na estrutura da cesta
             bool temModificacao = false;
             var todosOsProdutos = mapaOriginalFabrica.Keys.Union(mapaCarrinhoCliente.Keys).Distinct();
 
@@ -158,8 +170,7 @@ namespace CestaApp.Views
                 }
             }
 
-            // Se o carrinho foi modificado, grava as alterações detalhadas
-            // Se NÃO foi modificado, deixa os itens limpos para o painel admin ler como "Completa"
+            // Se modificado, acopla a listagem detalhada de alterações ao pedido em memória
             if (temModificacao && itemCarrinho.CestaSelecionada.Itens != null)
             {
                 var produtosParaGravar = itemCarrinho.CestaSelecionada.Itens
@@ -180,11 +191,11 @@ namespace CestaApp.Views
                 }
             }
 
-            // 5. Salva de forma permanente e atualiza a interface limpa
-            PedidoRepository repo = new PedidoRepository();
-            repo.AdicionarNovoPedidoNoTxt(novoPedido);
+            MemoriaPedidos.Lista.Add(novoPedido);
 
             MemoriaCarrinho.Itens.Clear();
+
+     
             ItensNoCarrinho.Clear();
 
             MessageBox.Show("Pedido finalizado e salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);

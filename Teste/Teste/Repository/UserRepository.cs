@@ -141,6 +141,14 @@ namespace Teste.Repository
         // 🚀 CORREÇÃO: Corrigido o nome de "Atuallizar" para "Atualizar"
         public void Atualizar(User user)
         {
+            // 🛡️ SEGURANÇA: Se o usuário enviado for nulo, interrompe o método para não quebrar o sistema
+            if (user == null)
+            {
+                Console.WriteLine("Aviso: Tentativa de atualizar um usuário nulo.");
+                return;
+            }
+
+            // O seu código original continua aqui de forma segura:
             var usuarioExistente = MemoriaUsuarios.Lista
                 .FirstOrDefault(u => u.Id == user.Id);
 
@@ -150,9 +158,9 @@ namespace Teste.Repository
                 usuarioExistente.Email = user.Email;
                 usuarioExistente.Telefone = user.Telefone;
                 usuarioExistente.Senha = user.Senha;
-                usuarioExistente.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil);
+                usuarioExistente.FotoPerfil = user.FotoPerfil; // Certifique-se de que a sua função SalvarFoto não cause loops
 
-                // 🚀 NOVO: Atualiza a referência do Endereço
+                // Atualiza a referência do Endereço
                 if (user.Endereco != null)
                 {
                     if (usuarioExistente.Endereco == null)
@@ -166,8 +174,6 @@ namespace Teste.Repository
                     usuarioExistente.Endereco.Bairro = user.Endereco.Bairro;
                 }
             }
-
-            SalvarArquivo();
         }
 
         // 🚀 SALVAR NO TXT (Incluindo as chaves do Endereço no final da linha)

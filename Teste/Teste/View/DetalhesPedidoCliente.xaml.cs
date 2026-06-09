@@ -8,6 +8,7 @@ using iText.Layout.Properties;
 using Microsoft.Win32;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
@@ -21,7 +22,6 @@ namespace Teste.View
     {
         private Pedido _pedidoAtual;
 
-        // 🔥 CORREÇÃO: Transformadas em variáveis globais da classe para o PDF e a UI enxergarem os mesmos dados
         private Dictionary<string, int> _dicionarioPadrao = new Dictionary<string, int>();
         private Dictionary<string, int> _dicionarioCliente = new Dictionary<string, int>();
 
@@ -30,7 +30,7 @@ namespace Teste.View
             InitializeComponent();
             _pedidoAtual = pedido;
 
-            // Ajuste automático de endereço em memória
+            // Ajuste automático de endereço em memória se estiver vazio
             if (string.IsNullOrWhiteSpace(_pedidoAtual.Endereco) || _pedidoAtual.Endereco.Equals("A combinar", StringComparison.OrdinalIgnoreCase))
             {
                 if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
@@ -47,7 +47,7 @@ namespace Teste.View
 
         private void SystematizarEGradeLogica()
         {
-            // 1. Estiliza a Tag do Cabeçalho com base no Modelo Inteligente
+            // 1. Estiliza a Tag do Cabeçalho com base no Modelo Customizado
             if (_pedidoAtual.IsModificada)
             {
                 BadgeComposicao.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFEDD5"));
@@ -154,8 +154,19 @@ namespace Teste.View
             GridRemovidos.ItemsSource = itensRemovidos;
         }
 
+        // 🚀 ATUALIZADO: Salva o endereço alterado diretamente no TXT ao fechar
         private void Fechar_Click(object sender, RoutedEventArgs e)
         {
+            try
+            {
+                PedidoRepository repoPedidos = new PedidoRepository();
+                repoPedidos.AtualizarArquivoTxt();
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show("Erro ao salvar alterações do pedido: " + ex.Message, "Aviso", MessageBoxButton.OK, MessageBoxImage.Warning);
+            }
+
             this.Close();
         }
 
@@ -210,6 +221,7 @@ namespace Teste.View
                     tabelaInfo.AddCell(new Cell().Add(new Paragraph("Cliente").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
                     tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Recebedor))).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
 
+                    // 📍 O endereço alterado pelo usuário na tela já sairá correto aqui no PDF
                     tabelaInfo.AddCell(new Cell().Add(new Paragraph("Endereço").SetFont(fonteNegrito)).SetBackgroundColor(cinzaClaro).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
                     tabelaInfo.AddCell(new Cell().Add(new Paragraph(Safe(_pedidoAtual.Endereco))).SetBorder(new iText.Layout.Borders.SolidBorder(iText.Kernel.Colors.ColorConstants.LIGHT_GRAY, 0.5f)));
 
@@ -244,7 +256,6 @@ namespace Teste.View
 
                     document.Add(tabelaItens);
 
-                    // 🔥 CORRIGIDO: Agora o PDF lê as variáveis globais _dicionarioPadrao e _dicionarioCliente com segurança
                     if (_pedidoAtual.IsModificada)
                     {
                         document.Add(new Paragraph("\nHistórico de Customizações (Opcionais):")
@@ -286,6 +297,7 @@ namespace Teste.View
                 MessageBox.Show(ex.Message, "Erro ao gerar PDF", MessageBoxButton.OK, MessageBoxImage.Error);
             }
         }
+
         private string Safe(object value) => value?.ToString() ?? "";
     }
 }

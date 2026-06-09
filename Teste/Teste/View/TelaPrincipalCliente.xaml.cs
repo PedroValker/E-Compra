@@ -50,26 +50,35 @@ namespace Teste.View
             NomeUsuarioText.Text = $"Olá, {nome}";
         }
 
+        // Cole ou adapte este método dentro da sua TelaPrincipalCliente.xaml.cs
         public void AtualizarFoto(string caminho)
         {
             try
             {
-                if (!string.IsNullOrEmpty(caminho) && File.Exists(caminho))
+                BitmapImage img = new BitmapImage();
+                img.BeginInit();
+                // IGNORA O CACHE: obriga o WPF a ler o arquivo de foto atualizado do disco rígido
+                img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
+                img.CacheOption = BitmapCacheOption.OnLoad;
+
+                if (caminho.StartsWith("pack://"))
                 {
-                    BitmapImage imagem = new BitmapImage();
-                    using (var stream = new FileStream(caminho, FileMode.Open, FileAccess.Read, FileShare.Read))
-                    {
-                        imagem.BeginInit();
-                        imagem.CacheOption = BitmapCacheOption.OnLoad;
-                        imagem.StreamSource = stream;
-                        imagem.EndInit();
-                        imagem.Freeze();
-                    }
-                    // Mude para ImageSource
-                    ImagemPerfil.ImageSource = new BitmapImage(new Uri("caminho_da_imagem"));
+                    img.UriSource = new Uri(caminho);
                 }
+                else
+                {
+                    img.UriSource = new Uri(caminho, UriKind.Absolute);
+                }
+
+                img.EndInit();
+
+                // Altere 'SuaBolinhaImagem' para o nome do componente ImageSource da sua elipse
+                ImagemPerfil.ImageSource = img;
             }
-            catch { }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro visual: " + ex.Message);
+            }
         }
         public void AtualizarEnderecoNaTela()
         {

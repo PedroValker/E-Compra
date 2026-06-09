@@ -51,13 +51,16 @@ namespace Teste.Repository
             return string.Join(";", itensFormatados);
         }
 
-        // 🚀 ATUALIZADO: Inclui a propriedade p.TipoComposicao no final da linha de texto
+        // 🚀 CORREÇÃO: Trata a string de observações antes de montar a linha do arquivo TXT
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
             string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
 
-            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{p.Observacoes} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao} |Pago:{p.Pago}";
+            // Se as observações estiverem vazias, define como "NENHUMA" para manter a integridade das colunas
+            string obsSalvar = string.IsNullOrWhiteSpace(p.Observacoes) ? "NENHUMA" : p.Observacoes.Trim().Replace("|", "").Replace("\r\n", " ").Replace("\n", " ");
+
+            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{obsSalvar} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao} |Pago:{p.Pago}";
         }
 
         public void AdicionarNovoPedidoNoTxt(Pedido p)
@@ -78,6 +81,8 @@ namespace Teste.Repository
                 Console.WriteLine($"Pagamento: {p.FormaPagamento}");
                 Console.WriteLine($"Status: {p.Status}");
                 Console.WriteLine($"Total: {p.Total}");
+                Console.WriteLine($"Obs: {p.Observacoes}");
+
                 MemoriaPedidos.Lista.Add(p);
                 AtualizarArquivoTxt();
             }
@@ -155,20 +160,16 @@ namespace Teste.Repository
                     string totalStr = partes[8].Replace("Total:", "").Trim();
 
                     string obs = partes[9].Replace("Obs:", "").Trim();
+                    // 🚀 CORREÇÃO: Se no arquivo estiver "NENHUMA", limpa para voltar a ser string vazia na memória
+                    if (obs == "NENHUMA") { obs = ""; }
 
                     string itensStr = partes[10].Replace("Itens:", "").Trim();
 
-                    string dataEntregaStr = partes[11]
-                        .Replace("DataEntrega:", "")
-                        .Trim();
+                    string dataEntregaStr = partes[11].Replace("DataEntrega:", "").Trim();
 
-                    string composicaoSalva = partes[12]
-                        .Replace("Composicao:", "")
-                        .Trim();
+                    string composicaoSalva = partes[12].Replace("Composicao:", "").Trim();
 
-                    string pagoStr = partes[13]
-                        .Replace("Pago:", "")
-                        .Trim();
+                    string pagoStr = partes[13].Replace("Pago:", "").Trim();
 
                     bool.TryParse(pagoStr, out bool pagoConvertido);
 
@@ -200,7 +201,7 @@ namespace Teste.Repository
                         FormaPagamento = pagamento,
                         Status = status,
                         Total = totalConvertConvertido,
-                        Observacoes = obs,
+                        Observacoes = obs, // 📍 Recebe as observações tratadas corretamente
                         DataEntrega = dataEntregaConvertida,
                         Pago = pagoConvertido,
                         Itens = new List<ItemPedido>()
@@ -237,10 +238,6 @@ namespace Teste.Repository
                             }
                         }
                     }
-
-                    // Se a sua propriedade "TipoComposicao" for estritamente um get-only dinâmico, 
-                    // o próprio motor do C# vai calculá-la em tempo de execução ao ler os 'Itens' processados acima. 
-                    // Mas salvando-a na linha, garantimos a integridade do histórico estático no arquivo txt.
 
                     MemoriaPedidos.Lista.Add(p);
                 }

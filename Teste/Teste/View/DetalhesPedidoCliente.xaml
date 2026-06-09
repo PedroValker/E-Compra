@@ -70,24 +70,47 @@
             </Grid>
 
             <WrapPanel Margin="0,12,0,0" Orientation="Horizontal">
-                <StackPanel Orientation="Horizontal" Margin="0,0,28,6">
-                    <TextBlock Text="👤 Cliente:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0"/>
-                    <TextBlock Text="{Binding Recebedor}" Foreground="#334155" FontWeight="Medium"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="👤 Cliente:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Recebedor}" Foreground="#334155" FontWeight="Medium" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,28,6">
-                    <TextBlock Text="📅 Data do Pedido:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0"/>
-                    <TextBlock Text="{Binding DataDoPedido}" Foreground="#334155"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="📅 Data do Pedido:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DataDoPedido}" Foreground="#334155" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,28,6">
-                    <TextBlock Text="🚚 Entrega:" FontWeight="SemiBold" Foreground="#1E22D8" Margin="0,0,6,0"/>
-                    <TextBlock Text="{Binding DataEntrega, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Não agendada'}" Foreground="#1E22D8" FontWeight="Bold"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="🚚 Entrega:" FontWeight="SemiBold" Foreground="#1E22D8" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DataEntrega, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Não agendada'}" Foreground="#1E22D8" FontWeight="Bold" VerticalAlignment="Center"/>
                 </StackPanel>
 
-                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
-                    <TextBlock Text="📍 Endereço:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0"/>
-                    <TextBlock Text="{Binding Endereco}" Foreground="#334155" TextWrapping="Wrap" MaxWidth="400"/>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
+                    <TextBlock Text="📍 Endereço:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Endereco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Foreground="#334155" 
+                             FontWeight="Medium"
+                             Width="350"
+                             Padding="8,5"
+                             Background="White"
+                             BorderBrush="#CBD5E1"
+                             BorderThickness="1"
+                             VerticalAlignment="Center">
+                        <TextBox.Resources>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TextBox">
+                                            <Border CornerRadius="6" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
                 </StackPanel>
             </WrapPanel>
         </StackPanel>

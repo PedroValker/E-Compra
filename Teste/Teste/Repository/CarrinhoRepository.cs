@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Teste.Model;
 
 namespace Teste.Repository
@@ -13,21 +14,20 @@ namespace Teste.Repository
             // Busca a pasta "Dados" na raiz do projeto
             string pastaProjeto = Path.GetFullPath(Path.Combine(AppDomain.CurrentDomain.BaseDirectory, @"..\..\..\"));
 
-            // 🔥 CORREÇÃO E MELHORIA: Proteção contra nulo e uso do ID como chave única
+            // Definição padrão caso não haja usuário logado
             string sufixoArquivo = "Visitante";
 
             if (Sessao.UsuarioLogado != null)
             {
-                // Usar o ID garante que, mesmo se existirem dois usuários com o mesmo nome, os carrinhos não se misturem
+                // Vincula o ID do usuário ao nome do arquivo do carrinho individual
                 sufixoArquivo = Sessao.UsuarioLogado.Id.ToString();
             }
 
             string nomeArquivo = $"carrinho_{sufixoArquivo}.txt";
-
             return Path.Combine(pastaProjeto, "Dados", nomeArquivo);
         }
 
-        // 🔥 SALVA TUDO NO TXT DO USUÁRIO LOGADO
+        // 🔥 SALVA O RASCUNHO DO CARRINHO NO TXT INDIVIDUAL DO USUÁRIO
         public void AtualizarArquivoTxt()
         {
             try
@@ -39,14 +39,16 @@ namespace Teste.Repository
 
                 foreach (var item in MemoriaCarrinho.Itens)
                 {
-                    // 🛠️ SEGURANÇA: Se a obs estiver vazia, salva como "NENHUMA" para não quebrar o Split('|')
-                    string obsSalvar = string.IsNullOrWhiteSpace(item.Observacoes) ? "NENHUMA" : item.Observacoes.Trim();
+                    // Proteções sanitárias para evitar quebras no delimitador '|'
+                    string obsSalvar = string.IsNullOrWhiteSpace(item.Observacoes) ? "NENHUMA" : item.Observacoes.Trim().Replace("|", "");
+                    string endSalvar = string.IsNullOrWhiteSpace(item.EnderecoEntrega) ? "A combinar" : item.EnderecoEntrega.Trim().Replace("|", "");
 
-                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{obsSalvar}";
+                    // Salva os dados estruturados do carrinho temporário
+                    string linha = $"CestaID:{item.CestaSelecionada.Id} |Qtd:{item.Quantidade} |Obs:{obsSalvar} |End:{endSalvar}";
                     linhasParaSalvar.Add(linha);
                 }
 
-                File.WriteAllLines(caminho, linhasParaSalvar);
+                File.WriteAllLines(caminho, linhasParaSalvar, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -54,45 +56,58 @@ namespace Teste.Repository
             }
         }
 
-        // 🔥 CARREGA DO TXT DO USUÁRIO PARA A MEMÓRIA
+        // 🔥 CARREGA O RASCUNHO DO CARRINHO DO USUÁRIO PARA A MEMÓRIA
         public void CarregarDoArquivo()
         {
-            MemoriaCarrinho.Itens.Clear();
-            string caminho = ObterCaminhoArquivo();
-
-            if (!File.Exists(caminho)) return;
-
-            var linhas = File.ReadAllLines(caminho);
-
-            foreach (var linha in linhas)
+            try
             {
-                if (string.IsNullOrWhiteSpace(linha)) continue;
+                MemoriaCarrinho.Itens.Clear();
+                string caminho = ObterCaminhoArquivo();
 
-                var partes = linha.Split('|');
+                if (!File.Exists(caminho)) return;
 
-                if (partes.Length < 3) continue;
+                var linhas = File.ReadAllLines(caminho, Encoding.UTF8);
 
-                string idLimpo = partes[0].Replace("CestaID:", "").Trim();
-                string qtdLimpa = partes[1].Replace("Qtd:", "").Trim();
-                string obsLimpa = partes[2].Replace("Obs:", "").Trim();
-
-                if (!int.TryParse(idLimpo, out int idCesta)) continue;
-                if (!int.TryParse(qtdLimpa, out int quantidade)) continue;
-
-                Cesta cestaEncontrada = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == idCesta);
-
-                if (cestaEncontrada != null)
+                foreach (var linha in linhas)
                 {
-                    ItemCarrinho itemSalvo = new ItemCarrinho
-                    {
-                        CestaSelecionada = cestaEncontrada,
-                        Quantidade = quantidade,
-                        // 🛠️ RECUPERAÇÃO: Se for "NENHUMA", volta a ser string vazia na memória
-                        Observacoes = obsLimpa == "NENHUMA" ? "" : obsLimpa
-                    };
+                    if (string.IsNullOrWhiteSpace(linha)) continue;
 
-                    MemoriaCarrinho.Itens.Add(itemSalvo);
+                    var partes = linha.Split('|');
+                    if (partes.Length < 3) continue;
+
+                    string idLimpo = partes[0].Replace("CestaID:", "").Trim();
+                    string qtdLimpa = partes[1].Replace("Qtd:", "").Trim();
+                    string obsLimpa = partes[2].Replace("Obs:", "").Trim();
+
+                    // Recupera o endereço se ele existir (compatibilidade com arquivos antigos)
+                    string endLimpo = "A combinar";
+                    if (partes.Length >= 4)
+                    {
+                        endLimpo = partes[3].Replace("End:", "").Trim();
+                    }
+
+                    if (!int.TryParse(idLimpo, out int idCesta)) continue;
+                    if (!int.TryParse(qtdLimpa, out int quantidade)) continue;
+
+                    Cesta cestaEncontrada = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == idCesta);
+
+                    if (cestaEncontrada != null)
+                    {
+                        ItemCarrinho itemSalvo = new ItemCarrinho
+                        {
+                            CestaSelecionada = cestaEncontrada,
+                            Quantidade = quantidade,
+                            Observacoes = obsLimpa == "NENHUMA" ? "" : obsLimpa,
+                            EnderecoEntrega = endLimpo
+                        };
+
+                        MemoriaCarrinho.Itens.Add(itemSalvo);
+                    }
                 }
+            }
+            catch (Exception ex)
+            {
+                Console.WriteLine("Erro ao carregar o arquivo de carrinho: " + ex.Message);
             }
         }
     }

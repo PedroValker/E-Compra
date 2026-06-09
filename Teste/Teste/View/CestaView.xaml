@@ -69,7 +69,6 @@
 
         <Border Grid.Column="0" Style="{StaticResource CardStyle}" Margin="8,10,10,0">
             <StackPanel VerticalAlignment="Center" Height="333" Margin="11,0,0,0">
-
                 <TextBlock Text="{Binding CestaAtual.Nome}"
                            FontSize="22"
                            FontWeight="Bold"
@@ -77,9 +76,9 @@
                            HorizontalAlignment="Center"
                            Margin="0,0,0,20" Height="24"/>
                 <Image Source="{Binding CestaAtual.ImagemCompleta}"
-                   Stretch="Uniform"
-                   HorizontalAlignment="Center"
-                   VerticalAlignment="Center"/>
+                       Stretch="Uniform"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"/>
             </StackPanel>
         </Border>
 
@@ -89,34 +88,26 @@
 
                 <DataGrid x:Name="GridProdutos" ItemsSource="{Binding ProdutosDaCesta}">
                     <DataGrid.Columns>
-
                         <DataGridTextColumn Header="Qtd" Binding="{Binding Peso, FallbackValue=0}" Width="50" IsReadOnly="True" FontWeight="Bold"/>
-
                         <DataGridTextColumn Header="Produto" Binding="{Binding Nome}" Width="*" IsReadOnly="True"/>
-
                         <DataGridTemplateColumn Header="Ajuste" Width="100">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
                                     <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
-
                                         <Button Content="-"
-                                Style="{StaticResource QtyButtonStyle}"
-                                Click="DiminuirQtd_Click"/>
-
+                                                Style="{StaticResource QtyButtonStyle}"
+                                                Click="DiminuirQtd_Click"/>
                                         <TextBlock Text="{Binding QuantidadeSelecionada, FallbackValue=1}"
-                                   Margin="10,0"
-                                   FontWeight="SemiBold"
-                                   VerticalAlignment="Center"/>
-
+                                                   Margin="10,0"
+                                                   FontWeight="SemiBold"
+                                                   VerticalAlignment="Center"/>
                                         <Button Content="+"
-                                Style="{StaticResource QtyButtonStyle}"
-                                Click="AumentarQtd_Click"/>
-
+                                                Style="{StaticResource QtyButtonStyle}"
+                                                Click="AumentarQtd_Click"/>
                                     </StackPanel>
                                 </DataTemplate>
                             </DataGridTemplateColumn.CellTemplate>
                         </DataGridTemplateColumn>
-
                     </DataGrid.Columns>
                 </DataGrid>
             </StackPanel>
@@ -127,7 +118,6 @@
             <Border Style="{StaticResource CardStyle}">
                 <StackPanel>
                     <TextBlock Text="Total do Pedido" Foreground="{StaticResource TextSecondary}"/>
-
                     <TextBlock Text="{Binding ValorTotalCesta, StringFormat='R$ \{0:N2\}'}"
                                FontSize="26"
                                FontWeight="Bold"
@@ -137,9 +127,35 @@
 
             <Border Style="{StaticResource CardStyle}">
                 <StackPanel>
+                    <TextBlock Text="📍 Endereço de Entrega" FontWeight="SemiBold" Margin="0,0,0,5"/>
+                    <TextBox Text="{Binding EnderecoEntrega, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"
+                             Height="35"
+                             VerticalContentAlignment="Center"
+                             BorderBrush="#DDD"
+                             Padding="6,2">
+                        <TextBox.Resources>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TextBox">
+                                            <Border CornerRadius="6" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}">
+                <StackPanel>
                     <TextBlock Text="Observações" FontWeight="SemiBold" Margin="0,0,0,5"/>
                     <TextBox Text="{Binding Observacoes, UpdateSourceTrigger=PropertyChanged}"
-                             Height="100"
+                             Height="60"
                              TextWrapping="Wrap"
                              AcceptsReturn="True"
                              BorderBrush="#DDD"
@@ -153,6 +169,5 @@
                     Click="AdicionarCarrinho_Click"/>
 
         </StackPanel>
-
     </Grid>
 </UserControl>

@@ -5,6 +5,7 @@ using System.Collections.ObjectModel;
 using System.ComponentModel;
 using System.Linq;
 using System.Runtime.CompilerServices;
+using System.Text.RegularExpressions;
 using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
@@ -18,14 +19,23 @@ namespace CestaApp.Views
         public ObservableCollection<Produto> ProdutosDaCesta { get; set; }
         public string Observacoes { get; set; }
 
-        // 🚀 NOVA LÓGICA: Calcula baseado no preço cadastrado da Cesta + ou - as alterações
+        private string _enderecoEntrega;
+        public string EnderecoEntrega
+        {
+            get => _enderecoEntrega;
+            set
+            {
+                _enderecoEntrega = value;
+                OnPropertyChanged();
+            }
+        }
+
         public decimal ValorTotalCesta
         {
             get
             {
                 if (CestaAtual == null) return 0;
 
-                // Começa estritamente com o valor definido no cadastro (Ex: R$ 76.50)
                 decimal valorBase = CestaAtual.Preco;
                 decimal variacaoPreco = 0;
 
@@ -37,19 +47,13 @@ namespace CestaApp.Views
                         if (_quantidadesOriginaisFabrica.ContainsKey(chave))
                         {
                             int qtdOriginal = _quantidadesOriginaisFabrica[chave];
-                            // Se der positivo: adicionou itens. Se der negativo: retirou itens.
                             int diferencaQtd = produto.QuantidadeSelecionada - qtdOriginal;
-
-                            // Multiplica a diferença unitária pelo preço do produto
                             variacaoPreco += (diferencaQtd * produto.Preco);
                         }
                     }
                 }
 
-                // Retorna o valor fixo de tabela somado algébricamente com a variação (que pode ser negativa)
                 decimal totalCalculado = valorBase + variacaoPreco;
-
-                // Garante que a cesta nunca fique com valor negativo caso removam tudo
                 return totalCalculado > 0 ? totalCalculado : 0;
             }
         }
@@ -67,6 +71,24 @@ namespace CestaApp.Views
             ProdutosDaCesta = new ObservableCollection<Produto>();
             _quantidadesOriginaisFabrica.Clear();
 
+            // 🚀 AUTOMÁTICO: Resgata as informações cadastrais de endereço em memória do usuário ativo
+            if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
+            {
+                var end = Sessao.UsuarioLogado.Endereco;
+                if (!string.IsNullOrWhiteSpace(end.Rua))
+                {
+                    EnderecoEntrega = $"{end.Rua}, nº {end.Numero} - {end.Bairro}";
+                }
+                else
+                {
+                    EnderecoEntrega = "A combinar";
+                }
+            }
+            else
+            {
+                EnderecoEntrega = "A combinar";
+            }
+
             if (CestaAtual != null && CestaAtual.Itens != null)
             {
                 var itensAgrupados = CestaAtual.Itens
@@ -77,7 +99,6 @@ namespace CestaApp.Views
                         var primeiroItem = grupo.First();
                         int totalDeFabrica = grupo.Count();
 
-                        // Salva rigorosamente a estrutura inicial vinda do banco
                         _quantidadesOriginaisFabrica[primeiroItem.Nome.Trim().ToUpper()] = totalDeFabrica;
 
                         return new Produto
@@ -93,7 +114,6 @@ namespace CestaApp.Views
                 {
                     item.PropertyChanged -= Produto_PropertyChanged;
                     item.PropertyChanged += Produto_PropertyChanged;
-
                     ProdutosDaCesta.Add(item);
                 }
             }
@@ -110,7 +130,6 @@ namespace CestaApp.Views
         {
             if (e.PropertyName == nameof(Produto.QuantidadeSelecionada) || e.PropertyName == nameof(Produto.SubtotalItem))
             {
-                // Notifica a interface para atualizar o textblock do valor final total
                 OnPropertyChanged(nameof(ValorTotalCesta));
             }
         }
@@ -172,23 +191,25 @@ namespace CestaApp.Views
 
             var cestaOriginalDoBanco = MemoriaCestas.Lista.FirstOrDefault(c => c.Id == CestaAtual.Id);
             string nomeVerdadeiroDaCesta = cestaOriginalDoBanco?.Nome ?? CestaAtual.Nome;
-
-            // 🚀 ATUALIZADO: O preço final leva em conta a nossa nova propriedade inteligente
             decimal precoFinalCesta = this.ValorTotalCesta;
 
+            // 🟢 CORREÇÃO: Propriedade 'Endereco' removida daqui de dentro para parar o erro de compilação
             Cesta cestaClonadaParaCarrinho = new Cesta(CestaAtual.Id)
             {
                 Nome = nomeVerdadeiroDaCesta,
-                Preco = precoFinalCesta, // Passa o valor correto (Base + Alterações) para o carrinho
+                Preco = precoFinalCesta,
                 ImagemPath = CestaAtual.ImagemPath,
                 Itens = listaFinalParaCarrinho
             };
 
+            // 🚀 SOLUÇÃO: O endereço da tela agora deve ser associado ao ItemCarrinho.
+            // Certifique-se de que sua classe 'ItemCarrinho' tenha a propriedade 'EnderecoEntrega'.
             ItemCarrinho novoItem = new ItemCarrinho
             {
                 CestaSelecionada = cestaClonadaParaCarrinho,
                 Quantidade = 1,
-                Observacoes = this.Observacoes
+                Observacoes = this.Observacoes,
+                EnderecoEntrega = this.EnderecoEntrega // Atribuição correta na classe de transporte do carrinho
             };
 
             MemoriaCarrinho.Itens.Add(novoItem);

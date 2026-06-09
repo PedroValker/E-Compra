@@ -175,8 +175,13 @@ namespace Teste.Model
     {
         public int Quantidade { get; set; }
         public string Nome { get; set; } = "";
-    }
+        public string Observacoes { get; set; }
 
+        public string EnderecoEntrega { get; set; }
+
+
+    }
+  
     public static class MemoriaPedidos
     {
         public static List<Pedido> Lista { get; set; } = new List<Pedido>();
