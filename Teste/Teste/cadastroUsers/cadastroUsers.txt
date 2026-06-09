@@ -1,4 +1,4 @@
-Id:1 |Nome:Admin |Email:admin@gmail.com |Telefone:12991080134 |Senha:123 |FotoPerfil:C:\Users\pedro\OneDrive\Documentos\Imagens\BK.jpg |CEP: |Rua: |Numero: |Bairro:
+Id:1 |Nome:Admin |Email:admin@gmail.com |Telefone:12991080134 |Senha:123 |FotoPerfil:null |CEP: |Rua: |Numero: |Bairro:
 Id:2 |Nome:pedro |Email:pedro12@gmail.com |Telefone:12991080134 |Senha:123 |FotoPerfil:C:\Users\aluno\Pictures\Imagem1.jpg |CEP:12712040 |Rua:Rua Prefeito José de Souza Braga |Numero: |Bairro:Retiro da Mantiqueira
 Id:3 |Nome:ricardo pinto |Email:pinto@gmail.com |Telefone:32132132132 |Senha:1234 |FotoPerfil:null |CEP: |Rua: |Numero: |Bairro:
 Id:4 |Nome:shai |Email:shai@gmail.com |Telefone:12991080132 |Senha:123 |FotoPerfil:null |CEP: |Rua: |Numero: |Bairro:

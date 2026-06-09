@@ -228,7 +228,15 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-
+                    
+                    <Button x:Name="BtnMarcarPronta"
+        Content="✔ Marcar Pronta"
+        Click="BtnMarcarPronta_Click"
+        Width="150"
+        Height="40"
+        Margin="0,0,10,0"
+         Background="#008000" Foreground="White" />
+                    
                     <Button Content="Fechar" Style="{StaticResource BaseButtonStyle}" Click="Fechar_Click" Background="#0F172A" Foreground="White">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">

@@ -42,6 +42,15 @@ namespace Teste.View
 
             this.DataContext = _pedidoAtual;
 
+            if (_pedidoAtual.TipoComposicao == "Modificada")
+            {
+                BtnMarcarPronta.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnMarcarPronta.Visibility = Visibility.Collapsed;
+            }
+
             SystematizarEGradeLogica();
         }
 
@@ -154,6 +163,8 @@ namespace Teste.View
             GridRemovidos.ItemsSource = itensRemovidos;
         }
 
+
+
         // 🚀 ATUALIZADO: Salva o endereço alterado diretamente no TXT ao fechar
         private void Fechar_Click(object sender, RoutedEventArgs e)
         {
@@ -168,6 +179,16 @@ namespace Teste.View
             }
 
             this.Close();
+        }
+
+        private void BtnMarcarPronta_Click(object sender, RoutedEventArgs e)
+        {
+            _pedidoAtual.ModificadaPronta = true;
+
+            PedidoRepository repo = new PedidoRepository();
+            repo.AtualizarArquivoTxt();
+
+            MessageBox.Show("Cesta marcada como pronta.");
         }
 
         private void GerarPdf_Click(object sender, RoutedEventArgs e)
@@ -300,4 +321,7 @@ namespace Teste.View
 
         private string Safe(object value) => value?.ToString() ?? "";
     }
+
+
+
 }

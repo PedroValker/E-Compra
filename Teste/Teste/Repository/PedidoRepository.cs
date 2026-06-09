@@ -57,10 +57,11 @@ namespace Teste.Repository
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
             string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
 
+
             // Se as observações estiverem vazias, define como "NENHUMA" para manter a integridade das colunas
             string obsSalvar = string.IsNullOrWhiteSpace(p.Observacoes) ? "NENHUMA" : p.Observacoes.Trim().Replace("|", "").Replace("\r\n", " ").Replace("\n", " ");
 
-            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{obsSalvar} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao} |Pago:{p.Pago}";
+            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{obsSalvar} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |ModificadaPronta:{p.ModificadaPronta}| |Pago:{p.Pago}";
         }
 
         public void AdicionarNovoPedidoNoTxt(Pedido p)
@@ -167,7 +168,10 @@ namespace Teste.Repository
 
                     string dataEntregaStr = partes[11].Replace("DataEntrega:", "").Trim();
 
-                    string composicaoSalva = partes[12].Replace("Composicao:", "").Trim();
+                    bool.TryParse(
+                    partes[12].Replace("ModificadaPronta:", "").Trim(),
+                      out bool modificadaPronta
+                     );
 
                     string pagoStr = partes[13].Replace("Pago:", "").Trim();
 
@@ -204,6 +208,7 @@ namespace Teste.Repository
                         Observacoes = obs, // 📍 Recebe as observações tratadas corretamente
                         DataEntrega = dataEntregaConvertida,
                         Pago = pagoConvertido,
+                        ModificadaPronta = modificadaPronta,
                         Itens = new List<ItemPedido>()
                     };
 

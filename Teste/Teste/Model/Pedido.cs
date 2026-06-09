@@ -13,6 +13,7 @@ namespace Teste.Model
         public int Quantidade { get; set; }
     }
 
+
     public class Pedido : INotifyPropertyChanged
     {
 
@@ -53,6 +54,7 @@ namespace Teste.Model
             }
             set => _cestaComprada = value;
         }
+
 
         // 🔥 PROPRIEDADE COMPUTADA SEGURO: Retorna a receita original fixa da fábrica
         public List<Produto> ProdutosOriginaisCesta
@@ -96,27 +98,75 @@ namespace Teste.Model
         }
 
         // 🔥 PROPRIEDADE COMPUTADA (No lugar correto): Identifica se a cesta mantém a receita original ou foi alterada
+
+        private string _tipoComposicaoManual = "";
+
+        public string TipoComposicaoManual
+        {
+            get => _tipoComposicaoManual;
+            set
+            {
+                _tipoComposicaoManual = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TipoComposicao));
+            }
+        }
+
+        private bool _pronta;
+
+        public bool Pronta
+        {
+            get => _pronta;
+            set
+            {
+                _pronta = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TipoComposicaoExibicao));
+            }
+        }
+
+
+        public string TipoComposicaoExibicao
+        {
+            get
+            {
+                if (TipoComposicao == "Modificada" && ModificadaPronta)
+                    return "Modificada - Pronta";
+
+                return TipoComposicao;
+            }
+        }
+
+
         public string TipoComposicao
         {
             get
             {
+                if (!string.IsNullOrEmpty(TipoComposicaoManual))
+                    return TipoComposicaoManual;
+
                 var originais = ProdutosOriginaisCesta;
+
                 if (originais == null || !originais.Any())
                     return "Padrão";
 
-                var mapaOriginal = originais.GroupBy(p => p.Nome?.Trim().ToUpper())
-                                            .ToDictionary(g => g.Key ?? "", g => g.Count());
+                var mapaOriginal = originais
+                    .GroupBy(p => p.Nome?.Trim().ToUpper())
+                    .ToDictionary(g => g.Key ?? "", g => g.Count());
 
                 var modificados = ProdutosModificadosCliente;
-                var mapaCliente = modificados.GroupBy(i => i.Nome?.Trim().ToUpper())
-                                             .ToDictionary(g => g.Key ?? "", g => g.Sum(i => i.Quantidade));
+
+                var mapaCliente = modificados
+                    .GroupBy(i => i.Nome?.Trim().ToUpper())
+                    .ToDictionary(g => g.Key ?? "", g => g.Sum(i => i.Quantidade));
 
                 if (mapaOriginal.Count != mapaCliente.Count)
                     return "Modificada";
 
                 foreach (var par in mapaOriginal)
                 {
-                    if (!mapaCliente.TryGetValue(par.Key, out int qtdCliente) || par.Value != qtdCliente)
+                    if (!mapaCliente.TryGetValue(par.Key, out int qtdCliente)
+                        || par.Value != qtdCliente)
                     {
                         return "Modificada";
                     }
@@ -125,6 +175,22 @@ namespace Teste.Model
                 return "Completa";
             }
         }
+
+        
+        private bool _modificadaPronta;
+
+        public bool ModificadaPronta
+        {
+            get => _modificadaPronta;
+            set
+            {
+                _modificadaPronta = value;
+                OnPropertyChanged();
+                OnPropertyChanged(nameof(TipoComposicaoExibicao));
+            }
+        }
+
+
 
         // 🔥 PROPRIEDADE BOOLEANA AUXILIAR: Facilita filtros ou uso de cores/triggers no WPF
         public bool IsModificada => TipoComposicao == "Modificada";
@@ -186,4 +252,6 @@ namespace Teste.Model
     {
         public static List<Pedido> Lista { get; set; } = new List<Pedido>();
     }
+
+
 }
