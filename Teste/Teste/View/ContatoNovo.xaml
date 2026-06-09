@@ -5,9 +5,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d"
     x:Class="Teste.View.ContatoNovo"
-    Background="#F5F7FA"
-    HorizontalContentAlignment="Stretch"
-    VerticalContentAlignment="Stretch">
+    Background="#F5F7FA">
 
     <UserControl.Resources>
 
@@ -25,7 +23,7 @@
 
     </UserControl.Resources>
 
-    <Grid Margin="50">
+    <Grid Margin="20">
 
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
@@ -34,75 +32,80 @@
 
         <!-- CABEÇALHO -->
         <StackPanel HorizontalAlignment="Center"
-                    Margin="0,0,0,40">
+                    Margin="0,0,0,25">
 
             <TextBlock Text="Sobre a E-Compra"
-                       FontSize="36"
+                       FontSize="28"
                        FontWeight="Bold"
                        Foreground="#1E22D8"
                        HorizontalAlignment="Center"/>
 
             <TextBlock Text="Facilitando o acesso a cestas básicas com praticidade, segurança e flexibilidade."
-                       FontSize="16"
+                       FontSize="14"
                        Foreground="#707070"
-                       Width="650"
                        TextAlignment="Center"
-                       Margin="0,12,0,0"/>
+                       MaxWidth="600"
+                       Margin="0,10,0,0"
+                       TextWrapping="Wrap"/>
+
         </StackPanel>
 
         <!-- CONTEÚDO -->
         <Grid Grid.Row="1">
 
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="1*"/>
             </Grid.ColumnDefinitions>
 
             <!-- CARD SOBRE -->
             <Border Grid.Column="0"
-                    Margin="0,0,15,0"
+                    Margin="0,0,10,0"
                     Background="White"
-                    CornerRadius="25"
-                    Padding="35">
+                    CornerRadius="20"
+                    Padding="25"
+                    Height="340">
 
                 <Border.Effect>
-                    <DropShadowEffect BlurRadius="20"
+                    <DropShadowEffect BlurRadius="15"
                                       ShadowDepth="2"
-                                      Opacity="0.15"/>
+                                      Opacity="0.12"/>
                 </Border.Effect>
 
                 <StackPanel>
 
-                    <TextBlock Text="Quem Somos"
-                               FontSize="28"
+                    <TextBlock Text="🏢 Quem Somos"
+                               FontSize="22"
                                FontWeight="Bold"
                                Foreground="#1E22D8"
-                               Margin="0,0,0,20"/>
+                               Margin="0,0,0,15"/>
 
                     <Border Background="#EEF2FF"
-                            CornerRadius="12"
-                            Padding="12"
-                            Margin="0,0,0,20">
+                            CornerRadius="10"
+                            Padding="10"
+                            Margin="0,0,0,15">
 
                         <TextBlock Text="Transformando a compra de cestas básicas em uma experiência simples, acessível e confiável."
-                                   FontSize="14"
+                                   FontSize="13"
                                    FontWeight="SemiBold"
                                    Foreground="#1E22D8"
                                    TextWrapping="Wrap"/>
+
                     </Border>
 
                     <TextBlock
                         TextWrapping="Wrap"
                         TextAlignment="Justify"
-                        FontSize="16"
+                        FontSize="14"
                         Foreground="#444444"
-                        LineHeight="30">
+                        LineHeight="24">
 
-                        A E-Compra é uma empresa comprometida em facilitar o acesso a cestas básicas, oferecendo uma solução prática, segura e acessível para quem busca garantir os itens essenciais do dia a dia. Entendemos que cada família possui necessidades e realidades diferentes, por isso disponibilizamos opções de pagamento flexíveis que tornam a compra mais simples e viável.
+                        A E-Compra é uma empresa comprometida em facilitar o acesso a cestas básicas, oferecendo uma solução prática, segura e acessível para quem busca garantir os itens essenciais do dia a dia.
 
-                        Nosso objetivo é contribuir para o bem-estar das pessoas, reduzindo barreiras e proporcionando mais tranquilidade no momento da compra. Trabalhamos com responsabilidade, transparência e foco na satisfação dos nossos clientes, buscando oferecer uma experiência eficiente desde a escolha da cesta até a entrega.
+                        Entendemos que cada família possui necessidades e realidades diferentes, por isso disponibilizamos opções de pagamento flexíveis que tornam a compra mais simples e viável.
 
-                        Mais do que comercializar produtos, queremos ser uma ponte entre as famílias e o acesso à alimentação de qualidade, promovendo praticidade, confiança e conveniência em cada etapa do processo.
+                        Nosso objetivo é contribuir para o bem-estar das pessoas, reduzindo barreiras e proporcionando mais tranquilidade no momento da compra.
+
                     </TextBlock>
 
                 </StackPanel>
@@ -114,56 +117,55 @@
                     Style="{StaticResource BotaoContato}"
                     Cursor="Hand"
                     Click="BtnContato_Click"
-                    Margin="15,0,0,0">
+                    Margin="10,0,0,0">
 
                 <Border Background="White"
-                        CornerRadius="25"
-                        Padding="30">
+                        CornerRadius="20"
+                        Height="340"
+                        Padding="20">
 
                     <Border.Effect>
-                        <DropShadowEffect BlurRadius="20"
+                        <DropShadowEffect BlurRadius="15"
                                           ShadowDepth="2"
-                                          Opacity="0.15"/>
+                                          Opacity="0.12"/>
                     </Border.Effect>
 
-                    <StackPanel VerticalAlignment="Center"
-                                HorizontalAlignment="Center">
+                    <StackPanel HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
 
-                        <Border Width="300"
-                                Height="300"
-                                CornerRadius="25"
-                                BorderBrush="#EAEAEA"
-                                BorderThickness="1"
+                        <Border Width="140"
+                                Height="140"
+                                CornerRadius="15"
                                 ClipToBounds="True"
-                                Margin="0,0,0,25">
+                                Margin="0,0,0,15">
 
                             <Image Source="/Dados/imagem/imgcontato.png"
                                    Stretch="UniformToFill"/>
 
                         </Border>
 
-                        <TextBlock Text="Entre em Contato"
-                                   FontSize="32"
+                        <TextBlock Text="Precisa de ajuda?"
+                                   FontSize="18"
                                    FontWeight="Bold"
                                    Foreground="#1E1E1E"
-                                   HorizontalAlignment="Center"/>
+                                   TextAlignment="Center"/>
 
-                        <TextBlock Text="Atendimento rápido e personalizado via WhatsApp"
-                                   FontSize="16"
+                        <TextBlock Text="Nossa equipe está pronta para atender você."
+                                   FontSize="13"
                                    Foreground="#666666"
                                    TextAlignment="Center"
-                                   Width="362"
-                                   Margin="0,12,0,0"/>
+                                   Width="220"
+                                   Margin="0,8,0,15"
+                                   TextWrapping="Wrap"/>
 
                         <Border Background="#1E22D8"
                                 CornerRadius="20"
-                                Padding="14,8"
-                                Margin="0,25,0,0">
+                                Padding="16,8">
 
                             <TextBlock Text="Falar no WhatsApp"
                                        Foreground="White"
                                        FontWeight="SemiBold"
-                                       FontSize="15"
+                                       FontSize="13"
                                        HorizontalAlignment="Center"/>
 
                         </Border>
