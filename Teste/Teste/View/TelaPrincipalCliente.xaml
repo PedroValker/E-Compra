@@ -11,15 +11,15 @@
         <Style x:Key="PrimaryButton" TargetType="Button">
             <Setter Property="Background" Value="#FFD700"/>
             <Setter Property="Foreground" Value="#111111"/>
-            <Setter Property="Height" Value="45"/>
+            <Setter Property="Height" Value="40"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="FontWeight" Value="Bold"/>
-            <Setter Property="FontSize" Value="16"/>
+            <Setter Property="FontSize" Value="15"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="Button">
-                        <Border Background="{TemplateBinding Background}" CornerRadius="8">
+                        <Border Background="{TemplateBinding Background}" CornerRadius="6">
                             <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                         </Border>
                     </ControlTemplate>
@@ -33,8 +33,8 @@
         </Style>
 
         <Style x:Key="MenuItemText" TargetType="TextBlock">
-            <Setter Property="FontSize" Value="16"/>
-            <Setter Property="Margin" Value="25,0"/>
+            <Setter Property="FontSize" Value="15"/>
+            <Setter Property="Margin" Value="15,0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Style.Triggers>
                 <Trigger Property="IsMouseOver" Value="True">
@@ -53,76 +53,85 @@
 
         <Border Grid.Row="0" Background="White">
             <Border.Effect>
-                <DropShadowEffect BlurRadius="10" Opacity="0.05" ShadowDepth="2" Direction="270"/>
+                <DropShadowEffect BlurRadius="10" Opacity="0.05" ShadowDepth="2" Direction="100"/>
             </Border.Effect>
 
-            <StackPanel HorizontalAlignment="Center"
-                        MaxWidth="1300"
-                        Width="{Binding ActualWidth, ElementName=JanelaPrincipal}">
+            <Grid MaxWidth="1240" HorizontalAlignment="Stretch" Margin="30,0,30,20">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="1*"/>
+                    <ColumnDefinition Width="2*"/>
+                    <ColumnDefinition Width="1*"/>
+                </Grid.ColumnDefinitions>
 
-                <Grid Margin="20,25,20,20">
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
+                <StackPanel Grid.Column="0" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Left">
+                    <TextBlock Text="🛒 E-Compra" FontSize="26" FontWeight="Black" Foreground="#002DB3"/>
+                </StackPanel>
 
-                    <StackPanel Orientation="Horizontal" Grid.Column="0" VerticalAlignment="Center">
-                        <TextBlock Text="🛒 E-Compra
-" FontSize="32" FontWeight="Black" Foreground="#002DB3"/>
-                    </StackPanel>
+                <TextBlock x:Name="EnderecoTextBlock"
+                           Grid.Column="1"
+                           Text="Nenhum endereço cadastrado"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"
+                           FontSize="14"
+                           FontWeight="Medium"
+                           Foreground="#555"
+                           Margin="20,0" 
+                           TextTrimming="CharacterEllipsis"/>
 
-                    <TextBlock x:Name="EnderecoTextBlock"
-                               Grid.Column="1"
-                               Text="Nenhum endereço cadastrado ˅"
-                               HorizontalAlignment="Center"
-                               VerticalAlignment="Center"
-                               FontSize="16"
-                               FontWeight="Medium"
-                               Foreground="#555"/>
+                <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center" HorizontalAlignment="Right">
 
-                    <StackPanel Grid.Column="2" Orientation="Horizontal" VerticalAlignment="Center">
+                    <StackPanel VerticalAlignment="Center" Margin="0,10,5,0">
                         <TextBlock x:Name="NomeUsuarioText"
-                                   Text="Olá!"
-                                   FontSize="18"
+                                   Text="{Binding UsuarioLogado.Nome, StringFormat='Olá, {0}!'}"
+                                   FontSize="14"
                                    FontWeight="Bold"
                                    Foreground="#333"
-                                   VerticalAlignment="Center"
-                                   Margin="0,0,15,0"/>
+                                   HorizontalAlignment="Right"/>
 
-                        <Button x:Name="BtnPerfil" Width="45" Height="45" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,15,0" Click="AbrirMenuPerfil_Click">
-                            <Button.Template>
-                                <ControlTemplate TargetType="Button">
-                                    <Border Background="Transparent">
-                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
-                                    </Border>
-                                </ControlTemplate>
-                            </Button.Template>
-
-                            <Ellipse Width="42" Height="42" Stroke="#D9D9D9" StrokeThickness="2">
-                                <Ellipse.Fill>
-                                    <ImageBrush x:Name="ImagemPerfil" Stretch="UniformToFill"/>
-                                </Ellipse.Fill>
-                            </Ellipse>
-
-                            <Button.ContextMenu>
-                                <ContextMenu>
-                                    <MenuItem Header="Editar Perfil" Click="EditarPerfil_Click"/>
-                                    <Separator/>
-                                    <MenuItem Header="Sair da Conta" Click="Logoff_Click"/>
-                                </ContextMenu>
-                            </Button.ContextMenu>
-                        </Button>
-
-                        <Button Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click">
-                            <TextBlock Text="🛒" FontSize="24"/>
-                        </Button>
+                        <TextBlock x:Name="EmailUsuarioText"
+                                   Text="{Binding UsuarioLogado.Email}"
+                                   FontSize="11"
+                                   FontWeight="Normal"
+                                   Foreground="#777"
+                                   HorizontalAlignment="Right"
+                                   Margin="0,1,0,0"/>
                     </StackPanel>
-                </Grid>
 
+                    <Button x:Name="BtnPerfil" Width="38" Height="38" Background="Transparent" BorderThickness="0" Cursor="Hand" Margin="0,0,15,0" Click="AbrirMenuPerfil_Click">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border Background="Transparent">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                            </ControlTemplate>
+                        </Button.Template>
+
+                        <Ellipse Width="36" Height="36" Stroke="#D9D9D9" StrokeThickness="2">
+                            <Ellipse.Fill>
+                                <ImageBrush x:Name="ImagemPerfil" Stretch="UniformToFill"/>
+                            </Ellipse.Fill>
+                        </Ellipse>
+
+                        <Button.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="Editar Perfil" Click="EditarPerfil_Click"/>
+                                <Separator/>
+                                <MenuItem Header="Sair da Conta" Click="Logoff_Click"/>
+                            </ContextMenu>
+                        </Button.ContextMenu>
+                    </Button>
+
+                    <Button Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click" VerticalAlignment="Center">
+                        <TextBlock Text="🛒" FontSize="20"/>
+                    </Button>
+                </StackPanel>
+            </Grid>
+        </Border>
+
+        <Border Grid.Row="0" Margin="0,75,0,0" Background="Transparent">
+            <StackPanel>
                 <Separator Background="#EEEEEE" Height="1"/>
-
-                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,15,0,20">
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" Margin="0,10,0,12">
                     <TextBlock Text="Início" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#002DB3" MouseLeftButtonDown="VoltarInicio_Click"/>
                     <TextBlock Text="Faça seu Pedido" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="FaçaPedido"/>
                     <TextBlock Text="Pedidos" Style="{StaticResource MenuItemText}" FontWeight="Bold" Foreground="#555" MouseLeftButtonDown="Pedidos"/>
@@ -131,106 +140,100 @@
             </StackPanel>
         </Border>
 
-        <ContentControl x:Name="ConteudoPrincipal" Grid.Row="1">
-            <ScrollViewer VerticalScrollBarVisibility="Auto">
-                <StackPanel HorizontalAlignment="Center" MaxWidth="1080" Width="{Binding ActualWidth, ElementName=JanelaPrincipal}" Margin="20,30,20,50">
-                    <Grid Height="300" Margin="0,0,0,40">
-                        <Border CornerRadius="16">
+        <ContentControl x:Name="ConteudoPrincipal" Grid.Row="1" Margin="0,40,0,0">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
+                <StackPanel HorizontalAlignment="Center" MaxWidth="1140" Margin="20,20,20,40">
+
+                    <Grid Margin="0,0,0,30">
+                        <Border CornerRadius="12" Height="Auto" MinHeight="150" MaxHeight="260">
                             <Border.Effect>
-                                <DropShadowEffect BlurRadius="18" ShadowDepth="4" Opacity="0.15" Direction="270" Color="Black"/>
+                                <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1" Direction="270" Color="Black"/>
                             </Border.Effect>
                             <Border.Background>
-                                <ImageBrush ImageSource="pack://application:,,,/Dados/imagem/fundoteste.png" Stretch="Fill"/>
+                                <ImageBrush ImageSource="pack://application:,,,/Dados/imagem/fundoteste.png" Stretch="UniformToFill"/>
                             </Border.Background>
                         </Border>
                     </Grid>
 
                     <StackPanel>
-                        <TextBlock FontSize="30" FontWeight="Black" Foreground="#222" Margin="0,0,0,30" HorizontalAlignment="Center" Text="Verifique nossos produtos mais vendidos"/>
+                        <TextBlock FontSize="24" FontWeight="Black" Foreground="#222" Margin="0,0,0,20" HorizontalAlignment="Center" Text="Verifique nossos produtos mais vendidos" TextAlignment="Center" TextWrapping="Wrap"/>
+
                         <ItemsControl ItemsSource="{Binding ListaCestas}" HorizontalAlignment="Center">
                             <ItemsControl.ItemsPanel>
                                 <ItemsPanelTemplate>
-                                    <WrapPanel HorizontalAlignment="Center" ItemWidth="340"/>
+                                    <WrapPanel HorizontalAlignment="Center" ItemWidth="300"/>
                                 </ItemsPanelTemplate>
                             </ItemsControl.ItemsPanel>
                             <ItemsControl.ItemTemplate>
                                 <DataTemplate>
-                                    <Border Background="White" CornerRadius="16" Margin="15" Padding="25">
+                                    <Border Background="White" CornerRadius="12" Margin="10" Padding="18">
                                         <Border.Effect>
-                                            <DropShadowEffect BlurRadius="20" Opacity="0.08" ShadowDepth="5" Direction="270" Color="Black"/>
+                                            <DropShadowEffect BlurRadius="15" Opacity="0.06" ShadowDepth="3" Direction="270" Color="Black"/>
                                         </Border.Effect>
                                         <StackPanel>
-                                            <Border Background="#F4F6F8" Height="250" CornerRadius="12" Margin="0,0,0,20" ClipToBounds="True">
+                                            <Border Background="#F4F6F8" Height="200" CornerRadius="8" Margin="0,0,0,15" ClipToBounds="True">
                                                 <Grid Margin="4">
                                                     <Image Source="{Binding ImagemCompleta}" Stretch="Uniform" HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                                 </Grid>
                                             </Border>
-                                            <TextBlock Text="{Binding Nome}" FontWeight="Bold" FontSize="22" Foreground="#212529" TextWrapping="Wrap" Margin="0,0,0,8"/>
-                                            <TextBlock Text="{Binding Preco, StringFormat='R$ {0:N2}'}" FontSize="18" FontWeight="SemiBold" Foreground="#6C757D" Margin="0,0,0,25"/>
+                                            <TextBlock Text="{Binding Nome}" FontWeight="Bold" FontSize="18" Foreground="#212529" TextWrapping="Wrap" Margin="0,0,0,6" Height="50" TextTrimming="CharacterEllipsis"/>
+                                            <TextBlock Text="{Binding Preco, StringFormat='R$ {0:N2}'}" FontSize="16" FontWeight="SemiBold" Foreground="#6C757D" Margin="0,0,0,15"/>
                                             <Button Content="Comprar" Style="{StaticResource PrimaryButton}" Click="ComprarCesta_Click" HorizontalAlignment="Stretch"/>
                                         </StackPanel>
                                     </Border>
                                 </DataTemplate>
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
-                        <Button Content="Explorar todas as cestas"
-        Width="260"
-        Height="50"
-        Margin="0,30,0,0"
-        HorizontalAlignment="Center"
-        Click="VerTodasCestas_Click"
-        Background="#1E22D8"
-        Foreground="White"
-        FontSize="15"
-        FontWeight="SemiBold"
-        BorderThickness="0"
-        Cursor="Hand">
 
+                        <Button Content="Explorar todas as cestas"
+                                Width="240"
+                                Height="44"
+                                Margin="0,20,0,0"
+                                HorizontalAlignment="Center"
+                                Click="VerTodasCestas_Click"
+                                Foreground="White"
+                                FontSize="14"
+                                FontWeight="SemiBold"
+                                BorderThickness="0"
+                                Cursor="Hand">
                             <Button.Style>
                                 <Style TargetType="Button">
                                     <Setter Property="Background" Value="#1E22D8"/>
-
                                     <Style.Triggers>
                                         <Trigger Property="IsMouseOver" Value="True">
                                             <Setter Property="Background" Value="#1518A8"/>
                                         </Trigger>
-
                                         <Trigger Property="IsPressed" Value="True">
                                             <Setter Property="Background" Value="#10127D"/>
                                         </Trigger>
                                     </Style.Triggers>
                                 </Style>
                             </Button.Style>
-
                             <Button.Template>
                                 <ControlTemplate TargetType="Button">
-                                    <Border Background="{TemplateBinding Background}"
-                    CornerRadius="20">
-                                        <ContentPresenter HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
+                                    <Border Background="{TemplateBinding Background}" CornerRadius="22">
+                                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
                                     </Border>
                                 </ControlTemplate>
                             </Button.Template>
-
                         </Button>
                     </StackPanel>
                 </StackPanel>
             </ScrollViewer>
         </ContentControl>
 
-        <Border Grid.Row="2" Background="#1E22D8" Padding="0,20,0,5">
-            <Grid MaxWidth="1200" Margin="40,0">
+        <Border Grid.Row="2" Background="#1E22D8" Padding="0,15">
+            <Grid MaxWidth="1140" Margin="20,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="Auto"/>
                     <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid Grid.Row="0" Margin="0,0,0,20">
-                    <TextBlock Text="🛒 E-Compra
-" Foreground="White" FontSize="24" FontWeight="Bold" VerticalAlignment="Center"/>
-                </Grid>
-                <Separator Grid.Row="1" Background="White" Opacity="0.15" Margin="0,0,0,15"/>
-                <TextBlock Grid.Row="2" Text="© 2026 E-Compra. Todos os direitos reservados." Foreground="White" Opacity="0.5" FontSize="12" HorizontalAlignment="Center"/>
+
+                <Separator Grid.Row="0" Background="White" Opacity="0.15" Margin="0,0,0,10"/>
+
+                <TextBlock Grid.Row="1" Text="© 2026 E-Compra. Todos os direitos reservados." 
+                           Foreground="White" Opacity="0.6" FontSize="11" 
+                           HorizontalAlignment="Center" VerticalAlignment="Center"/>
             </Grid>
         </Border>
     </Grid>

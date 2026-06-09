@@ -17,7 +17,7 @@ namespace Teste.View
 
         private object _telaInicial;
 
-        // 🔥 Construtor recebe o objeto User completo
+        // Construtor recebe o objeto User completo
         public TelaPrincipalCliente(User usuario)
         {
             InitializeComponent();
@@ -31,33 +31,36 @@ namespace Teste.View
 
             this.DataContext = this;
 
-            // Buscamos o nome de dentro do objeto do usuário
+            // === RECUPERAÇÃO DOS DADOS DO USUÁRIO ===
             NomeUsuarioText.Text = $"Olá, {usuario.Nome}";
+
+        
 
             CarregarCestasDoBanco();
 
             CarrinhoRepository repoCarrinho = new CarrinhoRepository();
             repoCarrinho.CarregarDoArquivo();
 
-            // 🚀 INJEÇÃO CRÍTICA: Força a verificação e renderização do endereço salvo assim que a tela abre
+            // Injeta o endereço salvo assim que a tela abre
             AtualizarEnderecoNaTela();
 
             Loaded += TelaPrincipalCliente_Loaded;
         }
 
-        public void UpdateUsuario(string nome)
+        // Método atualizado para também poder atualizar o email caso seja editado no perfil
+        public void UpdateUsuario(string nome, string email = null)
         {
             NomeUsuarioText.Text = $"Olá, {nome}";
+
+        
         }
 
-        // Cole ou adapte este método dentro da sua TelaPrincipalCliente.xaml.cs
         public void AtualizarFoto(string caminho)
         {
             try
             {
                 BitmapImage img = new BitmapImage();
                 img.BeginInit();
-                // IGNORA O CACHE: obriga o WPF a ler o arquivo de foto atualizado do disco rígido
                 img.CreateOptions = BitmapCreateOptions.IgnoreImageCache;
                 img.CacheOption = BitmapCacheOption.OnLoad;
 
@@ -72,7 +75,6 @@ namespace Teste.View
 
                 img.EndInit();
 
-                // Altere 'SuaBolinhaImagem' para o nome do componente ImageSource da sua elipse
                 ImagemPerfil.ImageSource = img;
             }
             catch (Exception ex)
@@ -80,31 +82,32 @@ namespace Teste.View
                 Console.WriteLine("Erro visual: " + ex.Message);
             }
         }
+
         public void AtualizarEnderecoNaTela()
         {
-            // Verifica se o TextBlock com o x:Name="EnderecoTextBlock" existe no XAML
-            if (this.FindName("EnderecoTextBlock") is TextBlock textBlockEndereco)
+            // Busca simplificada direta (evita falhas com o FindName em Grids proporcionais)
+            if (EnderecoTextBlock != null)
             {
                 if (Sessao.UsuarioLogado != null && Sessao.UsuarioLogado.Endereco != null)
                 {
                     var end = Sessao.UsuarioLogado.Endereco;
 
-                    // Só monta o endereço se o usuário digitou alguma coisa
                     if (!string.IsNullOrWhiteSpace(end.Rua))
                     {
-                        textBlockEndereco.Text = $"{end.Rua}, {end.Numero} - {end.Bairro} ˅";
+                        EnderecoTextBlock.Text = $"{end.Rua}, {end.Numero} - {end.Bairro} ";
                     }
                     else
                     {
-                        textBlockEndereco.Text = "Nenhum endereço cadastrado ˅";
+                        EnderecoTextBlock.Text = "Nenhum endereço cadastrado";
                     }
                 }
                 else
                 {
-                    textBlockEndereco.Text = "Nenhum endereço cadastrado ˅";
+                    EnderecoTextBlock.Text = "Nenhum endereço cadastrado";
                 }
             }
         }
+
         private void TelaPrincipalCliente_Loaded(object sender, RoutedEventArgs e)
         {
             _telaInicial = ConteudoPrincipal.Content;
@@ -166,15 +169,9 @@ namespace Teste.View
             ConteudoPrincipal.Content = new ContatoNovo();
         }
 
-        // 🔥 CORRIGIDO: Removido o ShowDialog que quebrava a compilação
         private void EditarPerfil_Click(object sender, RoutedEventArgs e)
         {
-            // Instancia o painel passando o usuário da sessão e joga diretamente no centro da tela
             ConteudoPrincipal.Content = new EditarPerfilCliente(Sessao.UsuarioLogado);
-
-            // Nota: Como o UserControl roda acoplado dentro desta tela, a atualização visual da bolinha 
-            // e do nome do usuário é feita diretamente pelo método "Salvar_Click" da tela EditarPerfilCliente,
-            // que chama "janela.UpdateUsuario()" e "janela.AtualizarFoto()" em tempo real!
         }
 
         private void AtualizarFotoPerfilNaTela()
@@ -231,19 +228,21 @@ namespace Teste.View
         {
             ConteudoPrincipal.Content = new FacaSeuPedidoView();
         }
+
         private void VoltarParaLoja_Click(object sender, RoutedEventArgs e)
         {
             var janelaPrincipal = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
             if (janelaPrincipal != null)
             {
-                janelaPrincipal.RetornarParaHome(); // 🚀 Mais limpo e elegante!
+                janelaPrincipal.RetornarParaHome();
             }
         }
-        // Método limpo para ser chamado de fora
+
         public void RetornarParaHome()
         {
             ConteudoPrincipal.Content = _telaInicial;
         }
+
         public void VoltarInicio_Click(object sender, RoutedEventArgs e)
         {
             ConteudoPrincipal.Content = _telaInicial;

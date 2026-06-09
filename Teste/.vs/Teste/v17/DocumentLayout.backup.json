@@ -3,6 +3,10 @@
   "WorkspaceRootPath": "C:\\Users\\aluno\\Documents\\E-Compra\\Teste\\",
   "Documents": [
     {
+      "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\e-compra\\teste\\teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
+      "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\telaprincipalcliente.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
+    },
+    {
       "AbsoluteMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|c:\\users\\aluno\\documents\\e-compra\\teste\\teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}",
       "RelativeMoniker": "D:0:0:{288F7E49-41B1-43C0-B63A-4663A9E5C15D}|Teste\\Teste.csproj|solutionrelative:teste\\view\\contatonovo.xaml||{F11ACC28-31D1-4C80-A34B-F4E09D3D753C}"
     }
@@ -19,6 +23,18 @@
             {
               "$type": "Document",
               "DocumentIndex": 0,
+              "Title": "TelaPrincipalCliente.xaml",
+              "DocumentMoniker": "C:\\Users\\aluno\\Documents\\E-Compra\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
+              "RelativeDocumentMoniker": "Teste\\View\\TelaPrincipalCliente.xaml",
+              "ToolTip": "C:\\Users\\aluno\\Documents\\E-Compra\\Teste\\Teste\\View\\TelaPrincipalCliente.xaml",
+              "RelativeToolTip": "Teste\\View\\TelaPrincipalCliente.xaml",
+              "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.003549|",
+              "WhenOpened": "2026-06-09T14:09:38.47Z",
+              "EditorCaption": ""
+            },
+            {
+              "$type": "Document",
+              "DocumentIndex": 1,
               "Title": "ContatoNovo.xaml",
               "DocumentMoniker": "C:\\Users\\aluno\\Documents\\E-Compra\\Teste\\Teste\\View\\ContatoNovo.xaml",
               "RelativeDocumentMoniker": "Teste\\View\\ContatoNovo.xaml",
