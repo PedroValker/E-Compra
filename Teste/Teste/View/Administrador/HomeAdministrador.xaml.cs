@@ -53,7 +53,9 @@ namespace Teste.View
             TxtPagPendentes.Text = pedidos.Count(p => !p.Pago).ToString();
 
             // Faturamento total
-            decimal total = pedidos.Sum(p => p.Total);
+            decimal total = pedidos
+              .Where(p => p.Pago)
+              .Sum(p => p.Total);
 
             TxtFaturamento.Text = $"R$ {total:N2}";
 
@@ -61,15 +63,15 @@ namespace Teste.View
 
 
             var vendasPorItem = pedidos
-    .Where(p => p.Itens != null)
-    .SelectMany(p => p.Itens)
-    .GroupBy(i => i.Nome.Trim().ToLower())
-    .Select(g => new
-    {
-        Nome = g.First().Nome, // mantém nome original
-        Quantidade = g.Sum(x => x.Quantidade)
-    })
-    .ToList();
+     .Where(p => p.CestaComprada != null)
+     .GroupBy(p => p.CestaComprada.Nome)
+     .Select(g => new
+     {
+         Nome = g.Key,
+         Quantidade = g.Count()
+     })
+     .OrderByDescending(x => x.Quantidade)
+     .ToList();
 
             ListaVendas.ItemsSource = vendasPorItem;
         }

@@ -21,7 +21,7 @@
                     <Style TargetType="DataGridColumnHeader">
                         <Setter Property="Background" Value="#F1F5F9"/>
                         <Setter Property="Foreground" Value="#64748B"/>
-                        <Setter Property="Padding" Value="16,12"/>
+                        <Setter Property="Padding" Value="15,12"/>
                         <Setter Property="FontWeight" Value="SemiBold"/>
                         <Setter Property="FontSize" Value="13"/>
                         <Setter Property="BorderThickness" Value="0,0,0,1"/>
@@ -33,7 +33,7 @@
             <Setter Property="CellStyle">
                 <Setter.Value>
                     <Style TargetType="DataGridCell">
-                        <Setter Property="Padding" Value="16,0"/>
+                        <Setter Property="Padding" Value="10,0"/>
                         <Setter Property="Template">
                             <Setter.Value>
                                 <ControlTemplate TargetType="DataGridCell">
@@ -71,7 +71,7 @@
         <Style x:Key="BtnAcaoStyle" TargetType="Button">
             <Setter Property="Background" Value="#10B981"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Padding" Value="10,7"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="Medium"/>
@@ -90,7 +90,7 @@
         <Style x:Key="BtnVisualizarStyle" TargetType="Button">
             <Setter Property="Background" Value="#EFF6FF"/>
             <Setter Property="Foreground" Value="#2563EB"/>
-            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Padding" Value="10,7"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="Medium"/>
@@ -109,7 +109,7 @@
         <Style x:Key="BtnEnviarRotaStyle" TargetType="Button">
             <Setter Property="Background" Value="#F59E0B"/>
             <Setter Property="Foreground" Value="White"/>
-            <Setter Property="Padding" Value="14,7"/>
+            <Setter Property="Padding" Value="10,7"/>
             <Setter Property="BorderThickness" Value="0"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="FontWeight" Value="Medium"/>

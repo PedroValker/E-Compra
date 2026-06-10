@@ -10,11 +10,11 @@
         </Grid.RowDefinitions>
 
         <StackPanel Grid.Row="0" Margin="0,0,0,24">
-            <TextBlock Text="Liberação de Cestas Básicas"
+            <TextBlock Text="Gerenciar Pagamento de Cestas Básicas"
                        FontSize="26"
                        FontWeight="Bold"
                        Foreground="#0F172A"/>
-            <TextBlock Text="Gerencie os pagamentos pendentes para autorizar a entrega das cestas."
+            <TextBlock Text="Gerencie os pagamentos pendentes das cestas."
                        FontSize="14"
                        Foreground="#64748B"
                        Margin="0,4,0,0"/>
@@ -91,7 +91,7 @@
                             <Setter Property="Foreground" Value="#475569"/>
                             <Setter Property="FontWeight" Value="SemiBold"/>
                             <Setter Property="FontSize" Value="13"/>
-                            <Setter Property="Padding" Value="12,10"/>
+                            <Setter Property="Padding" Value="10,10"/>
                             <Setter Property="BorderThickness" Value="0,0,0,1"/>
                             <Setter Property="BorderBrush" Value="#E2E8F0"/>
                         </Style>
@@ -121,18 +121,22 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nº Pedido"
                                             Binding="{Binding IdPedido}"
+                                            FontSize="10"
                                             Width="100"/>
 
                         <DataGridTextColumn Header="Beneficiário"
                                             Binding="{Binding Recebedor}"
+                                            FontSize="10"
                                             Width="*"/>
 
                         <DataGridTextColumn Header="Data do Pedido"
                                             Binding="{Binding DataDoPedido, StringFormat=\{0:dd/MM/yyyy\}}"
+                                            FontSize="10"
                                             Width="140"/>
 
                         <DataGridTextColumn Header="Valor"
                                             Binding="{Binding Total, StringFormat=C}"
+                                            FontSize="10"
                                             Width="120"/>
 
                         <DataGridTemplateColumn Header="Ações" Width="180">
@@ -147,7 +151,7 @@
                                             Background="#10B981"
                                             Foreground="White"
                                             FontWeight="SemiBold"
-                                            FontSize="12"
+                                            FontSize="10"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left">
 
