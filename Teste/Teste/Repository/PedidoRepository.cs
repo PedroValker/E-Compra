@@ -204,6 +204,7 @@ namespace Teste.Repository
                         Total = totalConvertConvertido,
                         Observacoes = obs, // 📍 Recebe as observações tratadas corretamente
                         DataEntrega = dataEntregaConvertida,
+                        TipoComposicao = composicaoSalva,
                         Pago = pagoConvertido,
                         Itens = new List<ItemPedido>()
                     };

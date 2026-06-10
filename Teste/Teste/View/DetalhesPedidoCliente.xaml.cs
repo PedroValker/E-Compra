@@ -28,9 +28,26 @@ namespace Teste.View
         public DetalhesPedidoCliente(Pedido pedido)
         {
             InitializeComponent();
-            _pedidoAtual = pedido;
 
             
+
+            _pedidoAtual = pedido;
+            DataContext = _pedidoAtual;
+
+
+            if (Sessao.UsuarioLogado != null &&
+                Sessao.UsuarioLogado.IsAdmin &&
+                _pedidoAtual.TipoComposicao == "Modificada")
+            {
+                BtnMarcarPronta.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                BtnMarcarPronta.Visibility = Visibility.Collapsed;
+            }
+
+            SystematizarEGradeLogica();
+        
 
             // Ajuste automático de endereço em memória se estiver vazio
             if (string.IsNullOrWhiteSpace(_pedidoAtual.Endereco) || _pedidoAtual.Endereco.Equals("A combinar", StringComparison.OrdinalIgnoreCase))
@@ -48,18 +65,54 @@ namespace Teste.View
         }
 
 
+        private void VerificarPermissaoBotao()
+        {
+            if (Sessao.UsuarioLogado == null)
+                return;
+
+            bool ehAdmin = Sessao.UsuarioLogado.IsAdmin;
+
+            bool pedidoModificado =
+                !string.IsNullOrEmpty(_pedidoAtual.TipoComposicao) &&
+                _pedidoAtual.TipoComposicao.Equals("Modificada",
+                    StringComparison.OrdinalIgnoreCase);
+
+            BtnMarcarPronta.Visibility =
+                (ehAdmin && pedidoModificado)
+                ? Visibility.Visible
+                : Visibility.Collapsed;
+        }
+        
+
         private void SystematizarEGradeLogica()
         {
             // 1. Estiliza a Tag do Cabeçalho com base no Modelo Customizado
-            if (_pedidoAtual.IsModificada)
+            if (_pedidoAtual.TipoComposicao == "Pronta")
             {
-                BadgeComposicao.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#FFEDD5"));
-                TxtBadge.Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#C2410C"));
+                // Verde
+                BadgeComposicao.Background = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#DCFCE7"));
+
+                TxtBadge.Foreground = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#15803D"));
+            }
+            else if (_pedidoAtual.IsModificada)
+            {
+                // Laranja
+                BadgeComposicao.Background = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#FFEDD5"));
+
+                TxtBadge.Foreground = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#C2410C"));
             }
             else
             {
-                BadgeComposicao.Background = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#E0F2FE"));
-                TxtBadge.Foreground = new SolidColorBrush((System.Windows.Media.Color)System.Windows.Media.ColorConverter.ConvertFromString("#0369A1"));
+                // Azul
+                BadgeComposicao.Background = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#E0F2FE"));
+
+                TxtBadge.Foreground = new SolidColorBrush(
+                    (System.Windows.Media.Color)ColorConverter.ConvertFromString("#0369A1"));
             }
 
             _dicionarioPadrao.Clear();
@@ -173,6 +226,32 @@ namespace Teste.View
             this.Close();
         }
 
+        private void BtnMarcarPronta_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                _pedidoAtual.TipoComposicao = "Pronta";
+
+                PedidoRepository repo = new PedidoRepository();
+                repo.AtualizarArquivoTxt();
+
+                MessageBox.Show(
+                    "Cesta marcada como pronta!",
+                    "Sucesso",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Information);
+
+                BtnMarcarPronta.Visibility = Visibility.Collapsed;
+            }
+            catch (Exception ex)
+            {
+                MessageBox.Show(
+                    ex.Message,
+                    "Erro",
+                    MessageBoxButton.OK,
+                    MessageBoxImage.Error);
+            }
+        }
         private void GerarPdf_Click(object sender, RoutedEventArgs e)
         {
             SaveFileDialog saveFileDialog = new SaveFileDialog

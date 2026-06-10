@@ -96,33 +96,15 @@ namespace Teste.Model
         }
 
         // 🔥 PROPRIEDADE COMPUTADA (No lugar correto): Identifica se a cesta mantém a receita original ou foi alterada
+        private string _tipoComposicao = "Completa";
+
         public string TipoComposicao
         {
-            get
+            get => _tipoComposicao;
+            set
             {
-                var originais = ProdutosOriginaisCesta;
-                if (originais == null || !originais.Any())
-                    return "Padrão";
-
-                var mapaOriginal = originais.GroupBy(p => p.Nome?.Trim().ToUpper())
-                                            .ToDictionary(g => g.Key ?? "", g => g.Count());
-
-                var modificados = ProdutosModificadosCliente;
-                var mapaCliente = modificados.GroupBy(i => i.Nome?.Trim().ToUpper())
-                                             .ToDictionary(g => g.Key ?? "", g => g.Sum(i => i.Quantidade));
-
-                if (mapaOriginal.Count != mapaCliente.Count)
-                    return "Modificada";
-
-                foreach (var par in mapaOriginal)
-                {
-                    if (!mapaCliente.TryGetValue(par.Key, out int qtdCliente) || par.Value != qtdCliente)
-                    {
-                        return "Modificada";
-                    }
-                }
-
-                return "Completa";
+                _tipoComposicao = value;
+                OnPropertyChanged();
             }
         }
 
