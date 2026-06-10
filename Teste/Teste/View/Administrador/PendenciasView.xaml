@@ -121,28 +121,28 @@
                     <DataGrid.Columns>
                         <DataGridTextColumn Header="Nº Pedido"
                                             Binding="{Binding IdPedido}"
-                                            FontSize="10"
+                                            FontSize="15"
                                             Width="100"/>
 
                         <DataGridTextColumn Header="Beneficiário"
                                             Binding="{Binding Recebedor}"
-                                            FontSize="10"
+                                            FontSize="15"
                                             Width="*"/>
 
                         <DataGridTextColumn Header="Data do Pedido"
                                             Binding="{Binding DataDoPedido, StringFormat=\{0:dd/MM/yyyy\}}"
-                                            FontSize="10"
+                                            FontSize="15"
                                             Width="140"/>
 
                         <DataGridTextColumn Header="Valor"
                                             Binding="{Binding Total, StringFormat=C}"
-                                            FontSize="10"
+                                            FontSize="15"
                                             Width="120"/>
 
-                        <DataGridTemplateColumn Header="Ações" Width="180">
+                        <DataGridTemplateColumn Header="Pagamento" Width="180">
                             <DataGridTemplateColumn.CellTemplate>
                                 <DataTemplate>
-                                    <Button Content="Confirmar Pago"
+                                    <Button Content="Confirmar"
                                             Command="{Binding RelativeSource={RelativeSource AncestorType=DataGrid}, Path=DataContext.ConfirmarPagamentoCommand}"
                                             CommandParameter="{Binding}"
                                             Cursor="Hand"
@@ -151,7 +151,7 @@
                                             Background="#10B981"
                                             Foreground="White"
                                             FontWeight="SemiBold"
-                                            FontSize="10"
+                                            FontSize="15"
                                             VerticalAlignment="Center"
                                             HorizontalAlignment="Left">
 

@@ -86,22 +86,6 @@
                     </StackPanel>
                 </Border>
 
-                <Border Background="White" CornerRadius="12" Padding="24">
-                    <Border.Effect>
-                        <DropShadowEffect BlurRadius="15" Opacity="0.03" ShadowDepth="2" Color="#000000"/>
-                    </Border.Effect>
-                    <StackPanel>
-                        <TextBlock Text="Informações da Conta" FontSize="15" FontWeight="SemiBold" Foreground="#475569" Margin="0,0,0,16"/>
-                        <TextBlock Text="ID do Usuário" FontSize="12" Foreground="#64748B" FontWeight="Medium"/>
-                        <Border Background="#F8FAFC" CornerRadius="6" Padding="12,10" Margin="0,6,0,16">
-                            <TextBlock Text="{Binding Id}" FontSize="14" FontWeight="SemiBold" Foreground="#334155"/>
-                        </Border>
-                        <TextBlock Text="Conta Criada em" FontSize="12" Foreground="#64748B" FontWeight="Medium"/>
-                        <Border Background="#F8FAFC" CornerRadius="6" Padding="12,10" Margin="0,6,0,0">
-                            <TextBlock Text="{Binding DataCriacao, StringFormat='\{0:dd/MM/yyyy HH:mm\}'}" FontSize="14" FontWeight="SemiBold" Foreground="#334155"/>
-                        </Border>
-                    </StackPanel>
-                </Border>
             </StackPanel>
 
             <Border Grid.Column="1" Background="White" CornerRadius="12" Padding="32" Margin="10,0,0,0">

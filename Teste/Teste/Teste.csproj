@@ -24,7 +24,6 @@
     <None Remove="Dados\imagem\fundo.png" />
     <None Remove="Dados\imagem\fundoteste.png" />
     <None Remove="Dados\imagem\imgcontato.png" />
-    <None Remove="Dados\imagem\perfil.png" />
   </ItemGroup>
 
   <ItemGroup>
@@ -39,9 +38,6 @@
   <ItemGroup>
     <Resource Include="Dados\imagem\fundoteste.png" />
     <Resource Include="Dados\imagem\imgcontato.png" />
-    <Resource Include="Dados\imagem\perfil.png">
-      <CopyToOutputDirectory>Never</CopyToOutputDirectory>
-    </Resource>
   </ItemGroup>
 
 </Project>

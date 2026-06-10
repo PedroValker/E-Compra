@@ -10,7 +10,7 @@ namespace Teste.Repository
     {
         private string ObterPastaImagensPerfil()
         {
-            string caminhoRaiz = @"C:\TesteSistema\Dados\imagemUser";
+            string caminhoRaiz = @"C:\Teste\Dados\imagemUser";
             if (!Directory.Exists(caminhoRaiz))
             {
                 Directory.CreateDirectory(caminhoRaiz);
@@ -141,14 +141,6 @@ namespace Teste.Repository
         // 🚀 CORREÇÃO: Corrigido o nome de "Atuallizar" para "Atualizar"
         public void Atualizar(User user)
         {
-            // 🛡️ SEGURANÇA: Se o usuário enviado for nulo, interrompe o método para não quebrar o sistema
-            if (user == null)
-            {
-                Console.WriteLine("Aviso: Tentativa de atualizar um usuário nulo.");
-                return;
-            }
-
-            // O seu código original continua aqui de forma segura:
             var usuarioExistente = MemoriaUsuarios.Lista
                 .FirstOrDefault(u => u.Id == user.Id);
 
@@ -158,21 +150,20 @@ namespace Teste.Repository
                 usuarioExistente.Email = user.Email;
                 usuarioExistente.Telefone = user.Telefone;
                 usuarioExistente.Senha = user.Senha;
-                usuarioExistente.FotoPerfil = user.FotoPerfil; // Certifique-se de que a sua função SalvarFoto não cause loops
+                usuarioExistente.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil);
 
-                // Atualiza a referência do Endereço
                 if (user.Endereco != null)
                 {
                     if (usuarioExistente.Endereco == null)
-                    {
                         usuarioExistente.Endereco = new Endereco();
-                    }
 
                     usuarioExistente.Endereco.CEP = user.Endereco.CEP;
                     usuarioExistente.Endereco.Rua = user.Endereco.Rua;
                     usuarioExistente.Endereco.Numero = user.Endereco.Numero;
                     usuarioExistente.Endereco.Bairro = user.Endereco.Bairro;
                 }
+
+                SalvarArquivo(); // <- importante
             }
         }
 

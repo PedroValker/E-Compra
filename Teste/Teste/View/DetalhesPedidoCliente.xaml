@@ -228,7 +228,7 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-
+                    
                     <Button Content="Fechar" Style="{StaticResource BaseButtonStyle}" Click="Fechar_Click" Background="#0F172A" Foreground="White">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">

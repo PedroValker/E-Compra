@@ -102,6 +102,16 @@ namespace Teste.View.Administrador
                         janelaPrincipal.ImagemPerfilBrush.ImageSource = ImgPerfilPreview.ImageSource;
                     }
                 }
+                Sessao.UsuarioLogado.Nome = TxtNome.Text;
+                Sessao.UsuarioLogado.Email = TxtEmail.Text;
+                Sessao.UsuarioLogado.Telefone = TxtTelefone.Text;
+                Sessao.UsuarioLogado.FotoPerfil = _caminhoFotoTemporaria;
+
+                UserRepository repo = new UserRepository();
+                repo.Atualizar(Sessao.UsuarioLogado);
+                repo.SalvarArquivo();
+
+                MessageBox.Show("Informações salvas com sucesso!");
             }
         }
     }

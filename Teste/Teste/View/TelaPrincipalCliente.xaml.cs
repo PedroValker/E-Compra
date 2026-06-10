@@ -201,7 +201,7 @@ namespace Teste.View
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao carregar foto na bolinha: " + ex.Message);
+                Console.WriteLine("Erro ao carregar foto: " + ex.Message);
             }
         }
 
@@ -209,7 +209,7 @@ namespace Teste.View
         {
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja sair da sua conta?",
-                "Confirmação de Logoff",
+                "Confirmação de Logout",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 

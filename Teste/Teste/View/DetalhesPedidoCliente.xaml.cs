@@ -30,6 +30,8 @@ namespace Teste.View
             InitializeComponent();
             _pedidoAtual = pedido;
 
+            
+
             // Ajuste automático de endereço em memória se estiver vazio
             if (string.IsNullOrWhiteSpace(_pedidoAtual.Endereco) || _pedidoAtual.Endereco.Equals("A combinar", StringComparison.OrdinalIgnoreCase))
             {
@@ -44,6 +46,7 @@ namespace Teste.View
 
             SystematizarEGradeLogica();
         }
+
 
         private void SystematizarEGradeLogica()
         {

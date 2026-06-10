@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.ObjectModel;
+using System.Linq;
 using System.Windows;
 using System.Windows.Controls;
 using Teste.Model;
@@ -23,7 +24,8 @@ namespace Teste.View
             CarregarDashboard();
         }
 
-        private void CarregarDashboard()
+  
+    private void CarregarDashboard()
         {
             var pedidos = MemoriaPedidos.Lista;
 
@@ -43,11 +45,7 @@ namespace Teste.View
             //.ToString();
 
             // Pagamentos pendentes
-            TxtPagPendentes.Text = pedidos.Count(p =>
-                p.FormaPagamento != null &&
-                p.FormaPagamento.ToLower() == "pendente")
-                .ToString();
-
+          
             // Pedidos não pagos
             // Pagamentos pendentes
             TxtPagPendentes.Text = pedidos.Count(p => !p.Pago).ToString();

@@ -45,11 +45,6 @@ namespace Teste.View
                     }
                     ImagemPerfil.ImageSource = imagem;
                 }
-                else
-                {
-                    ImagemPerfil.ImageSource = new BitmapImage(
-                        new Uri("pack://application:,,,/Dados/imagem/perfil.png"));
-                }
             }
             catch (Exception ex)
             {
@@ -178,67 +173,26 @@ namespace Teste.View
 
         private void Salvar_Click(object sender, RoutedEventArgs e)
         {
-            //Atualiza o objeto do usuário na memória com os dados dos campos
             usuario.Nome = TxtNome.Text;
             usuario.Email = TxtEmail.Text;
             usuario.Telefone = TxtTelefone.Text;
             usuario.FotoPerfil = caminhoFoto;
 
             if (usuario.Endereco == null)
-            {
                 usuario.Endereco = new Endereco();
-            }
 
             usuario.Endereco.CEP = TxtCEP.Text;
             usuario.Endereco.Rua = TxtRua.Text;
             usuario.Endereco.Numero = TxtNumero.Text;
             usuario.Endereco.Bairro = TxtBairro.Text;
 
-            // Atualiza a sessão global em memória
             Sessao.UsuarioLogado = usuario;
 
-            // Atualiza os componentes visuais da Tela Principal
-            var janela = Window.GetWindow(this) as TelaPrincipalCliente;
-            if (janela != null)
-            {
-                janela.UpdateUsuario(usuario.Nome);
-                janela.AtualizarEnderecoNaTela();
+            UserRepository repo = new UserRepository();
+            repo.Atualizar(usuario);
+            repo.SalvarArquivo();
 
-                // para garantir que a "bolinha" da foto atualize na mesma hora.
-                try
-                {
-                    if (!string.IsNullOrEmpty(usuario.FotoPerfil) && File.Exists(usuario.FotoPerfil))
-                    {
-                        BitmapImage novaImagemPerfil = new BitmapImage();
-                        using (var stream = new FileStream(usuario.FotoPerfil, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        {
-                            novaImagemPerfil.BeginInit();
-                            novaImagemPerfil.CacheOption = BitmapCacheOption.OnLoad; // Força carregar para a memória
-                            novaImagemPerfil.StreamSource = stream;
-                            novaImagemPerfil.EndInit();
-                            novaImagemPerfil.Freeze(); // Torna a imagem thread-safe para outras telas usarem
-                        }
-
-                        janela.AtualizarFoto(usuario.FotoPerfil);
-                    }
-                    else
-                    {
-                        janela.AtualizarFoto("pack://application:,,,/Dados/imagem/perfil.png");
-                    }
-                }
-                catch (Exception ex)
-                {
-                    Console.WriteLine("Erro ao sincronizar foto com a tela principal: " + ex.Message);
-                    // Fallback caso falhe o stream
-                    janela.AtualizarFoto(usuario.FotoPerfil);
-                }
-            }
-
-            MessageBox.Show(
-                "Perfil atualizado na memória com sucesso!",
-                "Sucesso",
-                MessageBoxButton.OK,
-                MessageBoxImage.Information);
+            MessageBox.Show("Perfil atualizado com sucesso!");
         }
 
         private void Cancelar_Click(object sender, RoutedEventArgs e)

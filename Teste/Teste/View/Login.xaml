@@ -137,7 +137,7 @@
                              TextChanged="SenhaVisivelBox_TextChanged"/>
 
                     <TextBlock x:Name="SenhaPlaceholder"
-                               Text="Sua senha secreta"
+                               Text=""
                                Foreground="#94A3B8"
                                FontSize="16"
                                Margin="14,0,0,0"

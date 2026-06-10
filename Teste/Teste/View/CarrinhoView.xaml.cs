@@ -193,6 +193,9 @@ namespace CestaApp.Views
 
             MemoriaPedidos.Lista.Add(novoPedido);
 
+            PedidoRepository repo = new PedidoRepository();
+            repo.AtualizarArquivoTxt();
+
             MemoriaCarrinho.Itens.Clear();
 
      

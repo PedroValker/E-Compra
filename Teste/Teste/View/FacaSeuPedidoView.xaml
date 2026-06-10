@@ -43,7 +43,7 @@
             <ItemsControl ItemsSource="{Binding ListaCestas}" Margin="25,0">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Left"/>
+                        <WrapPanel HorizontalAlignment="Center"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
