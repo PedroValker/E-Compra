@@ -158,15 +158,16 @@
 
         <ContentControl x:Name="ConteudoPrincipal" Grid.Row="1" Margin="0,40,0,0">
             <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-                <StackPanel HorizontalAlignment="Center" MaxWidth="1140" Margin="20,20,20,40">
+                <StackPanel HorizontalAlignment="Center" MaxWidth="1120" Margin="20,20,20,40">
+
 
                     <Grid Margin="0,0,0,30">
-                        <Border CornerRadius="12" Height="Auto" MinHeight="150" MaxHeight="260">
+                        <Border CornerRadius="12" Height="Auto" MinHeight="220" MaxHeight="462">
                             <Border.Effect>
                                 <DropShadowEffect BlurRadius="15" ShadowDepth="3" Opacity="0.1" Direction="270" Color="Black"/>
                             </Border.Effect>
                             <Border.Background>
-                                <ImageBrush ImageSource="pack://application:,,,/Dados/imagem/fundoteste.png" Stretch="UniformToFill"/>
+                                <ImageBrush ImageSource="pack://application:,,,/Dados/imagem/fundoteste.png" Stretch="Fill"/>
                             </Border.Background>
                         </Border>
                     </Grid>

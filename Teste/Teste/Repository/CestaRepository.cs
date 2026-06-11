@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Text;
 using Teste.Model;
 
 namespace Teste.Repository
@@ -23,69 +24,62 @@ namespace Teste.Repository
             return Path.Combine(ObterPastaProjeto(), "Dados", "imagem");
         }
 
-        // 🔥 MODIFICADO: Salva apenas na memória RAM durante a execução
         public bool Salvar(Cesta cesta, out string mensagemErro)
         {
             mensagemErro = "";
 
             try
             {
-                string imagemFinal = "null";
+                // Se a cesta já tiver uma imagem salva de forma relativa, preserva
+                string imagemFinal = string.IsNullOrEmpty(cesta.ImagemPath) ? "null" : cesta.ImagemPath;
 
-                // TRATAMENTO DA IMAGEM
-                if (!string.IsNullOrEmpty(cesta.ImagemPath) && File.Exists(cesta.ImagemPath))
+                // 🟢 Se for uma imagem vinda de fora da aplicação (caminho absoluto do computador)
+                if (!string.IsNullOrEmpty(cesta.ImagemPath) && File.Exists(cesta.ImagemPath) && Path.IsPathRooted(cesta.ImagemPath))
                 {
                     string pastaImagens = ObterPastaImagens();
                     Directory.CreateDirectory(pastaImagens);
 
                     string extensao = Path.GetExtension(cesta.ImagemPath);
                     string nomeArquivo = $"{Guid.NewGuid()}{extensao}";
-                    string destino = Path.Combine(pastaImagens, nomeArquivo);
+                    string destinoCompletoFisico = Path.Combine(pastaImagens, nomeArquivo);
 
-                    string origemCompleta = Path.GetFullPath(cesta.ImagemPath);
-                    string destinoCompleto = Path.GetFullPath(destino);
+                    // Faz a cópia física segura para a pasta Dados/imagem do projeto
+                    File.Copy(cesta.ImagemPath, destinoCompletoFisico, true);
 
-                    if (!origemCompleta.Equals(destinoCompleto, StringComparison.OrdinalIgnoreCase))
-                    {
-                        using (var streamOrigem = new FileStream(origemCompleta, FileMode.Open, FileAccess.Read, FileShare.Read))
-                        using (var streamDestino = new FileStream(destinoCompleto, FileMode.Create, FileAccess.Write, FileShare.None))
-                        {
-                            streamOrigem.CopyTo(streamDestino);
-                        }
-                    }
-
-                    imagemFinal = Path.Combine("Dados", "imagem", nomeArquivo);
+                    // 🌟 FORÇANDO TEXTO PURO SEM SEPARADORES DE MÁQUINA LOCAL:
+                    // Isso impede que o C# gere caminhos como "C:\Users\pedro" no arquivo de texto
+                    imagemFinal = "Dados/imagem/" + nomeArquivo;
                 }
 
                 cesta.ImagemPath = imagemFinal;
 
-                // Adiciona apenas na memória
-                MemoriaCestas.Lista.Add(cesta);
+                // Adiciona apenas se for uma nova ID na memória
+                if (!MemoriaCestas.Lista.Any(c => c.Id == cesta.Id))
+                {
+                    MemoriaCestas.Lista.Add(cesta);
+                }
 
                 return true;
             }
             catch (Exception ex)
             {
-                mensagemErro = "Erro ao salvar cesta na memória: " + ex.Message;
+                mensagemErro = "Erro ao processar imagem da cesta: " + ex.Message;
                 return false;
             }
         }
 
-        // 🔥 MODIFICADO: Atualiza apenas a instância em memória
         public void AtualizarArquivoTxt()
         {
-            // Como a orientação agora é persistir no arquivo apenas ao fechar o app,
-            // este método deixa de gravar no disco imediatamente para evitar gargalos.
-            // A lista em memória já é atualizada por referência diretamente no seu View/Code-behind.
+            SalvarTudo();
         }
 
-        // 🔥 NOVO MÉTODO: Grava tudo no arquivo texto (Chamar no encerramento do programa)
+        // 💾 SALVAMENTO DEFINITIVO EM ARQUIVO TEXTO
         public void SalvarTudo()
         {
             try
             {
                 string caminho = ObterCaminhoArquivo();
-                string? pasta = Path.GetDirectoryName(caminho);
+                string pasta = Path.GetDirectoryName(caminho);
 
                 if (!string.IsNullOrEmpty(pasta))
                     Directory.CreateDirectory(pasta);
@@ -100,13 +94,15 @@ namespace Teste.Repository
                         .Select(grupo => $"{grupo.Count()}x {grupo.Key}");
 
                     string nomesProdutos = string.Join(",", stringsProdutos);
-                    string imagem = string.IsNullOrEmpty(cesta.ImagemPath) ? "null" : cesta.ImagemPath;
 
-                    string linha = $"ID:{cesta.Id} |Nome:{cesta.Nome} |Preco:{cesta.Preco} |Imagem:{imagem} |Produtos:{nomesProdutos}";
+                    // Garante que se o caminho estiver vazio ou nulo por falha de digitação vire string "null"
+                    string imagem = string.IsNullOrWhiteSpace(cesta.ImagemPath) ? "null" : cesta.ImagemPath.Replace("\\", "/");
+
+                    string linha = $"ID:{cesta.Id} |Nome:{cesta.Nome} |Preco:{cesta.Preco.ToString("F2")} |Imagem:{imagem} |Produtos:{nomesProdutos}";
                     linhasParaSalvar.Add(linha);
                 }
 
-                File.WriteAllLines(caminho, linhasParaSalvar);
+                File.WriteAllLines(caminho, linhasParaSalvar, Encoding.UTF8);
             }
             catch (Exception ex)
             {
@@ -121,7 +117,7 @@ namespace Teste.Repository
 
             if (!File.Exists(caminho)) return;
 
-            var linhas = File.ReadAllLines(caminho);
+            var linhas = File.ReadAllLines(caminho, Encoding.UTF8);
 
             foreach (var linha in linhas)
             {
@@ -140,11 +136,14 @@ namespace Teste.Repository
 
                 decimal.TryParse(precoLimpo, out decimal precoConvertido);
 
+                // Normaliza o caminho do arquivo para o separador nativo do sistema operacional atual
+                string caminhoNormalizado = imagemLimpa == "null" ? "" : imagemLimpa.Replace("/", Path.DirectorySeparatorChar.ToString());
+
                 Cesta c = new Cesta(id)
                 {
                     Nome = nomeLimpo,
                     Preco = precoConvertido,
-                    ImagemPath = imagemLimpa == "null" ? "" : imagemLimpa
+                    ImagemPath = caminhoNormalizado
                 };
 
                 string[] itensComQuantidade = produtosLimpos.Split(new[] { ',' }, StringSplitOptions.RemoveEmptyEntries);
@@ -175,7 +174,7 @@ namespace Teste.Repository
                             c.Itens.Add(new Produto
                             {
                                 Nome = prodEncontrado.Nome,
-                                Marca = prodEncontrado.Marca, // 🔥 CORREÇÃO CRÍTICA: Resgatando a marca da memória de produtos
+                                Marca = prodEncontrado.Marca,
                                 Preco = prodEncontrado.Preco,
                                 Peso = prodEncontrado.Peso,
                                 QuantidadeSelecionada = 1

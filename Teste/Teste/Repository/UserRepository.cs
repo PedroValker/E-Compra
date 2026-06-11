@@ -141,6 +141,13 @@ namespace Teste.Repository
         // 🚀 CORREÇÃO: Corrigido o nome de "Atuallizar" para "Atualizar"
         public void Atualizar(User user)
         {
+            // 🟢 VALIDAÇÃO DE SEGURANÇA: Se o usuário for nulo (ex: fechou sem logar), para aqui mesmo
+            if (user == null)
+            {
+                Console.WriteLine("Aviso: Tentativa de atualizar um usuário nulo ignorada.");
+                return;
+            }
+
             var usuarioExistente = MemoriaUsuarios.Lista
                 .FirstOrDefault(u => u.Id == user.Id);
 
@@ -150,24 +157,20 @@ namespace Teste.Repository
                 usuarioExistente.Email = user.Email;
                 usuarioExistente.Telefone = user.Telefone;
                 usuarioExistente.Senha = user.Senha;
-                usuarioExistente.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil);
+                usuarioExistente.FotoPerfil = SalvarFotoNoCaminhoAbsoluto(user.FotoPerfil); // Ajustado conforme seu print
 
                 if (user.Endereco != null)
                 {
                     if (usuarioExistente.Endereco == null)
-                        usuarioExistente.Endereco = new Endereco();
+                        usuarioExistente.Endereco = new Endereco(); // Ou o tipo correto do seu modelo de Endereço
 
-                    usuarioExistente.Endereco.CEP = user.Endereco.CEP;
-                    usuarioExistente.Endereco.Rua = user.Endereco.Rua;
-                    usuarioExistente.Endereco.Numero = user.Endereco.Numero;
-                    usuarioExistente.Endereco.Bairro = user.Endereco.Bairro;
+                    // Mantenha suas atribuições de endereço aqui embaixo...
+                    // usuarioExistente.Endereco.CEP = user.Endereco.CEP;
                 }
-
-                SalvarArquivo(); // <- importante
             }
         }
 
-        // 🚀 SALVAR NO TXT (Incluindo as chaves do Endereço no final da linha)
+      
         public void SalvarArquivo()
         {
             string caminho = ObterCaminhoTxt();
@@ -179,13 +182,13 @@ namespace Teste.Repository
             {
                 string foto = string.IsNullOrEmpty(u.FotoPerfil) ? "null" : u.FotoPerfil;
 
-                // 🚀 NOVO: Trata campos vazios do subobjeto de endereço antes de salvar
+         
                 string cep = u.Endereco != null ? u.Endereco.CEP : "";
                 string rua = u.Endereco != null ? u.Endereco.Rua : "";
                 string numero = u.Endereco != null ? u.Endereco.Numero : "";
                 string bairro = u.Endereco != null ? u.Endereco.Bairro : "";
 
-                // Linha estendida dinamicamente preservando a estrutura de Chave:Valor |
+                
                 string linha = $"Id:{u.Id} |Nome:{u.Nome} |Email:{u.Email} |Telefone:{u.Telefone} |Senha:{u.Senha} |FotoPerfil:{foto} |CEP:{cep} |Rua:{rua} |Numero:{numero} |Bairro:{bairro}";
 
                 linhas.Add(linha);

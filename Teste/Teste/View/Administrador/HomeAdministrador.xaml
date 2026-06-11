@@ -109,7 +109,7 @@
 
                 <Border Grid.Row="0" Background="White" CornerRadius="8" Padding="24" BorderBrush="#E2E8F0" BorderThickness="1">
                     <StackPanel>
-                        <TextBlock Text="Faturamento Mensal" FontSize="14" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,0,8"/>
+                        <TextBlock Text="Faturamento Bruto" FontSize="14" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,0,8"/>
                         <TextBlock x:Name="TxtFaturamento" FontSize="32" FontWeight="Black" Foreground="#10B981"/>
 
                         <TextBlock Text="Valores recebidos via PIX, dinheiro ou cartão." FontSize="12" Foreground="#94A3B8" Margin="0,12,0,0"/>

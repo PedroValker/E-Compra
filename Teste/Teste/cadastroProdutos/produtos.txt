@@ -1,4 +1,4 @@
-Nome:Coca-Cola | Marca:Coca | Categoria:Alimentos | Preco:8,30 | Peso:2L
+Nome:Coca-Cola | Marca:Coca | Categoria:Alimentos | Preco:9,30 | Peso:2L
 Nome:Pão | Marca:N/A | Categoria:Alimentos | Preco:0,50 | Peso:50g
 Nome:Arroz | Marca:Dona Benta | Categoria:Alimentos | Preco:15,00 | Peso:500g
 Nome:Arroz Agulhinha | Marca:Camil | Categoria:Alimentos | Preco:25,90 | Peso:5kg

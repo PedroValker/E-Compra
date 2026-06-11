@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="Teste.View.ContatoNovo"
+<UserControl x:Class="Teste.View.ContatoNovo"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
@@ -25,7 +25,6 @@
     </UserControl.Resources>
 
     <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
-
         <Grid MaxWidth="1240" HorizontalAlignment="Center" Margin="24,35,24,40">
             <Grid.RowDefinitions>
                 <RowDefinition Height="Auto"/>
@@ -49,10 +48,6 @@
             </StackPanel>
 
             <Grid Grid.Row="1">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
                 <WrapPanel HorizontalAlignment="Center" Margin="0">
 
                     <Border MinWidth="450" 
@@ -93,7 +88,7 @@
                                 <LineBreak/><LineBreak/>
                                 Entendemos que cada família possui necessidades e realidades diferentes, por isso disponibilizamos opções de pagamento flexíveis que tornam a compra mais simples e viável.
                                 <LineBreak/><LineBreak/>
-                                Nosso objetivo é contribuir para o bem-estar das pessoas, undermining barreiras e proporcionando mais tranquilidade no momento da compra.
+                                Nosso objetivo é contribuir para o bem-estar das pessoas, eliminando barreiras e proporcionando mais tranquilidade no momento da compra.
                             </TextBlock>
                         </StackPanel>
                     </Border>

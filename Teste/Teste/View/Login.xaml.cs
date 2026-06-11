@@ -99,7 +99,7 @@ namespace Teste
                 MessageBox.Show("Erro no login: " + ex.Message);
             }
         }
-        private void AbrirCadastro_Click(object sender, MouseButtonEventArgs e)
+        private void AbrirCadastro_Click(object sender, RoutedEventArgs e)
         {
             MainWindow cadastro = new MainWindow();
             cadastro.Show();

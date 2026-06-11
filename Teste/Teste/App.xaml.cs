@@ -50,7 +50,6 @@ namespace Teste
                     repoUsers.Atualizar(Sessao.UsuarioLogado);
                 }
 
-                // 💾 AGORA SIM: Salva todos os dados da memória de volta nos arquivos TXT com segurança
                 UserRepository repoFinal = new UserRepository();
                 repoFinal.SalvarArquivo();
 

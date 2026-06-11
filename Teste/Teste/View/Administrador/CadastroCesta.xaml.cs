@@ -29,15 +29,11 @@ namespace Teste.View
             AtualizarListaCestas();
         }
 
-        // 🔥 Calcula em tempo real o preço com base na composição da lista
         private void RecalcularPrecoSugerido()
         {
             decimal totalSoma = ItensDaCestaAtual.Sum(item => item.Preco * item.Quantidade);
-
-            // Atualiza a label explicativa com a soma real de mercado
             TxtPrecoSugerido.Text = $"Soma dos Itens: R$ {totalSoma:N2}";
 
-            // Autofill no TextBox de preço caso esteja criando do zero
             if (_cestaEmEdicao == null || string.IsNullOrWhiteSpace(PrecoCestaBox.Text))
             {
                 PrecoCestaBox.Text = totalSoma.ToString("F2");
@@ -47,17 +43,11 @@ namespace Teste.View
         private void AdicionarItem_Click(object sender, RoutedEventArgs e)
         {
             Produto produtoSelecionado = ProdutosComboBox.SelectedItem as Produto;
-
             if (produtoSelecionado != null)
             {
-                if (!int.TryParse(QuantidadeBox.Text, out int qtd) || qtd <= 0)
-                {
-                    qtd = 1;
-                }
+                if (!int.TryParse(QuantidadeBox.Text, out int qtd) || qtd <= 0) qtd = 1;
 
-                // 🔥 CORREÇÃO: Busca combinando Nome E Marca para não misturar produtos parecidos
                 var itemExistente = ItensDaCestaAtual.FirstOrDefault(i => i.Nome == produtoSelecionado.Nome && i.Marca == produtoSelecionado.Marca);
-
                 if (itemExistente != null)
                 {
                     itemExistente.Quantidade += qtd;
@@ -68,13 +58,12 @@ namespace Teste.View
                     ItensDaCestaAtual.Add(new ItemCestaDisplay
                     {
                         Nome = produtoSelecionado.Nome,
-                        Marca = produtoSelecionado.Marca, // Repassando a marca perfeitamente
+                        Marca = produtoSelecionado.Marca,
                         Peso = produtoSelecionado.Peso,
-                        Preco = produtoSelecionado.Preco, // Repassando o preço corretamente
+                        Preco = produtoSelecionado.Preco,
                         Quantidade = qtd
                     });
                 }
-
                 QuantidadeBox.Text = "1";
                 RecalcularPrecoSugerido();
             }
@@ -131,7 +120,6 @@ namespace Teste.View
             decimal.TryParse(PrecoCestaBox.Text, out decimal preco);
             CestaRepository repo = new CestaRepository();
 
-            // 🔥 CORREÇÃO: Mapeia a lista temporária de volta para a lista oficial de Produtos
             List<Produto> listaFinalProdutos = new List<Produto>();
             foreach (var item in ItensDaCestaAtual)
             {
@@ -140,9 +128,9 @@ namespace Teste.View
                     listaFinalProdutos.Add(new Produto
                     {
                         Nome = item.Nome,
-                        Marca = item.Marca, // Salvando a marca no arquivo/banco
+                        Marca = item.Marca,
                         Peso = item.Peso,
-                        Preco = item.Preco // Salvando o preço no arquivo/banco
+                        Preco = item.Preco
                     });
                 }
             }
@@ -151,12 +139,18 @@ namespace Teste.View
             {
                 _cestaEmEdicao.Nome = NomeCestaBox.Text;
                 _cestaEmEdicao.Preco = preco;
-                if (!string.IsNullOrEmpty(caminhoImagemSelecionada)) _cestaEmEdicao.ImagemPath = caminhoImagemSelecionada;
+                if (!string.IsNullOrEmpty(caminhoImagemSelecionada))
+                {
+                    _cestaEmEdicao.ImagemPath = caminhoImagemSelecionada;
+                }
                 _cestaEmEdicao.Itens = listaFinalProdutos;
 
-                repo.AtualizarArquivoTxt();
-                MessageBox.Show("Cesta atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
-                _cestaEmEdicao = null;
+                if (repo.Salvar(_cestaEmEdicao, out string erroUp))
+                {
+                    repo.SalvarTudo();
+                    MessageBox.Show("Cesta atualizada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+                    _cestaEmEdicao = null;
+                }
             }
             else
             {
@@ -173,6 +167,8 @@ namespace Teste.View
                     MessageBox.Show(erro, "Erro", MessageBoxButton.OK, MessageBoxImage.Error);
                     return;
                 }
+
+                repo.SalvarTudo();
                 MessageBox.Show("Cesta criada com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             }
 
@@ -187,10 +183,8 @@ namespace Teste.View
                 _cestaEmEdicao = cestaClicada;
                 NomeCestaBox.Text = cestaClicada.Nome;
                 PrecoCestaBox.Text = cestaClicada.Preco.ToString("F2");
-
                 ItensDaCestaAtual.Clear();
 
-                // 🔥 CORREÇÃO: Agrupando por Nome E Marca para que fiquem separados na tabela corretamente
                 var grupos = cestaClicada.Itens.GroupBy(p => new { p.Nome, p.Marca });
                 foreach (var g in grupos)
                 {
@@ -198,22 +192,17 @@ namespace Teste.View
                     ItensDaCestaAtual.Add(new ItemCestaDisplay
                     {
                         Nome = p.Nome,
-                        Marca = p.Marca, // Recuperando a marca ao editar
+                        Marca = p.Marca,
                         Peso = p.Peso,
-                        Preco = p.Preco, // Recuperando o preço ao editar (corrige o R$ 0,00)
-                        Quantidade = g.Count()
+                        Preco = p.Preco,
+                        Quantidade = g.Count() // Ajustado para corresponder à propriedade Quantidade da classe Display
                     });
                 }
 
-                caminhoImagemSelecionada = cestaClicada.ImagemPath;
+                caminhoImagemSelecionada = "";
                 ImagemPathBox.Text = cestaClicada.ImagemPath;
-                try
-                {
-                    if (!string.IsNullOrEmpty(cestaClicada.ImagemPath) && File.Exists(cestaClicada.ImagemPath))
-                        PreviewImagem.Source = new BitmapImage(new Uri(Path.GetFullPath(cestaClicada.ImagemPath)));
-                }
-                catch { PreviewImagem.Source = null; }
 
+                PreviewImagem.Source = cestaClicada.ImagemCompleta;
                 RecalcularPrecoSugerido();
             }
         }
@@ -225,7 +214,7 @@ namespace Teste.View
                 if (MessageBox.Show($"Deseja excluir '{cestaClicada.Nome}'?", "Confirmar", MessageBoxButton.YesNo) == MessageBoxResult.Yes)
                 {
                     MemoriaCestas.Lista.Remove(cestaClicada);
-                    new CestaRepository().AtualizarArquivoTxt();
+                    new CestaRepository().SalvarTudo();
                     AtualizarListaCestas();
                 }
             }
@@ -260,6 +249,7 @@ namespace Teste.View
         }
     }
 
+    // 🟢 CLASSE LOCAL MANTIDA PARA EVITAR ERROS DE NAMESPACE
     public class ItemCestaDisplay
     {
         public string Nome { get; set; }

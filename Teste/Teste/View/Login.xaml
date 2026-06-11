@@ -63,7 +63,7 @@
             <Setter Property="FontWeight" Value="Bold"/>
             <Setter Property="Height" Value="48"/>
             <Setter Property="Width" Value="400"/>
-            <Setter Property="Margin" Value="0,10,0,16"/>
+            <Setter Property="Margin" Value="0,10,0,20"/>
             <Setter Property="Cursor" Value="Hand"/>
             <Setter Property="Template">
                 <Setter.Value>
@@ -169,14 +169,20 @@
 
                 <Button Content="Entrar" Style="{StaticResource PrimaryButtonStyle}" Click="BotaoEntrar_Click"/>
 
-                <TextBlock HorizontalAlignment="Center" FontSize="14" Foreground="{StaticResource TextoSecundario}">
-                    Não tem uma conta?
-                    <Run Text="Cadastre-se"
-                         FontWeight="SemiBold"
-                         Foreground="{StaticResource BordaInputFoco}"
-                         Cursor="Hand"
-                         MouseDown="AbrirCadastro_Click"/>
-                </TextBlock>
+                <StackPanel Orientation="Vertical" HorizontalAlignment="Center">
+                    <TextBlock FontSize="14" Margin="0,0,0,10" HorizontalAlignment="Center">
+                        <Hyperlink Foreground="{StaticResource BordaInputFoco}" FontWeight="Medium" TextDecorations="None" Click="BotaoEntrar_Click">
+                            Esqueceu a senha? Redefinir senha
+                        </Hyperlink>
+                    </TextBlock>
+
+                    <TextBlock FontSize="14" Foreground="{StaticResource TextoSecundario}" HorizontalAlignment="Center">
+                        Não tem uma conta? 
+                        <Hyperlink Foreground="{StaticResource BordaInputFoco}" FontWeight="Bold" TextDecorations="None" Click="AbrirCadastro_Click">
+                            Cadastre-se
+                        </Hyperlink>
+                    </TextBlock>
+                </StackPanel>
 
             </StackPanel>
         </Grid>

@@ -36,9 +36,19 @@
                 <RowDefinition Height="*"/>
             </Grid.RowDefinitions>
 
-            <StackPanel Grid.Row="0" Margin="12,35,12,20">
-                <TextBlock Text="Escolha sua cesta ideal" FontSize="30" FontWeight="Black" Foreground="#0F172A"/>
-                <TextBlock Text="Selecione as melhores combinações com os melhores preços do mercado." FontSize="15" Foreground="#64748B" Margin="0,4,0,0"/>
+            <StackPanel Grid.Row="0" Margin="12,35,12,20" HorizontalAlignment="Center">
+                <TextBlock Text="Escolha sua cesta ideal" 
+                           FontSize="30" 
+                           FontWeight="Black" 
+                           Foreground="#0F172A"
+                           TextAlignment="Center"/>
+
+                <TextBlock Text="Selecione as melhores combinações com os melhores preços do mercado." 
+                           FontSize="15" 
+                           Foreground="#64748B" 
+                           Margin="0,4,0,0"
+                           TextAlignment="Center"
+                           TextWrapping="Wrap"/>
             </StackPanel>
 
             <ItemsControl Grid.Row="1" ItemsSource="{Binding ListaCestas}" HorizontalAlignment="Stretch" Margin="0,0,0,40">
