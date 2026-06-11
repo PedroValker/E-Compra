@@ -21,7 +21,7 @@ namespace Teste.View
         public TelaPrincipalCliente(User usuario)
         {
             InitializeComponent();
-
+            this.Loaded += (s, e) => AtualizarBadgeCarrinho();
             // Guardamos o usuário completo na Sessão para não perder o ID e Endereço!
             Sessao.UsuarioLogado = usuario;
 
@@ -54,7 +54,34 @@ namespace Teste.View
 
         
         }
+        // 🔥 COLOQUE ESTE MÉTODO DENTRO DA SUA CLASSE TelaPrincipalCliente
+        public void AtualizarBadgeCarrinho()
+        {
+            // 1. Localiza o botão do carrinho na árvore visual da janela
+            Button botaoCarrinhoObjeto = this.FindName("BtnCarrinhoPrincipal") as Button;
 
+            // 2. Verifica se o botão e o template dele existem
+            if (botaoCarrinhoObjeto != null && botaoCarrinhoObjeto.Template != null)
+            {
+                // 3. Força a busca dos componentes ocultos DENTRO do ControlTemplate do botão
+                var badgeVisual = botaoCarrinhoObjeto.Template.FindName("BadgeCarrinho", botaoCarrinhoObjeto) as FrameworkElement;
+                var textoVisual = botaoCarrinhoObjeto.Template.FindName("TxtQtdBadge", botaoCarrinhoObjeto) as TextBlock;
+
+                // 4. Pega a contagem real e atualizada de itens em memória
+                int totalItens = Teste.Model.MemoriaCarrinho.Itens.Count;
+
+                // 5. Aplica a regra visual baseada na quantidade
+                if (totalItens > 0)
+                {
+                    if (badgeVisual != null) badgeVisual.Visibility = Visibility.Visible;
+                    if (textoVisual != null) textoVisual.Text = totalItens.ToString();
+                }
+                else
+                {
+                    if (badgeVisual != null) badgeVisual.Visibility = Visibility.Collapsed;
+                }
+            }
+        }
         public void AtualizarFoto(string caminho)
         {
             try
@@ -201,7 +228,7 @@ namespace Teste.View
             }
             catch (Exception ex)
             {
-                Console.WriteLine("Erro ao carregar foto: " + ex.Message);
+                Console.WriteLine("Erro ao carregar foto na bolinha: " + ex.Message);
             }
         }
 
@@ -209,7 +236,7 @@ namespace Teste.View
         {
             MessageBoxResult resposta = MessageBox.Show(
                 "Tem certeza que deseja sair da sua conta?",
-                "Confirmação de Logout",
+                "Confirmação de Logoff",
                 MessageBoxButton.YesNo,
                 MessageBoxImage.Question);
 

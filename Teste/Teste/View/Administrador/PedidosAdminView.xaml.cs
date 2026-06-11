@@ -25,8 +25,7 @@ namespace Teste.View
 
         private void CarregarPedidos()
         {
-            // 🚨 REMOVIDO: repo.CarregarDoArquivo() saiu daqui.
-            // Os pedidos já foram carregados uma única vez na inicialização global do App.xaml.cs
+        
 
             ListaPedidosPendentes.Clear();
             ListaPedidosACaminho.Clear();
@@ -56,7 +55,7 @@ namespace Teste.View
             }
         }
 
-        // --- 🧭 NAVEGAÇÃO DAS ABAS LOGÍSTICAS ---
+  
         private void AbaPendentes_Click(object sender, MouseButtonEventArgs e)
         {
             GridPedidos.ItemsSource = ListaPedidosPendentes;
@@ -111,7 +110,7 @@ namespace Teste.View
             GridPedidos.ItemsSource = ListaPedidosACaminho;
         }
 
-        // --- 📅 AÇÃO: ENVIAR PARA ROTA E VALIDAR LIMITE DE 8 ---
+ 
         private void AgendarRota_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button botao && botao.DataContext is Pedido pedidoClicado)
@@ -175,13 +174,9 @@ namespace Teste.View
                         return;
                     }
 
-                    // 🛠️ ALTERADO: Modifica o objeto na memória global diretamente
                     pedidoClicado.DataEntrega = dataEscolhida;
                     pedidoClicado.Status = "A Caminho";
 
-                    // 🔴 REMOVIDO: PedidoRepository.AtualizarArquivoTxt() não é mais chamado aqui.
-
-                    // Atualiza as listas locais da interface
                     ListaPedidosPendentes.Remove(pedidoClicado);
                     ListaPedidosACaminho.Add(pedidoClicado);
 
@@ -193,7 +188,7 @@ namespace Teste.View
             }
         }
 
-        // --- 🏁 AÇÃO: CONCLUIR E MARCAR COMO ENTREGUE ---
+      
         private void MarcarEntregue_Click(object sender, RoutedEventArgs e)
         {
             if (sender is Button botao && botao.DataContext is Pedido pedidoClicado)
@@ -203,12 +198,9 @@ namespace Teste.View
 
                 if (resp == MessageBoxResult.Yes)
                 {
-                    // 🛠️ ALTERADO: Modifica na memória global
+                 
                     pedidoClicado.Status = "Entregue";
 
-                    // 🔴 REMOVIDO: PedidoRepository.AtualizarArquivoTxt() não é mais chamado aqui.
-
-                    // Atualiza as listas locais da interface
                     ListaPedidosACaminho.Remove(pedidoClicado);
                     ListaPedidosEntregues.Add(pedidoClicado);
 
@@ -221,7 +213,7 @@ namespace Teste.View
         {
             if (sender is Button botao && botao.DataContext is Pedido pedidoClicado)
             {
-                DetalhesPedidoCliente modal = new DetalhesPedidoCliente(pedidoClicado);
+                DetalhesPedidoWindow modal = new DetalhesPedidoWindow(pedidoClicado);
                 modal.ShowDialog();
             }
         }

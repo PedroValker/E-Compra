@@ -1,9 +1,8 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq;
 using System.Text;
+using System.Collections.Generic;
+using System.Linq;
 using Teste.Model;
 
 namespace Teste.Repository
@@ -52,16 +51,18 @@ namespace Teste.Repository
             return string.Join(";", itensFormatados);
         }
 
-        // 🚀 CORREÇÃO: Trata a string de observações antes de montar a linha do arquivo TXT
         private string MontarLinhaTexto(Pedido p, string stringDosItens, int numeroLinha)
         {
             string totalFormatado = p.Total.ToString("F2", System.Globalization.CultureInfo.GetCultureInfo("pt-BR"));
             string dataEntregaStr = p.DataEntrega.HasValue ? p.DataEntrega.Value.ToString("yyyy-MM-dd") : "NULL";
 
-            // Se as observações estiverem vazias, define como "NENHUMA" para manter a integridade das colunas
             string obsSalvar = string.IsNullOrWhiteSpace(p.Observacoes) ? "NENHUMA" : p.Observacoes.Trim().Replace("|", "").Replace("\r\n", " ").Replace("\n", " ");
 
-            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{obsSalvar} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao} |Pago:{p.Pago}";
+            // Se o Status da montagem estiver vazio nos bastidores, salva como "PENDENTE" para não quebrar a coluna do TXT
+            string montagemSalvar = string.IsNullOrWhiteSpace(p.StatusMontagem) ? "PENDENTE" : p.StatusMontagem.Trim();
+
+            // 🔥 ATUALIZADO: Adicionado a propriedade "|Montagem:{montagemSalvar}" na composição final da string de persistência
+            return $"IdPedido:{p.IdPedido} |Data:{p.DataDoPedido} |IdUsuario:{p.IdUsuario} |NomePedido:{p.NomePedido} |Recebedor:{p.Recebedor} |Endereco:{p.Endereco} |Pagamento:{p.FormaPagamento} |Status:{p.Status} |Total:{totalFormatado} |Obs:{obsSalvar} |Itens:{stringDosItens} |DataEntrega:{dataEntregaStr} |Composicao:{p.TipoComposicao} |Pago:{p.Pago} |Montagem:{montagemSalvar}";
         }
 
         public void AdicionarNovoPedidoNoTxt(Pedido p)
@@ -74,16 +75,6 @@ namespace Teste.Repository
                 }
 
                 Console.WriteLine("=== NOVO PEDIDO ===");
-                Console.WriteLine($"IdPedido: {p.IdPedido}");
-                Console.WriteLine($"IdUsuario: {p.IdUsuario}");
-                Console.WriteLine($"NomePedido: {p.NomePedido}");
-                Console.WriteLine($"Recebedor: {p.Recebedor}");
-                Console.WriteLine($"Endereco: {p.Endereco}");
-                Console.WriteLine($"Pagamento: {p.FormaPagamento}");
-                Console.WriteLine($"Status: {p.Status}");
-                Console.WriteLine($"Total: {p.Total}");
-                Console.WriteLine($"Obs: {p.Observacoes}");
-
                 MemoriaPedidos.Lista.Add(p);
                 AtualizarArquivoTxt();
             }
@@ -123,6 +114,20 @@ namespace Teste.Repository
         {
             try
             {
+                // 🟢 SÓ CARREGA SE A MEMÓRIA ESTIVER VAZIA
+                // Se já houver pedidos na lista, significa que o programa já está rodando
+                // e nós NÃO queremos apagar as alterações feitas em memória.
+                if (MemoriaPedidos.Lista != null && MemoriaPedidos.Lista.Any())
+                {
+                    Console.WriteLine("Pedidos já estão carregados na memória viva. Ignorando releitura do TXT.");
+                    return;
+                }
+
+                if (MemoriaPedidos.Lista == null)
+                {
+                    MemoriaPedidos.Lista = new List<Pedido>();
+                }
+
                 MemoriaPedidos.Lista.Clear();
                 string caminho = ObterCaminhoArquivo();
 
@@ -144,35 +149,31 @@ namespace Teste.Repository
                     int.TryParse(idPedidoStr, out int idPedido);
 
                     string dataPedido = partes[1].Replace("Data:", "").Trim();
-
                     string idUsuarioStr = partes[2].Replace("IdUsuario:", "").Trim();
                     int.TryParse(idUsuarioStr, out int idUsuarioConvertido);
 
                     string nomePedido = partes[3].Replace("NomePedido:", "").Trim();
-
                     string recebedor = partes[4].Replace("Recebedor:", "").Trim();
-
                     string endereco = partes[5].Replace("Endereco:", "").Trim();
-
                     string pagamento = partes[6].Replace("Pagamento:", "").Trim();
-
                     string status = partes[7].Replace("Status:", "").Trim();
-
                     string totalStr = partes[8].Replace("Total:", "").Trim();
 
                     string obs = partes[9].Replace("Obs:", "").Trim();
-                    // 🚀 CORREÇÃO: Se no arquivo estiver "NENHUMA", limpa para voltar a ser string vazia na memória
                     if (obs == "NENHUMA") { obs = ""; }
 
                     string itensStr = partes[10].Replace("Itens:", "").Trim();
-
                     string dataEntregaStr = partes[11].Replace("DataEntrega:", "").Trim();
-
                     string composicaoSalva = partes[12].Replace("Composicao:", "").Trim();
-
                     string pagoStr = partes[13].Replace("Pago:", "").Trim();
-
                     bool.TryParse(pagoStr, out bool pagoConvertido);
+
+                    string statusMontagemRecuperado = "";
+                    if (partes.Length >= 15)
+                    {
+                        statusMontagemRecuperado = partes[14].Replace("Montagem:", "").Trim();
+                        if (statusMontagemRecuperado == "PENDENTE") statusMontagemRecuperado = "";
+                    }
 
                     DateTime? dataEntregaConvertida = null;
 
@@ -185,12 +186,12 @@ namespace Teste.Repository
 
                     totalStr = totalStr.Replace(",", ".");
 
-                    decimal.TryParse(
-                        totalStr,
-                        System.Globalization.NumberStyles.Any,
-                        System.Globalization.CultureInfo.InvariantCulture,
-                        out decimal totalConvertConvertido);
-
+                   
+                decimal.TryParse(
+                    totalStr,
+                    System.Globalization.NumberStyles.Any,
+                    System.Globalization.CultureInfo.InvariantCulture, 
+                out decimal totalConvertConvertido);
                     Pedido p = new Pedido
                     {
                         IdPedido = idPedido,
@@ -202,10 +203,11 @@ namespace Teste.Repository
                         FormaPagamento = pagamento,
                         Status = status,
                         Total = totalConvertConvertido,
-                        Observacoes = obs, // 📍 Recebe as observações tratadas corretamente
+                        Observacoes = obs,
                         DataEntrega = dataEntregaConvertida,
-                        TipoComposicao = composicaoSalva,
                         Pago = pagoConvertido,
+                        StatusMontagem = statusMontagemRecuperado,
+                        TipoComposicao = composicaoSalva, // Garante que a composição salva (Pronta/Modificada) seja aplicada
                         Itens = new List<ItemPedido>()
                     };
 

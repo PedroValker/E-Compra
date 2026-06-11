@@ -61,14 +61,14 @@ namespace CestaApp.Views
             if (botaoRemover == null) return;
 
             ItemCarrinho itemParaRemover = botaoRemover.DataContext as ItemCarrinho;
-
             if (itemParaRemover != null)
             {
                 MemoriaCarrinho.Itens.Remove(itemParaRemover);
                 ItensNoCarrinho.Remove(itemParaRemover);
 
-                this.DataContext = null;
-                this.DataContext = this;
+                // 🚀 GATILHO VISUAL NA REMOÇÃO: Atualiza o indicador
+                var janelaMae = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
+                if (janelaMae != null) janelaMae.AtualizarBadgeCarrinho();
 
                 VerificarSeCarrinhoEstaVazio();
             }
@@ -96,6 +96,7 @@ namespace CestaApp.Views
             // 2. Criação do objeto de Pedido com todas as propriedades necessárias
             Pedido novoPedido = new Pedido
             {
+
                 NomePedido = "PED-" + DateTime.Now.ToString("yyyyMMddHHmmss"),
                 Recebedor = Sessao.UsuarioLogado?.Nome ?? "Cliente",
                 Endereco = enderecoFinal,
@@ -192,17 +193,14 @@ namespace CestaApp.Views
             }
 
             MemoriaPedidos.Lista.Add(novoPedido);
-
-            PedidoRepository repo = new PedidoRepository();
-            repo.AtualizarArquivoTxt();
-
             MemoriaCarrinho.Itens.Clear();
-
-     
             ItensNoCarrinho.Clear();
 
-            MessageBox.Show("Pedido finalizado e salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
+            // 🚀 GATILHO VISUAL NO FECHAMENTO: Limpa a bolinha vermelha da tela principal
+            var janelaMae = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
+            if (janelaMae != null) janelaMae.AtualizarBadgeCarrinho();
 
+            MessageBox.Show("Pedido finalizado e salvo com sucesso!", "Sucesso", MessageBoxButton.OK, MessageBoxImage.Information);
             VerificarSeCarrinhoEstaVazio();
         }
     }

@@ -121,8 +121,24 @@
                         </Button.ContextMenu>
                     </Button>
 
-                    <Button Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click" VerticalAlignment="Center">
-                        <TextBlock Text="🛒" FontSize="20"/>
+                    <Button x:Name="BtnCarrinhoPrincipal" Background="Transparent" BorderThickness="0" Cursor="Hand" ToolTip="Carrinho" Click="VerCarrinho_Click" VerticalAlignment="Center">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Grid Background="Transparent">
+                                    <TextBlock Text="🛒" FontSize="22" Padding="5,5,10,5"/>
+
+                                    <Grid x:Name="BadgeCarrinho" Visibility="Collapsed" HorizontalAlignment="Right" VerticalAlignment="Top" Margin="0,2,2,0">
+                                        <Ellipse Width="16" Height="16" Fill="#EF4444"/>
+                                        <TextBlock x:Name="TxtQtdBadge" Text="0" Foreground="White" FontSize="10" FontWeight="Bold" HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                    </Grid>
+                                </Grid>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter Property="Opacity" Value="0.8"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
                     </Button>
                 </StackPanel>
             </Grid>
@@ -185,7 +201,7 @@
                             </ItemsControl.ItemTemplate>
                         </ItemsControl>
 
-                        <Button Content="Explorar todas as cestas"
+                        <Button Content="Explorar todas as baskets"
                                 Width="240"
                                 Height="44"
                                 Margin="0,20,0,0"

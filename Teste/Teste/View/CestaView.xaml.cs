@@ -214,6 +214,13 @@ namespace CestaApp.Views
 
             MemoriaCarrinho.Itens.Add(novoItem);
 
+            // 🚀 O GATILHO VISUAL: Localiza a janela mãe aberta e executa a atualização do Badge
+            var janelaMae = Window.GetWindow(this) as Teste.View.TelaPrincipalCliente;
+            if (janelaMae != null)
+            {
+                janelaMae.AtualizarBadgeCarrinho();
+            }
+
             MessageBox.Show($"'{nomeVerdadeiroDaCesta}' foi adicionada ao seu carrinho com sucesso!",
                             "Carrinho",
                             MessageBoxButton.OK,

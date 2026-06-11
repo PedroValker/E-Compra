@@ -87,12 +87,14 @@
 
                 <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
                     <TextBlock Text="📍 Endereço:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,8,0" VerticalAlignment="Center"/>
-                    <TextBox Text="{Binding Endereco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
-                             Foreground="#334155" 
+
+                    <TextBox Text="{Binding Endereco, Mode=OneWay}" 
+                             IsReadOnly="True"
+                             Foreground="#475569" 
                              FontWeight="Medium"
                              Width="350"
                              Padding="8,5"
-                             Background="White"
+                             Background="#F1F5F9"
                              BorderBrush="#CBD5E1"
                              BorderThickness="1"
                              VerticalAlignment="Center">
@@ -209,11 +211,13 @@
                 <TextBlock Text="{Binding Observacoes, TargetNullValue='Nenhuma observação informada.'}" Foreground="#64748B" TextWrapping="Wrap" FontStyle="Italic" FontSize="13" LineHeight="18"/>
             </StackPanel>
 
-            <StackPanel Grid.Column="1" HorizontalAlignment="Right" MinWidth="260">
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" MinWidth="400">
                 <TextBlock Text="Total do Pedido Fechado" FontSize="13" FontWeight="Medium" Foreground="#64748B" HorizontalAlignment="Right"/>
                 <TextBlock Text="{Binding Total, StringFormat='R$ {0:N2}'}" FontSize="36" FontWeight="Black" Foreground="#1E22D8" HorizontalAlignment="Right" Margin="0,-2,0,16"/>
 
                 <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+
                     <Button Content="🖨️ Gerar PDF" Style="{StaticResource BaseButtonStyle}" Click="GerarPdf_Click" Margin="0,0,12,0" Background="#F59E0B" Foreground="White">
                         <Button.Template>
                             <ControlTemplate TargetType="Button">
@@ -228,38 +232,6 @@
                             </ControlTemplate>
                         </Button.Template>
                     </Button>
-
-                    <Button x:Name="BtnMarcarPronta"
-        Content="Pronta"
-        Click="BtnMarcarPronta_Click"
-        Visibility="Collapsed"
-        Margin="0,0,12,0"
-        Background="#16A34A"
-        Foreground="White"
-        Style="{StaticResource BaseButtonStyle}">
-
-                        <Button.Template>
-                            <ControlTemplate TargetType="Button">
-                                <Border x:Name="btnBorder"
-                    Background="{TemplateBinding Background}"
-                    CornerRadius="6">
-                                    <ContentPresenter HorizontalAlignment="Center"
-                                  VerticalAlignment="Center"/>
-                                </Border>
-
-                                <ControlTemplate.Triggers>
-                                    <Trigger Property="IsMouseOver" Value="True">
-                                        <Setter TargetName="btnBorder"
-                            Property="Background"
-                            Value="#15803D"/>
-                                    </Trigger>
-                                </ControlTemplate.Triggers>
-                            </ControlTemplate>
-                        </Button.Template>
-
-                    </Button>
-
-
 
                     <Button Content="Fechar" Style="{StaticResource BaseButtonStyle}" Click="Fechar_Click" Background="#0F172A" Foreground="White">
                         <Button.Template>

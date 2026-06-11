@@ -130,7 +130,7 @@
                            FontWeight="SemiBold" 
                            Foreground="{StaticResource TextoSecundario}" 
                            Margin="0,0,0,6"/>
-                <TextBox x:Name="TelefoneBox" PreviewTextInput="TelefoneBox_PreviewTextInput"/>
+                <TextBox x:Name="TelefoneBox" MaxLength="11" PreviewTextInput="TelefoneBox_PreviewTextInput"/>
 
                 <TextBlock Text="Senha" 
                            FontSize="13" 

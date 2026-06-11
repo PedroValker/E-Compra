@@ -22,7 +22,7 @@ namespace Teste
             string senha = SenhaBox.Password;
             string confirmarSenha = ConfirmarSenhaBox.Password;
 
-            // 🔥 VALIDAÇÃO
+            // 🔥 VALIDAÇÃO DE CAMPOS VAZIOS
             if (string.IsNullOrWhiteSpace(nome) ||
                 string.IsNullOrWhiteSpace(email) ||
                 string.IsNullOrWhiteSpace(telefone) ||
@@ -33,15 +33,17 @@ namespace Teste
                 return;
             }
 
+            // 🔥 VALIDAÇÃO DO GMAIL
             if (!EmailValido(email))
             {
-                MessageBox.Show("E-mail inválido!");
+                MessageBox.Show("E-mail inválido! O cadastro permite apenas contas @gmail.com");
                 return;
             }
 
+            // 🔥 VALIDAÇÃO DO TELEFONE
             if (!TelefoneValido(telefone))
             {
-                MessageBox.Show("Telefone inválido!");
+                MessageBox.Show("Telefone inválido! Digite o DDD + Número (10 ou 11 dígitos).");
                 return;
             }
 
@@ -54,14 +56,14 @@ namespace Teste
             // 🔥 VERIFICA DUPLICIDADE
             foreach (var u in MemoriaUsuarios.Lista)
             {
-                if (u.Email == email)
+                if (u.Email.Equals(email, StringComparison.OrdinalIgnoreCase))
                 {
                     MessageBox.Show("Esse e-mail já está cadastrado!");
                     return;
                 }
             }
 
-            // 🔥 CRIA USUÁRIO (SEM ISADMIN!)
+            // 🔥 CRIA USUÁRIO
             User user = new User
             {
                 Nome = nome,
@@ -72,11 +74,9 @@ namespace Teste
             };
 
             // 🔥 SALVA NA MEMÓRIA
-
-            MessageBox.Show("Conta criada com sucesso!");
             MemoriaUsuarios.Lista.Add(user);
+            MessageBox.Show("Conta criada com sucesso!");
 
-            MessageBox.Show("Total de usuários na memória: " + MemoriaUsuarios.Lista.Count);
             // abre login
             Login login = new Login();
             login.Show();
@@ -84,10 +84,13 @@ namespace Teste
             this.Close();
         }
 
+        // Método atualizado para aceitar apenas @gmail.com
         private bool EmailValido(string email)
         {
-            string pattern = @"^[^@\s]+@[^@\s]+\.[^@\s]+$";
-            return Regex.IsMatch(email, pattern);
+            string emailMinusculo = email.ToLower().Trim();
+            // Garante o formato correto e o final fixo @gmail.com
+            string pattern = @"^[^@\s]+@gmail\.com$";
+            return Regex.IsMatch(emailMinusculo, pattern);
         }
 
         private bool TelefoneValido(string telefone)

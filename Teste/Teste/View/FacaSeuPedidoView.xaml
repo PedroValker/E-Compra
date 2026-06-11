@@ -28,22 +28,23 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid>
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="*"/>
-        </Grid.RowDefinitions>
+    <ScrollViewer VerticalScrollBarVisibility="Auto" HorizontalScrollBarVisibility="Disabled">
 
-        <StackPanel Grid.Row="0" Margin="40,35,40,20">
-            <TextBlock Text="Escolha sua cesta ideal" FontSize="30" FontWeight="Black" Foreground="#0F172A"/>
-            <TextBlock Text="Selecione as melhores combinações com os melhores preços do mercado." FontSize="15" Foreground="#64748B" Margin="0,4,0,0"/>
-        </StackPanel>
+        <Grid MaxWidth="1240" HorizontalAlignment="Center" Margin="24,0">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="*"/>
+            </Grid.RowDefinitions>
 
-        <ScrollViewer Grid.Row="1" VerticalScrollBarVisibility="Auto" Padding="0,0,0,40">
-            <ItemsControl ItemsSource="{Binding ListaCestas}" Margin="25,0">
+            <StackPanel Grid.Row="0" Margin="12,35,12,20">
+                <TextBlock Text="Escolha sua cesta ideal" FontSize="30" FontWeight="Black" Foreground="#0F172A"/>
+                <TextBlock Text="Selecione as melhores combinações com os melhores preços do mercado." FontSize="15" Foreground="#64748B" Margin="0,4,0,0"/>
+            </StackPanel>
+
+            <ItemsControl Grid.Row="1" ItemsSource="{Binding ListaCestas}" HorizontalAlignment="Stretch" Margin="0,0,0,40">
                 <ItemsControl.ItemsPanel>
                     <ItemsPanelTemplate>
-                        <WrapPanel HorizontalAlignment="Center"/>
+                        <WrapPanel HorizontalAlignment="Left"/>
                     </ItemsPanelTemplate>
                 </ItemsControl.ItemsPanel>
 
@@ -79,6 +80,6 @@
                     </DataTemplate>
                 </ItemsControl.ItemTemplate>
             </ItemsControl>
-        </ScrollViewer>
-    </Grid>
+        </Grid>
+    </ScrollViewer>
 </UserControl>

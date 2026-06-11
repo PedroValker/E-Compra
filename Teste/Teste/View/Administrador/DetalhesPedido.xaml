@@ -1,58 +1,266 @@
 ﻿<Window x:Class="Teste.View.DetalhesPedidoWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        Title="Detalhes do Pedido" Height="450" Width="650"
-        WindowStartupLocation="CenterScreen" Background="#F8FAFC">
+        x:Name="JanelaDetalhes" 
+        Title="Resumo Profissional do Pedido" Height="700" Width="1000"
+        WindowStartupLocation="CenterScreen"
+        Background="#F1F5F9"
+        FontFamily="Segoe UI, Tahoma, sans-serif">
 
-    <Grid Margin="20">
+    <Window.Resources>
+        <Style x:Key="PremiumCardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="12"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="BorderThickness" Value="1"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="15" Opacity="0.03" ShadowDepth="2" Color="#000000"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style TargetType="DataGridColumnHeader">
+            <Setter Property="Background" Value="#F8FAFC"/>
+            <Setter Property="Foreground" Value="#475569"/>
+            <Setter Property="FontWeight" Value="SemiBold"/>
+            <Setter Property="Padding" Value="12,10"/>
+            <Setter Property="BorderThickness" Value="0,0,0,1"/>
+            <Setter Property="BorderBrush" Value="#E2E8F0"/>
+            <Setter Property="HorizontalContentAlignment" Value="Left"/>
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="DataGridColumnHeader">
+                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Padding="{TemplateBinding Padding}">
+                            <ContentPresenter HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" VerticalAlignment="Center"/>
+                        </Border>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <Style x:Key="BaseButtonStyle" TargetType="Button">
+            <Setter Property="Height" Value="40"/>
+            <Setter Property="Width" Value="130"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="BorderThickness" Value="0"/>
+            <Setter Property="Cursor" Value="Hand"/>
+        </Style>
+    </Window.Resources>
+
+    <Grid Margin="32">
         <Grid.RowDefinitions>
             <RowDefinition Height="Auto"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <TextBlock x:Name="TxtTitulo" FontSize="20" FontWeight="Bold" Foreground="#1E293B" Margin="0,0,0,15"/>
+        <StackPanel Grid.Row="0" Margin="0,0,0,24">
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="Auto"/>
+                </Grid.ColumnDefinitions>
+                <TextBlock Grid.Column="0" Text="{Binding NomePedido, StringFormat='Resumo Logístico do Pedido: {0}'}" FontSize="26" FontWeight="Black" Foreground="#0F172A"/>
 
-        <DataGrid x:Name="GridItens" Grid.Row="1" AutoGenerateColumns="False" CanUserAddRows="False" IsReadOnly="True" 
-                  Background="White" BorderBrush="#E2E8F0" HeadersVisibility="Column">
-            <DataGrid.Columns>
+                <Border Grid.Column="1" x:Name="BadgeComposicao" CornerRadius="12" Padding="12,4" VerticalAlignment="Center">
+                    <TextBlock x:Name="TxtBadge" Text="{Binding TipoComposicao}" FontSize="12" FontWeight="Bold"/>
+                </Border>
+            </Grid>
 
-                <DataGridTextColumn Header="Qtd" Binding="{Binding Quantidade}" Width="60">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="Bold"/>
-                            <Setter Property="HorizontalAlignment" Value="Center"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="0,10"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+            <WrapPanel Margin="0,12,0,0" Orientation="Horizontal">
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="👤 Cliente:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding Recebedor}" Foreground="#334155" FontWeight="Medium" VerticalAlignment="Center"/>
+                </StackPanel>
 
-                <DataGridTextColumn Header="Nome da Cesta" Binding="{Binding Nome}" Width="150">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="FontWeight" Value="SemiBold"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="10"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="📅 Data do Pedido:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DataDoPedido}" Foreground="#334155" VerticalAlignment="Center"/>
+                </StackPanel>
 
-                <DataGridTextColumn Header="Produtos na Cesta" Binding="{Binding Produtos}" Width="*">
-                    <DataGridTextColumn.ElementStyle>
-                        <Style TargetType="TextBlock">
-                            <Setter Property="TextWrapping" Value="Wrap"/>
-                            <Setter Property="Foreground" Value="#555"/>
-                            <Setter Property="VerticalAlignment" Value="Center"/>
-                            <Setter Property="Margin" Value="10"/>
-                        </Style>
-                    </DataGridTextColumn.ElementStyle>
-                </DataGridTextColumn>
+                <StackPanel Orientation="Horizontal" Margin="0,0,28,6" VerticalAlignment="Center">
+                    <TextBlock Text="🚚 Entrega:" FontWeight="SemiBold" Foreground="#1E22D8" Margin="0,0,6,0" VerticalAlignment="Center"/>
+                    <TextBlock Text="{Binding DataEntrega, StringFormat={}{0:dd/MM/yyyy}, TargetNullValue='Não agendada'}" Foreground="#1E22D8" FontWeight="Bold" VerticalAlignment="Center"/>
+                </StackPanel>
 
-            </DataGrid.Columns>
-        </DataGrid>
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6" VerticalAlignment="Center">
+                    <TextBlock Text="📍 Endereço:" FontWeight="SemiBold" Foreground="#64748B" Margin="0,0,8,0" VerticalAlignment="Center"/>
+                    <TextBox Text="{Binding Endereco, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" 
+                             Foreground="#334155" 
+                             FontWeight="Medium"
+                             Width="350"
+                             Padding="8,5"
+                             Background="White"
+                             BorderBrush="#CBD5E1"
+                             BorderThickness="1"
+                             VerticalAlignment="Center">
+                        <TextBox.Resources>
+                            <Style TargetType="TextBox">
+                                <Setter Property="Template">
+                                    <Setter.Value>
+                                        <ControlTemplate TargetType="TextBox">
+                                            <Border CornerRadius="6" Background="{TemplateBinding Background}" 
+                                                    BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}">
+                                                <ScrollViewer x:Name="PART_ContentHost" Margin="2"/>
+                                            </Border>
+                                        </ControlTemplate>
+                                    </Setter.Value>
+                                </Setter>
+                            </Style>
+                        </TextBox.Resources>
+                    </TextBox>
+                </StackPanel>
+            </WrapPanel>
+        </StackPanel>
 
-        <Button Grid.Row="2" Content="Fechar" Width="100" Height="35" HorizontalAlignment="Right" Margin="0,15,0,0" 
-                Background="#64748B" Foreground="White" BorderThickness="0" Cursor="Hand" FontWeight="Bold" Click="Fechar_Click"/>
+        <Grid Grid.Row="1">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1.3*" />
+                <ColumnDefinition Width="1*" />
+            </Grid.ColumnDefinitions>
+
+            <Border Grid.Column="0" Style="{StaticResource PremiumCardStyle}" Margin="0,0,12,0" Padding="20">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                    </Grid.RowDefinitions>
+
+                    <StackPanel Grid.Row="0" Margin="0,0,0,16">
+                        <TextBlock Text="📦 Composição Final da Cesta" FontSize="18" FontWeight="Bold" Foreground="#0F172A"/>
+                        <TextBlock Text="Estes são os produtos físicos reais que devem ser inseridos na embalagem." FontSize="12" Foreground="#64748B" Margin="0,2,0,0"/>
+                    </StackPanel>
+
+                    <DataGrid x:Name="GridItensFinais" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                              HeadersVisibility="Column" Background="Transparent" BorderThickness="0" 
+                              GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F1F5F9" RowHeight="40">
+                        <DataGrid.Columns>
+                            <DataGridTextColumn Header="Qtd Atual" Binding="{Binding Quantidade}" Width="90" FontWeight="Bold">
+                                <DataGridTextColumn.ElementStyle>
+                                    <Style TargetType="TextBlock">
+                                        <Setter Property="HorizontalAlignment" Value="Center"/>
+                                    </Style>
+                                </DataGridTextColumn.ElementStyle>
+                            </DataGridTextColumn>
+                            <DataGridTextColumn Header="Produto Integrante" Binding="{Binding Nome}" Width="*"/>
+                        </DataGrid.Columns>
+                    </DataGrid>
+                </Grid>
+            </Border>
+
+            <Grid Grid.Column="1" Margin="12,0,0,0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="1*" />
+                    <RowDefinition Height="1*" />
+                </Grid.RowDefinitions>
+
+                <Border Grid.Row="0" Style="{StaticResource PremiumCardStyle}" BorderBrush="#DCFCE7" BorderThickness="1.5" Margin="0,0,0,10" Padding="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="➕ Itens Adicionados (Extras)" FontSize="14" FontWeight="Bold" Foreground="#15803D" Margin="0,0,0,10"/>
+                        <DataGrid x:Name="GridAdicionados" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                                  HeadersVisibility="Column" Background="Transparent" BorderThickness="0" 
+                                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F1F5F9" RowHeight="34">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Produto" Binding="{Binding Produto}" Width="*"/>
+                                <DataGridTextColumn Header="Qtd Extra" Binding="{Binding Qtd}" Width="90" FontWeight="Bold"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+
+                <Border Grid.Row="1" Style="{StaticResource PremiumCardStyle}" BorderBrush="#FEE2E2" BorderThickness="1.5" Margin="0,10,0,0" Padding="16">
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="*"/>
+                        </Grid.RowDefinitions>
+                        <TextBlock Grid.Row="0" Text="➖ Itens Removidos da Receita" FontSize="14" FontWeight="Bold" Foreground="#B91C1C" Margin="0,0,0,10"/>
+                        <DataGrid x:Name="GridRemovidos" Grid.Row="1" AutoGenerateColumns="False" IsReadOnly="True" 
+                                  HeadersVisibility="Column" Background="Transparent" BorderThickness="0" 
+                                  GridLinesVisibility="Horizontal" HorizontalGridLinesBrush="#F1F5F9" RowHeight="34">
+                            <DataGrid.Columns>
+                                <DataGridTextColumn Header="Produto" Binding="{Binding Produto}" Width="*"/>
+                                <DataGridTextColumn Header="Qtd Retirada" Binding="{Binding Qtd}" Width="100" FontWeight="Bold"/>
+                            </DataGrid.Columns>
+                        </DataGrid>
+                    </Grid>
+                </Border>
+            </Grid>
+        </Grid>
+
+        <Grid Grid.Row="2" Margin="0,24,0,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <StackPanel Grid.Column="0" Margin="0,0,24,0" VerticalAlignment="Center">
+                <StackPanel Orientation="Horizontal" Margin="0,0,0,6">
+                    <TextBlock Text="Forma de Pagamento: " FontWeight="SemiBold" Foreground="#475569" FontSize="14"/>
+                    <TextBlock Text="{Binding FormaPagamento}" Foreground="#1E293B" FontSize="14" FontWeight="Bold"/>
+                </StackPanel>
+                <TextBlock Text="Observações Importantes:" FontWeight="SemiBold" Foreground="#475569" FontSize="13" Margin="0,4,0,2"/>
+                <TextBlock Text="{Binding Observacoes, TargetNullValue='Nenhuma observação informada.'}" Foreground="#64748B" TextWrapping="Wrap" FontStyle="Italic" FontSize="13" LineHeight="18"/>
+            </StackPanel>
+
+            <StackPanel Grid.Column="1" HorizontalAlignment="Right" MinWidth="260">
+                <TextBlock Text="Total do Pedido Fechado" FontSize="13" FontWeight="Medium" Foreground="#64748B" HorizontalAlignment="Right"/>
+                <TextBlock Text="{Binding Total, StringFormat='R$ {0:N2}'}" FontSize="36" FontWeight="Black" Foreground="#1E22D8" HorizontalAlignment="Right" Margin="0,-2,0,16"/>
+
+                <StackPanel Orientation="Horizontal" HorizontalAlignment="Right">
+
+                    <Button x:Name="BtnPreparada" Content="📦 Preparada" Style="{StaticResource BaseButtonStyle}" Click="MarcarPreparada_Click" Margin="0,0,12,0" Background="#1E22D8" Foreground="White" Visibility="Collapsed">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#171A9A"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button Content="🖨️ Gerar PDF" Style="{StaticResource BaseButtonStyle}" Click="GerarPdf_Click" Margin="0,0,12,0" Background="#F59E0B" Foreground="White">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#D97706"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+
+                    <Button Content="Fechar" Style="{StaticResource BaseButtonStyle}" Click="Fechar_Click" Background="#0F172A" Foreground="White">
+                        <Button.Template>
+                            <ControlTemplate TargetType="Button">
+                                <Border x:Name="btnBorder" Background="{TemplateBinding Background}" CornerRadius="6">
+                                    <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                                </Border>
+                                <ControlTemplate.Triggers>
+                                    <Trigger Property="IsMouseOver" Value="True">
+                                        <Setter TargetName="btnBorder" Property="Background" Value="#1E293B"/>
+                                    </Trigger>
+                                </ControlTemplate.Triggers>
+                            </ControlTemplate>
+                        </Button.Template>
+                    </Button>
+                </StackPanel>
+            </StackPanel>
+        </Grid>
     </Grid>
 </Window>

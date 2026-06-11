@@ -31,7 +31,7 @@ namespace Teste.Model
                 contador = id + 1;
             }
         }
-
+       
         /// <summary>
         /// Gera o resumo dos itens agrupados de forma profissional
         /// </summary>
